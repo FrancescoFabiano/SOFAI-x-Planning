@@ -128,8 +128,20 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# MyFolders
-Output/
-tmp/
-*.tmp
+.vscode/launch.json
+
+*.csv
+
 .problem-cache/
+
+pdkb-domain.pddl
+
+pdkb-plan.out
+
+pdkb-problem.pddl
+
+execution.details
+
+EVAL-OUTPUT
+EFP
+output

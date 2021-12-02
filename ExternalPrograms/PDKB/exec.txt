@@ -1,0 +1,1 @@
+sudo python3 pdkb/planner.py examples/planning/grapevine-doxastic/prob-4ag-2g-2d.pdkbddl

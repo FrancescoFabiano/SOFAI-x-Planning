@@ -128,8 +128,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# MyFolders
-Output/
-tmp/
-*.tmp
-.problem-cache/
+#Output folders
+out/
