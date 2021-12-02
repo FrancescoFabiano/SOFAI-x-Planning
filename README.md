@@ -43,6 +43,7 @@ This part of the process is completely addressed by <https://github.com/Francesc
 Let us rember that before eecuting the overall architecture each part must be prepared. Please follow the instructions for Planner-1 and Planner-2 to prepare the enviroment (found in the respective repos)
 An example of execution is as follows: (from the main folder)
 * "python architecture.py Input/coininthebox/coininthebox.epddl Input/coininthebox/pb2.epddl Input/context/contextEx.epddl"
+
 Where:
 	- Input/coininthebox/coininthebox.epddl represents the domain file
 	- Input/coininthebox/pb1.epddl represents the problem file
