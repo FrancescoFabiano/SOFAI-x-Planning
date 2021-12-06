@@ -1,0 +1,2 @@
+(pickup a)
+(stack a b)

@@ -88,6 +88,15 @@ def readTimeFromFile(filename):
 
 
 def executeS1():
+    global domain_file
+    global problem_file
+
+
+    #The solver takes the file and then write the solution in "out"
+    # json
+        # Domain:
+        # Problem:
+        # Solution
     resFile = instanceNameEFP.replace(".tmp", "S1.tmp")
     out = open(output_folderPl1 + resFile, "w")
     out.write("Solution = open_a, peek_a")
@@ -233,15 +242,20 @@ if __name__ == '__main__':
     # if the returned value is within range of the given one, validate solution.
     # if not go to s2 solving
 
+    #@TODO: Confidence magari è ridondante w.r.t. correctness
+
     solutionS1, confidenceS1 = solveWithS1();
-    if (confidenceS1 >= correctnessCntx):
-        correctnessS1 = validateSolution(solutionS1)
-        if(correctnessS1 >= correctnessCntx):
-            print("The solution of System 1 is: " + str(solutionS1))
-            sys.exit(0)
+    if (confidenceS1 >= correctnessCntx): #@TODO: Errore cambia variabile
+        print("The solution is: " + str(solutionS1) + " found by System 1.")
+        sys.exit(0)
 
     ######### S2 metacognitive part
     # Employ the S2 metacognitive structure
+    correctnessS1 = validateSolution(solutionS1)
+    if(correctnessS1 >= correctnessCntx):
+        print("The solution is: " + str(solutionS1) + " found by System 1.")
+        sys.exit(0)
+
     planner = 1 #By default we use Planner1 -- we use label to indicate the planners
     instanceDepth = int(getVarFromFile(problem_file,"depth"))
 
@@ -261,9 +275,8 @@ if __name__ == '__main__':
         isSolved, elapsedTime, solutionS2 = solveWithS2(timeLimitCntx,planner)
         if (isSolved):
             memorizeSolution(planner, difficulty, elapsedTime, solutionS2)
-            print("The solution is: " + str(solutionS2) + " and has been found in " + str(elapsedTime) + "s")
-
+            print("The solution is: " + str(solutionS2) + " and has been found in " + str(elapsedTime) + "s") #Aggiungi da che planner ha trovato la sol
         else:
-            print("It was not possibile find any solution in the given time (" + str(elapsedTime) + "s)")
+            print("It was not possibile find any solution in the given time (" + str(elapsedTime) + "s)") #Metti anche la soluzione di Sys1
     else:
         print("The only found solution (System 1) is: " + str(solutionS1))

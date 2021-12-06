@@ -1,0 +1,5 @@
+EFP Version 2.0 (on POSS with STANDARD transition function) with VISITED-STATE completed the search in 0.0221531
+Executed actions: signal_a_b, open_a, peek_b
+Plan Length: 3
+
+

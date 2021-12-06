@@ -1,0 +1,835 @@
+{
+    "size_limit": 100,
+    "cases": {
+        "1": {
+            "Planning_Domain": "blockworld",
+            "initial": [
+                "(on-table a)",
+                "(on-table b)",
+                "(clear a)",
+                "(clear b)",
+                "(arm-empty)"
+            ],
+            "goal": [
+                "(on a b)"
+            ],
+            "Index": "blockworld-plans/plan_1.txt"
+        },
+        "2": {
+            "Planning_Domain": "blockworld",
+            "initial": [
+                "(on-table a)",
+                "(on-table b)",
+                "(on-table c)",
+                "(on-table d)",
+                "(on-table e)",
+                "(on-table f)",
+                "(on-table g)",
+                "(on-table h)",
+                "(on-table i)",
+                "(on-table j)",
+                "(on-table k)",
+                "(on-table l)",
+                "(on-table m)",
+                "(on-table n)",
+                "(clear a)",
+                "(clear b)",
+                "(clear c)",
+                "(clear d)",
+                "(clear e)",
+                "(clear j)",
+                "(clear f)",
+                "(clear g)",
+                "(clear h)",
+                "(clear i)",
+                "(clear k)",
+                "(clear l)",
+                "(clear m)",
+                "(clear n)",
+                "(arm-empty)"
+            ],
+            "goal": [
+                "(on a b)",
+                "(on b c)",
+                "(on c d)",
+                "(on d e)",
+                "(on e f)",
+                "(on f g)",
+                "(on g h)",
+                "(on h i)",
+                "(on i j)",
+                "(on j k)",
+                "(on k l)",
+                "(on l m)",
+                "(on m n)",
+                "(on m n) )"
+            ],
+            "Index": "blockworld-plans/plan_10.txt"
+        },
+        "3": {
+            "Planning_Domain": "blockworld",
+            "initial": [
+                "(on-table a)",
+                "(on-table b)",
+                "(on-table c)",
+                "(on-table d)",
+                "(on-table e)",
+                "(on-table f)",
+                "(on-table g)",
+                "(on-table h)",
+                "(on-table i)",
+                "(on-table j)",
+                "(on-table k)",
+                "(on-table l)",
+                "(on-table m)",
+                "(on-table n)",
+                "(on-table o)",
+                "(clear a)",
+                "(clear b)",
+                "(clear c)",
+                "(clear d)",
+                "(clear e)",
+                "(clear j)",
+                "(clear f)",
+                "(clear g)",
+                "(clear h)",
+                "(clear i)",
+                "(clear k)",
+                "(clear l)",
+                "(clear m)",
+                "(clear n)",
+                "(clear o)",
+                "(arm-empty)"
+            ],
+            "goal": [
+                "(on a b)",
+                "(on b c)",
+                "(on c d)",
+                "(on d e)",
+                "(on e f)",
+                "(on f g)",
+                "(on g h)",
+                "(on h i)",
+                "(on i j)",
+                "(on j k)",
+                "(on k l)",
+                "(on l m)",
+                "(on m n)",
+                "(on n o)",
+                "(on n o) )"
+            ],
+            "Index": "blockworld-plans/plan_11.txt"
+        },
+        "4": {
+            "Planning_Domain": "blockworld",
+            "initial": [
+                "(on-table a)",
+                "(on-table b)",
+                "(on-table c)",
+                "(clear a)",
+                "(clear b)",
+                "(clear c)",
+                "(arm-empty)"
+            ],
+            "goal": [
+                "(on a b)",
+                "(on b c)"
+            ],
+            "Index": "blockworld-plans/plan_12.txt"
+        },
+        "5": {
+            "Planning_Domain": "blockworld",
+            "initial": [
+                "(on-table a)",
+                "(on b a)",
+                "(on c b)",
+                "(on d c)",
+                "(clear d)",
+                "(arm-empty)"
+            ],
+            "goal": [
+                "(on b a)",
+                "(on c b)",
+                "(on a d)"
+            ],
+            "Index": "blockworld-plans/plan_13.txt"
+        },
+        "6": {
+            "Planning_Domain": "blockworld",
+            "initial": [
+                "(on-table a)",
+                "(on-table b)",
+                "(on-table c)",
+                "(on-table d)",
+                "(on-table e)",
+                "(clear a)",
+                "(clear b)",
+                "(clear c)",
+                "(clear d)",
+                "(clear e)",
+                "(arm-empty)"
+            ],
+            "goal": [
+                "(on a b)",
+                "(on b c)",
+                "(on c d)",
+                "(on d e)"
+            ],
+            "Index": "blockworld-plans/plan_14.txt"
+        },
+        "7": {
+            "Planning_Domain": "blockworld",
+            "initial": [
+                "(on-table a)",
+                "(on-table b)",
+                "(on-table c)",
+                "(on-table d)",
+                "(on-table e)",
+                "(on-table f)",
+                "(clear a)",
+                "(clear b)",
+                "(clear c)",
+                "(clear d)",
+                "(clear e)",
+                "(clear f)",
+                "(arm-empty)"
+            ],
+            "goal": [
+                "(on a b)",
+                "(on b c)",
+                "(on c d)",
+                "(on d e)",
+                "(on e f)"
+            ],
+            "Index": "blockworld-plans/plan_2.txt"
+        },
+        "8": {
+            "Planning_Domain": "blockworld",
+            "initial": [
+                "(on-table a)",
+                "(on-table b)",
+                "(on-table c)",
+                "(on-table d)",
+                "(on-table e)",
+                "(on-table f)",
+                "(on-table g)",
+                "(clear a)",
+                "(clear b)",
+                "(clear c)",
+                "(clear d)",
+                "(clear e)",
+                "(clear f)",
+                "(clear g)",
+                "(arm-empty)"
+            ],
+            "goal": [
+                "(on a b)",
+                "(on b c)",
+                "(on c d)",
+                "(on d e)",
+                "(on e f)",
+                "(on f g)"
+            ],
+            "Index": "blockworld-plans/plan_3.txt"
+        },
+        "9": {
+            "Planning_Domain": "blockworld",
+            "initial": [
+                "(on-table a)",
+                "(on-table b)",
+                "(on-table c)",
+                "(on-table d)",
+                "(on-table e)",
+                "(on-table f)",
+                "(on-table g)",
+                "(on-table h)",
+                "(clear a)",
+                "(clear b)",
+                "(clear c)",
+                "(clear d)",
+                "(clear e)",
+                "(clear f)",
+                "(clear g)",
+                "(clear h)"
+            ],
+            "goal": [
+                "(on a b)",
+                "(on b c)",
+                "(on c d)",
+                "(on d e)",
+                "(on e f)",
+                "(on f g)",
+                "(on g h)"
+            ],
+            "Index": "blockworld-plans/plan_4.txt"
+        },
+        "10": {
+            "Planning_Domain": "blockworld",
+            "initial": [
+                "(on-table a)",
+                "(on-table b)",
+                "(on-table c)",
+                "(on-table d)",
+                "(on-table e)",
+                "(on-table f)",
+                "(on-table g)",
+                "(on-table h)",
+                "(on-table i)",
+                "(clear a)",
+                "(clear b)",
+                "(clear c)",
+                "(clear d)",
+                "(clear e)",
+                "(clear f)",
+                "(clear g)",
+                "(clear h)",
+                "(clear i)",
+                "(arm-empty)"
+            ],
+            "goal": [
+                "(on a b)",
+                "(on b c)",
+                "(on c d)",
+                "(on d e)",
+                "(on e f)",
+                "(on f g)",
+                "(on g h)",
+                "(on h i)"
+            ],
+            "Index": "blockworld-plans/plan_5.txt"
+        },
+        "11": {
+            "Planning_Domain": "blockworld",
+            "initial": [
+                "(on-table a)",
+                "(on-table b)",
+                "(on-table c)",
+                "(on-table d)",
+                "(on-table e)",
+                "(on-table f)",
+                "(on-table g)",
+                "(on-table h)",
+                "(on-table i)",
+                "(on-table j)",
+                "(clear a)",
+                "(clear b)",
+                "(clear c)",
+                "(clear d)",
+                "(clear e)",
+                "(clear j)",
+                "(clear f)",
+                "(clear g)",
+                "(clear h)",
+                "(clear i)",
+                "(arm-empty)"
+            ],
+            "goal": [
+                "(on a b)",
+                "(on b c)",
+                "(on c d)",
+                "(on d e)",
+                "(on e f)",
+                "(on f g)",
+                "(on g h)",
+                "(on h i)",
+                "(on i j)",
+                "(on i j) )"
+            ],
+            "Index": "blockworld-plans/plan_6.txt"
+        },
+        "12": {
+            "Planning_Domain": "blockworld",
+            "initial": [
+                "(on-table a)",
+                "(on-table b)",
+                "(on-table c)",
+                "(on-table d)",
+                "(on-table e)",
+                "(on-table f)",
+                "(on-table g)",
+                "(on-table h)",
+                "(on-table i)",
+                "(on-table j)",
+                "(on-table k)",
+                "(clear a)",
+                "(clear b)",
+                "(clear c)",
+                "(clear d)",
+                "(clear e)",
+                "(clear j)",
+                "(clear f)",
+                "(clear g)",
+                "(clear h)",
+                "(clear i)",
+                "(clear k)",
+                "(arm-empty)"
+            ],
+            "goal": [
+                "(on a b)",
+                "(on b c)",
+                "(on c d)",
+                "(on d e)",
+                "(on e f)",
+                "(on f g)",
+                "(on g h)",
+                "(on h i)",
+                "(on i j)",
+                "(on j k)"
+            ],
+            "Index": "blockworld-plans/plan_7.txt"
+        },
+        "13": {
+            "Planning_Domain": "blockworld",
+            "initial": [
+                "(on-table a)",
+                "(on-table b)",
+                "(on-table c)",
+                "(on-table d)",
+                "(on-table e)",
+                "(on-table f)",
+                "(on-table g)",
+                "(on-table h)",
+                "(on-table i)",
+                "(on-table j)",
+                "(on-table k)",
+                "(on-table l)",
+                "(clear a)",
+                "(clear b)",
+                "(clear c)",
+                "(clear d)",
+                "(clear e)",
+                "(clear j)",
+                "(clear f)",
+                "(clear g)",
+                "(clear h)",
+                "(clear i)",
+                "(clear k)",
+                "(clear l)",
+                "(arm-empty)"
+            ],
+            "goal": [
+                "(on a b)",
+                "(on b c)",
+                "(on c d)",
+                "(on d e)",
+                "(on e f)",
+                "(on f g)",
+                "(on g h)",
+                "(on h i)",
+                "(on i j)",
+                "(on j k)",
+                "(on k l)",
+                "(on k l)  )"
+            ],
+            "Index": "blockworld-plans/plan_8.txt"
+        },
+        "14": {
+            "Planning_Domain": "blockworld",
+            "initial": [
+                "(on-table a)",
+                "(on-table b)",
+                "(on-table c)",
+                "(on-table d)",
+                "(on-table e)",
+                "(on-table f)",
+                "(on-table g)",
+                "(on-table h)",
+                "(on-table i)",
+                "(on-table j)",
+                "(on-table k)",
+                "(on-table l)",
+                "(on-table m)",
+                "(clear a)",
+                "(clear b)",
+                "(clear c)",
+                "(clear d)",
+                "(clear e)",
+                "(clear j)",
+                "(clear f)",
+                "(clear g)",
+                "(clear h)",
+                "(clear i)",
+                "(clear k)",
+                "(clear l)",
+                "(clear m)",
+                "(arm-empty)"
+            ],
+            "goal": [
+                "(on a b)",
+                "(on b c)",
+                "(on c d)",
+                "(on d e)",
+                "(on e f)",
+                "(on f g)",
+                "(on g h)",
+                "(on h i)",
+                "(on i j)",
+                "(on j k)",
+                "(on k l)",
+                "(on l m)",
+                "(on l m)  )"
+            ],
+            "Index": "blockworld-plans/plan_9.txt"
+        },
+        "15": {
+            "Planning_Domain": "coininthebox",
+            "initial": [
+                "(tail)",
+                "(has_key a)",
+                "(looking a)",
+                "([a b c](has_key a)",
+                "([a b c](not (has_key b)",
+                "([a b c](not (has_key c)",
+                "([a b c](not (opened)",
+                "([a b c](looking a)",
+                "([a b c](not (looking b)",
+                "([a b c](not (looking c)"
+            ],
+            "goal": [
+                "([a](opened)"
+            ],
+            "Index": "coininthebox-plans/plan_1.txt"
+        },
+        "16": {
+            "Planning_Domain": "coininthebox",
+            "initial": [
+                "(tail)",
+                "(has_key a)",
+                "(looking a)",
+                "([a b](has_key a)",
+                "([a b](not (has_key b)",
+                "([a b](not (opened)",
+                "([a b](looking a)",
+                "([a b](not (looking b)"
+            ],
+            "goal": [
+                "([a][b](tail)"
+            ],
+            "Index": "coininthebox-plans/plan_10.txt"
+        },
+        "17": {
+            "Planning_Domain": "coininthebox",
+            "initial": [
+                "(tail)",
+                "(has_key b)",
+                "(looking a)",
+                "([a b c](has_key b)",
+                "([a b c](not (has_key a)",
+                "([a b c](not (has_key c)",
+                "([a b c](not (opened)",
+                "([a b c](looking a)",
+                "([a b c](not (looking b)",
+                "([a b c](not (looking c)"
+            ],
+            "goal": [
+                "([a](opened)"
+            ],
+            "Index": "coininthebox-plans/plan_11.txt"
+        },
+        "18": {
+            "Planning_Domain": "coininthebox",
+            "initial": [
+                "(tail)",
+                "(has_key b)",
+                "(looking a)",
+                "([a b c](has_key b)",
+                "([a b c](not (has_key a)",
+                "([a b c](not (has_key c)",
+                "([a b c](not (opened)",
+                "([a b c](looking a)",
+                "([a b c](not (looking b)",
+                "([a b c](not (looking c)"
+            ],
+            "goal": [
+                "([a](tail)"
+            ],
+            "Index": "coininthebox-plans/plan_12.txt"
+        },
+        "19": {
+            "Planning_Domain": "coininthebox",
+            "initial": [
+                "(tail)",
+                "(has_key b)",
+                "(looking a)",
+                "([a b c](has_key b)",
+                "([a b c](not (has_key a)",
+                "([a b c](not (has_key c)",
+                "([a b c](not (opened)",
+                "([a b c](looking a)",
+                "([a b c](not (looking b)",
+                "([a b c](not (looking c)"
+            ],
+            "goal": [
+                "([b][a](tail)"
+            ],
+            "Index": "coininthebox-plans/plan_13.txt"
+        },
+        "20": {
+            "Planning_Domain": "coininthebox",
+            "initial": [
+                "(tail)",
+                "(has_key b)",
+                "(looking a)",
+                "([a b c](has_key b)",
+                "([a b c](not (has_key a)",
+                "([a b c](not (has_key c)",
+                "([a b c](not (opened)",
+                "([a b c](looking a)",
+                "([a b c](not (looking b)",
+                "([a b c](not (looking c)"
+            ],
+            "goal": [
+                "([b](tail)"
+            ],
+            "Index": "coininthebox-plans/plan_14.txt"
+        },
+        "21": {
+            "Planning_Domain": "coininthebox",
+            "initial": [
+                "(tail)",
+                "(has_key b)",
+                "(looking a)",
+                "([a b c](has_key b)",
+                "([a b c](not (has_key a)",
+                "([a b c](not (has_key c)",
+                "([a b c](not (opened)",
+                "([a b c](looking a)",
+                "([a b c](not (looking b)",
+                "([a b c](not (looking c)"
+            ],
+            "goal": [
+                "([c](tail)"
+            ],
+            "Index": "coininthebox-plans/plan_15.txt"
+        },
+        "22": {
+            "Planning_Domain": "coininthebox",
+            "initial": [
+                "(tail)",
+                "(has_key b)",
+                "(looking a)",
+                "([a b](has_key b)",
+                "([a b](not (has_key a)",
+                "([a b](not (opened)",
+                "([a b](looking a)",
+                "([a b](not (looking b)"
+            ],
+            "goal": [
+                "([a](opened)"
+            ],
+            "Index": "coininthebox-plans/plan_16.txt"
+        },
+        "23": {
+            "Planning_Domain": "coininthebox",
+            "initial": [
+                "(tail)",
+                "(has_key b)",
+                "(looking a)",
+                "([a b](has_key b)",
+                "([a b](not (has_key a)",
+                "([a b](not (opened)",
+                "([a b](looking a)",
+                "([a b](not (looking b)"
+            ],
+            "goal": [
+                "([a](tail)"
+            ],
+            "Index": "coininthebox-plans/plan_17.txt"
+        },
+        "24": {
+            "Planning_Domain": "coininthebox",
+            "initial": [
+                "(tail)",
+                "(has_key b)",
+                "(looking a)",
+                "([a b](has_key b)",
+                "([a b](not (has_key a)",
+                "([a b](not (opened)",
+                "([a b](looking a)",
+                "([a b](not (looking b)"
+            ],
+            "goal": [
+                "([b][a](tail)"
+            ],
+            "Index": "coininthebox-plans/plan_18.txt"
+        },
+        "25": {
+            "Planning_Domain": "coininthebox",
+            "initial": [
+                "(tail)",
+                "(has_key b)",
+                "(looking a)",
+                "([a b](has_key b)",
+                "([a b](not (has_key a)",
+                "([a b](not (opened)",
+                "([a b](looking a)",
+                "([a b](not (looking b)"
+            ],
+            "goal": [
+                "([b](tail)"
+            ],
+            "Index": "coininthebox-plans/plan_19.txt"
+        },
+        "26": {
+            "Planning_Domain": "coininthebox",
+            "initial": [
+                "(tail)",
+                "(has_key a)",
+                "(looking a)",
+                "([a b c](has_key a)",
+                "([a b c](not (has_key b)",
+                "([a b c](not (has_key c)",
+                "([a b c](not (opened)",
+                "([a b c](looking a)",
+                "([a b c](not (looking b)",
+                "([a b c](not (looking c)"
+            ],
+            "goal": [
+                "([a](tail)"
+            ],
+            "Index": "coininthebox-plans/plan_2.txt"
+        },
+        "27": {
+            "Planning_Domain": "coininthebox",
+            "initial": [
+                "(tail)",
+                "(has_key b)",
+                "(looking a)",
+                "([a b](has_key b)",
+                "([a b](not (has_key a)",
+                "([a b](not (opened)",
+                "([a b](looking a)",
+                "([a b](not (looking b)"
+            ],
+            "goal": [
+                "([a][b](tail)"
+            ],
+            "Index": "coininthebox-plans/plan_20.txt"
+        },
+        "28": {
+            "Planning_Domain": "coininthebox",
+            "initial": [
+                "(tail)",
+                "(has_key a)",
+                "(looking a)",
+                "([a b c](has_key a)",
+                "([a b c](not (has_key b)",
+                "([a b c](not (has_key c)",
+                "([a b c](not (opened)",
+                "([a b c](looking a)",
+                "([a b c](not (looking b)",
+                "([a b c](not (looking c)"
+            ],
+            "goal": [
+                "([b][a](tail)"
+            ],
+            "Index": "coininthebox-plans/plan_3.txt"
+        },
+        "29": {
+            "Planning_Domain": "coininthebox",
+            "initial": [
+                "(tail)",
+                "(has_key a)",
+                "(looking a)",
+                "([a b c](has_key a)",
+                "([a b c](not (has_key b)",
+                "([a b c](not (has_key c)",
+                "([a b c](not (opened)",
+                "([a b c](looking a)",
+                "([a b c](not (looking b)",
+                "([a b c](not (looking c)"
+            ],
+            "goal": [
+                "([b](tail)"
+            ],
+            "Index": "coininthebox-plans/plan_4.txt"
+        },
+        "30": {
+            "Planning_Domain": "coininthebox",
+            "initial": [
+                "(tail)",
+                "(has_key a)",
+                "(looking a)",
+                "([a b c](has_key a)",
+                "([a b c](not (has_key b)",
+                "([a b c](not (has_key c)",
+                "([a b c](not (opened)",
+                "([a b c](looking a)",
+                "([a b c](not (looking b)",
+                "([a b c](not (looking c)"
+            ],
+            "goal": [
+                "([c](tail)"
+            ],
+            "Index": "coininthebox-plans/plan_5.txt"
+        },
+        "31": {
+            "Planning_Domain": "coininthebox",
+            "initial": [
+                "(tail)",
+                "(has_key a)",
+                "(looking a)",
+                "([a b](has_key a)",
+                "([a b](not (has_key b)",
+                "([a b](not (opened)",
+                "([a b](looking a)",
+                "([a b](not (looking b)"
+            ],
+            "goal": [
+                "([a](opened)"
+            ],
+            "Index": "coininthebox-plans/plan_6.txt"
+        },
+        "32": {
+            "Planning_Domain": "coininthebox",
+            "initial": [
+                "(tail)",
+                "(has_key a)",
+                "(looking a)",
+                "([a b](has_key a)",
+                "([a b](not (has_key b)",
+                "([a b](not (opened)",
+                "([a b](looking a)",
+                "([a b](not (looking b)"
+            ],
+            "goal": [
+                "([a](tail)"
+            ],
+            "Index": "coininthebox-plans/plan_7.txt"
+        },
+        "33": {
+            "Planning_Domain": "coininthebox",
+            "initial": [
+                "(tail)",
+                "(has_key a)",
+                "(looking a)",
+                "([a b](has_key a)",
+                "([a b](not (has_key b)",
+                "([a b](not (opened)",
+                "([a b](looking a)",
+                "([a b](not (looking b)"
+            ],
+            "goal": [
+                "([b][a](tail)"
+            ],
+            "Index": "coininthebox-plans/plan_8.txt"
+        },
+        "34": {
+            "Planning_Domain": "coininthebox",
+            "initial": [
+                "(tail)",
+                "(has_key a)",
+                "(looking a)",
+                "([a b](has_key a)",
+                "([a b](not (has_key b)",
+                "([a b](not (opened)",
+                "([a b](looking a)",
+                "([a b](not (looking b)"
+            ],
+            "goal": [
+                "([b](tail)"
+            ],
+            "Index": "coininthebox-plans/plan_9.txt"
+        }
+    }
+}

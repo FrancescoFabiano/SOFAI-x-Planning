@@ -1,0 +1,47 @@
+(define (domain coininthebox)
+  (:requirements :strips :negative-preconditions :mep)
+  (:predicates (opened) (has_key ?ag - agent) (looking ?ag - agent) (tail))
+ 
+
+  (:action open
+	:act_type 	ontic
+    :parameters (?ag - agent)
+    :precondition (and ([?ag](has_key ?ag)) (has_key ?ag))
+    :effect (opened)
+	:observers (and (forall (diff(?ag2)(?ag)) (when (looking ?ag2) (?ag2))) (?ag))
+  )
+
+  (:action peek
+	:act_type	sensing
+    :parameters (?ag - agent)
+    :precondition (and ([?ag](opened)) ([?ag](looking ?ag)) (looking ?ag) (opened))
+    :effect (when (looking ?ag) (tail))
+	:observers	(?ag)
+	:p_observers (and (forall (diff(?ag2)(?ag)) (when (looking ?ag2) (?ag2))))
+	)
+  
+
+  (:action signal
+    :parameters (?ag1 ?ag2 - agent)
+    :precondition (and ([?ag1](looking ?ag1)) ([?ag2](not (looking ?ag2))) )
+    :effect (looking ?ag2)
+	:observers (?ag1 ?ag2)
+  )
+
+  (:action distract
+    :parameters (?ag1 ?ag2 - agent)
+    :precondition (and ([?ag1](looking ?ag1)) ([?ag2](looking ?ag2)))
+    :effect (not (looking ?ag2))
+	:observers (?ag1 ?ag2)
+  )
+  
+  
+  (:action announce
+	:act_type	announcement
+    :parameters (?ag - agent)
+    :precondition (and ([?ag](tail)) (tail))
+    :effect (tail)
+	:observers (and (forall (diff(?ag2)(?ag)) (when (looking ?ag2) (?ag2))) (?ag))
+   )
+	
+)

@@ -26,3 +26,5 @@ coininthebox,1,2304,1.381052,pb2,open_a;peek_a
 coininthebox,1,2304,1.376145,pb2,open_a;peek_a
 coininthebox,1,2304,1.393624,pb2,open_a;peek_a
 coininthebox,1,2304,1.47027,pb2,open_a;peek_a
+coininthebox,1,512,1.871872,pb20,open_b;signal_a_b;peek_b;announce_b
+coininthebox,1,512,1.778988,pb20,open_b;signal_a_b;peek_b;announce_b

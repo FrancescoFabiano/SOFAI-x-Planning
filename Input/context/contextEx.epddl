@@ -1,6 +1,6 @@
 (define (context)
   (:timelimit 300) ; in second
   (:memorylimit 5000) ; in kb
-  (:correctness 0.5) ; value between 0 and 1 where 0 is "I do not care about the corectness at all" while 1 is "perfectly accurate plan"
+  (:correctness 0.5) ; value between 0 and 1 where 0 is "I do not care about the correctness at all" while 1 is "perfectly accurate plan"
   (:optimality 0.5) ; value between 0 and 1 where 0 is "I do not care about the optimality at all" while 1 is "optimal plan"
 )
