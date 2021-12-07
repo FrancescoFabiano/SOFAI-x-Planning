@@ -88,18 +88,21 @@ def readTimeFromFile(filename):
 
 
 def executeS1():
-    global domain_file
-    global problem_file
 
+    db_file_name = db_folder + db_file
 
-    #The solver takes the file and then write the solution in "out"
-    # json
-        # Domain:
-        # Problem:
-        # Solution
+    solString =""
+    with open(db_file_name, "r") as db:
+        db_reader = csv.reader(db, delimiter=',')
+        for row in db_reader:
+            if row[0] == parser.domain_name and row[-2] == parser.problem_name:
+                solString = row[-1]
+    
+    db.close()
+
     resFile = instanceNameEFP.replace(".tmp", "S1.tmp")
     out = open(output_folderPl1 + resFile, "w")
-    out.write("Solution = open_a, peek_a")
+    out.write("Solution = " + solString)
     out.close()
     return 0.4, resFile;
 
