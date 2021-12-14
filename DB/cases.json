@@ -1,0 +1,779 @@
+{
+    "size_limit": 100,
+    "cases": {
+        "1": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb1",
+            "planner": "2",
+            "complexity": "2304",
+            "time_taken": "0.0007773",
+            "init": [
+                "(tail)",
+                "(has_key a)",
+                "(looking a)",
+                "([a b c](has_key a)",
+                "([a b c](not (has_key b)",
+                "([a b c](not (has_key c)",
+                "([a b c](not (opened)",
+                "([a b c](looking a)",
+                "([a b c](not (looking b)",
+                "([a b c](not (looking c)"
+            ],
+            "goal": [
+                "([a](opened)"
+            ],
+            "plan": [
+                "open_a"
+            ]
+        },
+        "2": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "planner": "2",
+            "complexity": "2304",
+            "time_taken": "0.0028427",
+            "init": [
+                "(tail)",
+                "(has_key a)",
+                "(looking a)",
+                "([a b c](has_key a)",
+                "([a b c](not (has_key b)",
+                "([a b c](not (has_key c)",
+                "([a b c](not (opened)",
+                "([a b c](looking a)",
+                "([a b c](not (looking b)",
+                "([a b c](not (looking c)"
+            ],
+            "goal": [
+                "([a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "3": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb3",
+            "planner": "2",
+            "complexity": "2304",
+            "time_taken": "0.0717545",
+            "init": [
+                "(tail)",
+                "(has_key a)",
+                "(looking a)",
+                "([a b c](has_key a)",
+                "([a b c](not (has_key b)",
+                "([a b c](not (has_key c)",
+                "([a b c](not (opened)",
+                "([a b c](looking a)",
+                "([a b c](not (looking b)",
+                "([a b c](not (looking c)"
+            ],
+            "goal": [
+                "([b][a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a",
+                "signal_a_b",
+                "announce_a"
+            ]
+        },
+        "4": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb4",
+            "planner": "2",
+            "complexity": "2304",
+            "time_taken": "0.028259",
+            "init": [
+                "(tail)",
+                "(has_key a)",
+                "(looking a)",
+                "([a b c](has_key a)",
+                "([a b c](not (has_key b)",
+                "([a b c](not (has_key c)",
+                "([a b c](not (opened)",
+                "([a b c](looking a)",
+                "([a b c](not (looking b)",
+                "([a b c](not (looking c)"
+            ],
+            "goal": [
+                "([b](tail)"
+            ],
+            "plan": [
+                "signal_a_b",
+                "open_a",
+                "peek_b"
+            ]
+        },
+        "5": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb5",
+            "planner": "2",
+            "complexity": "2304",
+            "time_taken": "0.0547217",
+            "init": [
+                "(tail)",
+                "(has_key a)",
+                "(looking a)",
+                "([a b c](has_key a)",
+                "([a b c](not (has_key b)",
+                "([a b c](not (has_key c)",
+                "([a b c](not (opened)",
+                "([a b c](looking a)",
+                "([a b c](not (looking b)",
+                "([a b c](not (looking c)"
+            ],
+            "goal": [
+                "([c](tail)"
+            ],
+            "plan": [
+                "signal_a_c",
+                "open_a",
+                "peek_c"
+            ]
+        },
+        "6": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb6",
+            "planner": "2",
+            "complexity": "512",
+            "time_taken": "0.0004594",
+            "init": [
+                "(tail)",
+                "(has_key a)",
+                "(looking a)",
+                "([a b](has_key a)",
+                "([a b](not (has_key b)",
+                "([a b](not (opened)",
+                "([a b](looking a)",
+                "([a b](not (looking b)"
+            ],
+            "goal": [
+                "([a](opened)"
+            ],
+            "plan": [
+                "open_a"
+            ]
+        },
+        "7": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb7",
+            "planner": "2",
+            "complexity": "512",
+            "time_taken": "0.0018939",
+            "init": [
+                "(tail)",
+                "(has_key a)",
+                "(looking a)",
+                "([a b](has_key a)",
+                "([a b](not (has_key b)",
+                "([a b](not (opened)",
+                "([a b](looking a)",
+                "([a b](not (looking b)"
+            ],
+            "goal": [
+                "([a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "8": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb8",
+            "planner": "2",
+            "complexity": "512",
+            "time_taken": "0.0146568",
+            "init": [
+                "(tail)",
+                "(has_key a)",
+                "(looking a)",
+                "([a b](has_key a)",
+                "([a b](not (has_key b)",
+                "([a b](not (opened)",
+                "([a b](looking a)",
+                "([a b](not (looking b)"
+            ],
+            "goal": [
+                "([b][a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a",
+                "signal_a_b",
+                "announce_a"
+            ]
+        },
+        "9": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb9",
+            "planner": "2",
+            "complexity": "512",
+            "time_taken": "0.0103099",
+            "init": [
+                "(tail)",
+                "(has_key a)",
+                "(looking a)",
+                "([a b](has_key a)",
+                "([a b](not (has_key b)",
+                "([a b](not (opened)",
+                "([a b](looking a)",
+                "([a b](not (looking b)"
+            ],
+            "goal": [
+                "([b](tail)"
+            ],
+            "plan": [
+                "signal_a_b",
+                "open_a",
+                "peek_b"
+            ]
+        },
+        "10": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb10",
+            "planner": "2",
+            "complexity": "512",
+            "time_taken": "0.0147193",
+            "init": [
+                "(tail)",
+                "(has_key a)",
+                "(looking a)",
+                "([a b](has_key a)",
+                "([a b](not (has_key b)",
+                "([a b](not (opened)",
+                "([a b](looking a)",
+                "([a b](not (looking b)"
+            ],
+            "goal": [
+                "([a][b](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a",
+                "signal_a_b",
+                "announce_a"
+            ]
+        },
+        "11": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb11",
+            "planner": "2",
+            "complexity": "2304",
+            "time_taken": "0.0006865",
+            "init": [
+                "(tail)",
+                "(has_key b)",
+                "(looking a)",
+                "([a b c](has_key b)",
+                "([a b c](not (has_key a)",
+                "([a b c](not (has_key c)",
+                "([a b c](not (opened)",
+                "([a b c](looking a)",
+                "([a b c](not (looking b)",
+                "([a b c](not (looking c)"
+            ],
+            "goal": [
+                "([a](opened)"
+            ],
+            "plan": [
+                "open_b"
+            ]
+        },
+        "12": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb12",
+            "planner": "2",
+            "complexity": "2304",
+            "time_taken": "0.003105",
+            "init": [
+                "(tail)",
+                "(has_key b)",
+                "(looking a)",
+                "([a b c](has_key b)",
+                "([a b c](not (has_key a)",
+                "([a b c](not (has_key c)",
+                "([a b c](not (opened)",
+                "([a b c](looking a)",
+                "([a b c](not (looking b)",
+                "([a b c](not (looking c)"
+            ],
+            "goal": [
+                "([a](tail)"
+            ],
+            "plan": [
+                "open_b",
+                "peek_a"
+            ]
+        },
+        "13": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb13",
+            "planner": "2",
+            "complexity": "2304",
+            "time_taken": "0.0807895",
+            "init": [
+                "(tail)",
+                "(has_key b)",
+                "(looking a)",
+                "([a b c](has_key b)",
+                "([a b c](not (has_key a)",
+                "([a b c](not (has_key c)",
+                "([a b c](not (opened)",
+                "([a b c](looking a)",
+                "([a b c](not (looking b)",
+                "([a b c](not (looking c)"
+            ],
+            "goal": [
+                "([b][a](tail)"
+            ],
+            "plan": [
+                "open_b",
+                "peek_a",
+                "signal_a_b",
+                "announce_a"
+            ]
+        },
+        "14": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb14",
+            "planner": "2",
+            "complexity": "2304",
+            "time_taken": "0.0156571",
+            "init": [
+                "(tail)",
+                "(has_key b)",
+                "(looking a)",
+                "([a b c](has_key b)",
+                "([a b c](not (has_key a)",
+                "([a b c](not (has_key c)",
+                "([a b c](not (opened)",
+                "([a b c](looking a)",
+                "([a b c](not (looking b)",
+                "([a b c](not (looking c)"
+            ],
+            "goal": [
+                "([b](tail)"
+            ],
+            "plan": [
+                "open_b",
+                "signal_a_b",
+                "peek_b"
+            ]
+        },
+        "15": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb15",
+            "planner": "2",
+            "complexity": "2304",
+            "time_taken": "0.0460259",
+            "init": [
+                "(tail)",
+                "(has_key b)",
+                "(looking a)",
+                "([a b c](has_key b)",
+                "([a b c](not (has_key a)",
+                "([a b c](not (has_key c)",
+                "([a b c](not (opened)",
+                "([a b c](looking a)",
+                "([a b c](not (looking b)",
+                "([a b c](not (looking c)"
+            ],
+            "goal": [
+                "([c](tail)"
+            ],
+            "plan": [
+                "signal_a_c",
+                "open_b",
+                "peek_c"
+            ]
+        },
+        "16": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb16",
+            "planner": "2",
+            "complexity": "512",
+            "time_taken": "0.000444",
+            "init": [
+                "(tail)",
+                "(has_key b)",
+                "(looking a)",
+                "([a b](has_key b)",
+                "([a b](not (has_key a)",
+                "([a b](not (opened)",
+                "([a b](looking a)",
+                "([a b](not (looking b)"
+            ],
+            "goal": [
+                "([a](opened)"
+            ],
+            "plan": [
+                "open_b"
+            ]
+        },
+        "17": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb17",
+            "planner": "2",
+            "complexity": "512",
+            "time_taken": "0.0018049",
+            "init": [
+                "(tail)",
+                "(has_key b)",
+                "(looking a)",
+                "([a b](has_key b)",
+                "([a b](not (has_key a)",
+                "([a b](not (opened)",
+                "([a b](looking a)",
+                "([a b](not (looking b)"
+            ],
+            "goal": [
+                "([a](tail)"
+            ],
+            "plan": [
+                "open_b",
+                "peek_a"
+            ]
+        },
+        "18": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb18",
+            "planner": "2",
+            "complexity": "512",
+            "time_taken": "0.0108115",
+            "init": [
+                "(tail)",
+                "(has_key b)",
+                "(looking a)",
+                "([a b](has_key b)",
+                "([a b](not (has_key a)",
+                "([a b](not (opened)",
+                "([a b](looking a)",
+                "([a b](not (looking b)"
+            ],
+            "goal": [
+                "([b][a](tail)"
+            ],
+            "plan": [
+                "open_b",
+                "peek_a",
+                "signal_a_b",
+                "announce_a"
+            ]
+        },
+        "19": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb19",
+            "planner": "2",
+            "complexity": "512",
+            "time_taken": "0.0057136",
+            "init": [
+                "(tail)",
+                "(has_key b)",
+                "(looking a)",
+                "([a b](has_key b)",
+                "([a b](not (has_key a)",
+                "([a b](not (opened)",
+                "([a b](looking a)",
+                "([a b](not (looking b)"
+            ],
+            "goal": [
+                "([b](tail)"
+            ],
+            "plan": [
+                "open_b",
+                "signal_a_b",
+                "peek_b"
+            ]
+        },
+        "20": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb20",
+            "planner": "2",
+            "complexity": "512",
+            "time_taken": "0.0107741",
+            "init": [
+                "(tail)",
+                "(has_key b)",
+                "(looking a)",
+                "([a b](has_key b)",
+                "([a b](not (has_key a)",
+                "([a b](not (opened)",
+                "([a b](looking a)",
+                "([a b](not (looking b)"
+            ],
+            "goal": [
+                "([a][b](tail)"
+            ],
+            "plan": [
+                "open_b",
+                "peek_a",
+                "signal_a_b",
+                "announce_a"
+            ]
+        },
+        "21": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb20",
+            "planner": "2",
+            "complexity": "512",
+            "time_taken": "0.009319",
+            "init": [
+                "(tail)",
+                "(has_key b)",
+                "(looking a)",
+                "([a b](has_key b)",
+                "([a b](not (has_key a)",
+                "([a b](not (opened)",
+                "([a b](looking a)",
+                "([a b](not (looking b)"
+            ],
+            "goal": [
+                "([a][b](tail)"
+            ],
+            "plan": [
+                "open_b",
+                "peek_a",
+                "signal_a_b",
+                "announce_a"
+            ]
+        },
+        "22": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb20",
+            "planner": "2",
+            "complexity": "512",
+            "time_taken": "0.0096563",
+            "init": [
+                "(tail)",
+                "(has_key b)",
+                "(looking a)",
+                "([a b](has_key b)",
+                "([a b](not (has_key a)",
+                "([a b](not (opened)",
+                "([a b](looking a)",
+                "([a b](not (looking b)"
+            ],
+            "goal": [
+                "([a][b](tail)"
+            ],
+            "plan": [
+                "open_b",
+                "peek_a",
+                "signal_a_b",
+                "announce_a"
+            ]
+        },
+        "23": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "planner": "2",
+            "complexity": "2304",
+            "time_taken": "0.0024999",
+            "init": [
+                "(tail)",
+                "(has_key a)",
+                "(looking a)",
+                "([a b c](has_key a)",
+                "([a b c](not (has_key b)",
+                "([a b c](not (has_key c)",
+                "([a b c](not (opened)",
+                "([a b c](looking a)",
+                "([a b c](not (looking b)",
+                "([a b c](not (looking c)"
+            ],
+            "goal": [
+                "([a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "24": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "planner": "2",
+            "complexity": "2304",
+            "time_taken": "0.0023602",
+            "init": [
+                "(tail)",
+                "(has_key a)",
+                "(looking a)",
+                "([a b c](has_key a)",
+                "([a b c](not (has_key b)",
+                "([a b c](not (has_key c)",
+                "([a b c](not (opened)",
+                "([a b c](looking a)",
+                "([a b c](not (looking b)",
+                "([a b c](not (looking c)"
+            ],
+            "goal": [
+                "([a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "25": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "planner": "1",
+            "complexity": "2304",
+            "time_taken": "1.381052",
+            "init": [
+                "(tail)",
+                "(has_key a)",
+                "(looking a)",
+                "([a b c](has_key a)",
+                "([a b c](not (has_key b)",
+                "([a b c](not (has_key c)",
+                "([a b c](not (opened)",
+                "([a b c](looking a)",
+                "([a b c](not (looking b)",
+                "([a b c](not (looking c)"
+            ],
+            "goal": [
+                "([a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "26": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "planner": "1",
+            "complexity": "2304",
+            "time_taken": "1.376145",
+            "init": [
+                "(tail)",
+                "(has_key a)",
+                "(looking a)",
+                "([a b c](has_key a)",
+                "([a b c](not (has_key b)",
+                "([a b c](not (has_key c)",
+                "([a b c](not (opened)",
+                "([a b c](looking a)",
+                "([a b c](not (looking b)",
+                "([a b c](not (looking c)"
+            ],
+            "goal": [
+                "([a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "27": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "planner": "1",
+            "complexity": "2304",
+            "time_taken": "1.393624",
+            "init": [
+                "(tail)",
+                "(has_key a)",
+                "(looking a)",
+                "([a b c](has_key a)",
+                "([a b c](not (has_key b)",
+                "([a b c](not (has_key c)",
+                "([a b c](not (opened)",
+                "([a b c](looking a)",
+                "([a b c](not (looking b)",
+                "([a b c](not (looking c)"
+            ],
+            "goal": [
+                "([a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "28": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "planner": "1",
+            "complexity": "2304",
+            "time_taken": "1.47027",
+            "init": [
+                "(tail)",
+                "(has_key a)",
+                "(looking a)",
+                "([a b c](has_key a)",
+                "([a b c](not (has_key b)",
+                "([a b c](not (has_key c)",
+                "([a b c](not (opened)",
+                "([a b c](looking a)",
+                "([a b c](not (looking b)",
+                "([a b c](not (looking c)"
+            ],
+            "goal": [
+                "([a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "29": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb20",
+            "planner": "1",
+            "complexity": "512",
+            "time_taken": "1.871872",
+            "init": [
+                "(tail)",
+                "(has_key b)",
+                "(looking a)",
+                "([a b](has_key b)",
+                "([a b](not (has_key a)",
+                "([a b](not (opened)",
+                "([a b](looking a)",
+                "([a b](not (looking b)"
+            ],
+            "goal": [
+                "([a][b](tail)"
+            ],
+            "plan": [
+                "open_b",
+                "signal_a_b",
+                "peek_b",
+                "announce_b"
+            ]
+        },
+        "30": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb20",
+            "planner": "1",
+            "complexity": "512",
+            "time_taken": "1.778988",
+            "init": [
+                "(tail)",
+                "(has_key b)",
+                "(looking a)",
+                "([a b](has_key b)",
+                "([a b](not (has_key a)",
+                "([a b](not (opened)",
+                "([a b](looking a)",
+                "([a b](not (looking b)"
+            ],
+            "goal": [
+                "([a][b](tail)"
+            ],
+            "plan": [
+                "open_b",
+                "signal_a_b",
+                "peek_b",
+                "announce_b"
+            ]
+        }
+    }
+}

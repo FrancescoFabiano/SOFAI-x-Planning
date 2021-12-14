@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # Four spaces as indentation [no tabs]
+import json
 import subprocess
 import re
 import csv
@@ -7,6 +8,8 @@ from pathlib import Path
 
 
 from ExternalPrograms.EPDDL.parser import EPDDL_Parser
+from ExternalPrograms.S1Solver import s1_solver
+from ExternalPrograms.S1Solver import getStates
 # Constants
 maxGroundDepth = 3
 output_folder = "Output/"
@@ -16,6 +19,7 @@ output_folderPDKB = output_folder + "PDKB/"
 scripts_folder = "Scripts/"
 db_folder = "DB/"
 db_file = "memory.db"
+json_file = "cases.json"
 
 
 # Global variables seen by all the functions
@@ -89,16 +93,8 @@ def readTimeFromFile(filename):
 
 def executeS1():
 
-    db_file_name = db_folder + db_file
-
-    solString =""
-    with open(db_file_name, "r") as db:
-        db_reader = csv.reader(db, delimiter=',')
-        for row in db_reader:
-            if row[0] == parser.domain_name and row[-2] == parser.problem_name:
-                solString = row[-1]
-    
-    db.close()
+    json_path = db_folder+json_file
+    solString = s1_solver.s1Solver(parser.domain_name,parser.problem_name,json_path)
 
     resFile = instanceNameEFP.replace(".tmp", "S1.tmp")
     out = open(output_folderPl1 + resFile, "w")
@@ -195,27 +191,35 @@ def solveWithS2(timeLimitCntx,planner):
 
 
 def memorizeSolution(planner, difficulty, elapsedTime, solutionS2):
-    db_file_name = db_folder + db_file
-    writeMemory = open(db_file_name, "a+")
-    writeMemory.write(parser.domain_name + ",")
-    writeMemory.write(str(planner) + ",")
-    writeMemory.write(str(difficulty) + ",")
-    writeMemory.write(str(elapsedTime)+ ",")
-    writeMemory.write(parser.problem_name)
 
-    first = True
-    for act in solutionS2:
-        if first:
-            writeMemory.write("," + act)
-            first = False
-        else:
-            writeMemory.write(";" + str(act))
+    json_path = db_folder+db_file
+    memory_file = open(json_path)
+    data = json.load(memory_file)
+    if ('cases' not in data.keys()) or (len(data['cases']) == 0):
+        index = 0
+    else:
+        index = max( [int(k) for k in data['cases'].keys()] )
 
-    writeMemory.write("\n")
-    writeMemory.close()
+    index += 1
 
+    data['cases'][str(index)] = {}
+    data['cases'][str(index)]['domain_name'] = parser.domain_name
+    data['cases'][str(index)]['problem_name'] = parser.problem_name
+    data['cases'][str(index)]['planner'] = planner
+    data['cases'][str(index)]['complexity'] = difficulty
+    data['cases'][str(index)]['time_taken'] = elapsedTime
 
+    init,goal = getStates.States(problem_file) #reading initial and goal states from problem file
+    
+    data['cases'][str(index)]['init'] = init
+    data['cases'][str(index)]['goal'] = goal
+    data['cases'][str(index)]['plan'] = solutionS2
 
+    json_object = json.dumps(data,indent=4)
+
+    # writing dictionary data into json file
+    with open(json_path,"w") as out:
+        out.write(json_object)
 
 
 def generateNamePDKB():
