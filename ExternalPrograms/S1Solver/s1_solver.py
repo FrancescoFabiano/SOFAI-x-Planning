@@ -12,6 +12,7 @@ def s1Solver(domain, problem,json_path):
     else:
         index = max( [int(k) for k in data['cases'].keys()] )
 
+
     maxLength = 0
     problem_plan = ""
     if index == 0:
@@ -25,6 +26,3 @@ def s1Solver(domain, problem,json_path):
                     problem_plan = ';'.join(data['cases'][str(i)]['plan'])
 
         return problem_plan
-
-
-

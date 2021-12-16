@@ -18,7 +18,7 @@ output_folderEFP = output_folder + "EFP/"
 output_folderPDKB = output_folder + "PDKB/"
 scripts_folder = "Scripts/"
 db_folder = "DB/"
-db_file = "memory.db"
+#db_file = "memory.db"
 json_file = "cases.json"
 
 
@@ -95,7 +95,7 @@ def executeS1():
 
     json_path = db_folder+json_file
     solString = s1_solver.s1Solver(parser.domain_name,parser.problem_name,json_path)
-
+    solString = solString.replace(";", ",")
     resFile = instanceNameEFP.replace(".tmp", "S1.tmp")
     out = open(output_folderPl1 + resFile, "w")
     out.write("Solution = " + solString)
@@ -139,7 +139,7 @@ def estimateDifficulty(instanceDepth):
     return (pow(parser.ag_number, instanceDepth)*pow(2, parser.fl_number))
 
 def estimateTimeCons(planner,difficulty):
-    db_file_name = db_folder + db_file
+    db_file_name = db_folder + json_file
     range = 100
     totalTimeConsumption = 0
     match_count = 0
@@ -192,9 +192,11 @@ def solveWithS2(timeLimitCntx,planner):
 
 def memorizeSolution(planner, difficulty, elapsedTime, solutionS2):
 
-    json_path = db_folder+db_file
+    json_path = db_folder+json_file
     memory_file = open(json_path)
+
     data = json.load(memory_file)
+
     if ('cases' not in data.keys()) or (len(data['cases']) == 0):
         index = 0
     else:
@@ -210,7 +212,7 @@ def memorizeSolution(planner, difficulty, elapsedTime, solutionS2):
     data['cases'][str(index)]['time_taken'] = elapsedTime
 
     init,goal = getStates.States(problem_file) #reading initial and goal states from problem file
-    
+
     data['cases'][str(index)]['init'] = init
     data['cases'][str(index)]['goal'] = goal
     data['cases'][str(index)]['plan'] = solutionS2
@@ -252,12 +254,14 @@ if __name__ == '__main__':
     #@TODO: Confidence magari è ridondante w.r.t. correctness
 
     solutionS1, confidenceS1 = solveWithS1();
+    #print("The solution is: " + str(solutionS1) + " found by System 1.")
+    #sys.exit(0)
     if (confidenceS1 >= correctnessCntx): #@TODO: Errore cambia variabile
         print("The solution is: " + str(solutionS1) + " found by System 1.")
         sys.exit(0)
-
-    ######### S2 metacognitive part
-    # Employ the S2 metacognitive structure
+    #
+    # ######### S2 metacognitive part
+    # # Employ the S2 metacognitive structure
     correctnessS1 = validateSolution(solutionS1)
     if(correctnessS1 >= correctnessCntx):
         print("The solution is: " + str(solutionS1) + " found by System 1.")
