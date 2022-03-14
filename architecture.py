@@ -11,7 +11,7 @@ from ExternalPrograms.EPDDL.parser import EPDDL_Parser
 from ExternalPrograms.S1Solver import s1_solver
 from ExternalPrograms.S1Solver import getStates
 # Constants
-maxGroundDepth = 3
+maxGroundDepth = 2
 output_folder = "Output/"
 output_folderPl1 = output_folder + "Pl1/"
 output_folderEFP = output_folder + "EFP/"
@@ -259,7 +259,8 @@ if __name__ == '__main__':
     if (confidenceS1 >= correctnessCntx): #@TODO: Errore cambia variabile
         print("The solution is: " + str(solutionS1) + " found by System 1.")
         sys.exit(0)
-    #
+
+
     # ######### S2 metacognitive part
     # # Employ the S2 metacognitive structure
     correctnessS1 = validateSolution(solutionS1)
@@ -286,7 +287,7 @@ if __name__ == '__main__':
         isSolved, elapsedTime, solutionS2 = solveWithS2(timeLimitCntx,planner)
         if (isSolved):
             memorizeSolution(planner, difficulty, elapsedTime, solutionS2)
-            print("The solution is: " + str(solutionS2) + " and has been found in " + str(elapsedTime) + "s") #Aggiungi da che planner ha trovato la sol
+            print("The solution is: " + str(solutionS2) + " and has been found in " + str(elapsedTime) + "s by Planner " + str(planner) + " (System 2)" ) #Aggiungi da che planner ha trovato la sol
         else:
             print("It was not possibile find any solution in the given time (" + str(elapsedTime) + "s)") #Metti anche la soluzione di Sys1
     else:
