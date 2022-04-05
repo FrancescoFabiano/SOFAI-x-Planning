@@ -10,6 +10,8 @@ from pathlib import Path
 from ExternalPrograms.EPDDL.parser import EPDDL_Parser
 from ExternalPrograms.S1Solver import s1_solver
 from ExternalPrograms.S1Solver import getStates
+from ExternalPrograms.S1Solver import s1_distance
+
 # Constants
 maxGroundDepth = 2
 output_folder = "Output/"
@@ -93,14 +95,39 @@ def readTimeFromFile(filename):
 
 def executeS1():
 
+    #New S1###################
+
+    mode = 1
+    similarity_threshold = 0.7 # If < than this is not returned
     json_path = db_folder+json_file
-    solString = s1_solver.s1Solver(parser.domain_name,parser.problem_name,json_path)
-    solString = solString.replace(";", ",")
+    with open(json_path) as f:
+        experience = json.load(f)
+    cases = experience["cases"]
+    init,goal = getStates.States(problem_file) #reading initial and goal states from problem file
+
+    #returned_list has records of this form <path_to_sol, similarity_score, problem_name>
+    sol = ""
+    confidence = 0
+    returned_list = s1_distance.doCaseMatch(cases, mode, parser.domain_name, init, goal, similarity_threshold)
+    if returned_list:
+        first_act = True
+        for act in returned_list[0][1]:
+            if first_act:
+                sol = act
+                first_act = False
+            else:
+                sol = sol + ", " + act
+        confidence = returned_list[0][0]
+    #########################
+
+
+#    solString = s1_solver.s1Solver(parser.domain_name,parser.problem_name,json_path)
+#    solString = solString.replace(";", ",")
     resFile = instanceNameEFP.replace(".tmp", "S1.tmp")
     out = open(output_folderPl1 + resFile, "w")
-    out.write("Solution = " + solString)
+    out.write("Solution = " + sol)
     out.close()
-    return 0.4, resFile;
+    return confidence, resFile;
 
 
 def solveWithS1():
@@ -257,7 +284,7 @@ if __name__ == '__main__':
     #print("The solution is: " + str(solutionS1) + " found by System 1.")
     #sys.exit(0)
     if (confidenceS1 >= correctnessCntx): #@TODO: Errore cambia variabile
-        print("The solution is: " + str(solutionS1) + " found by System 1.")
+        print("The solution is: " + str(solutionS1) + " found by System 1 with confidence " + str(confidenceS1))
         sys.exit(0)
 
 
