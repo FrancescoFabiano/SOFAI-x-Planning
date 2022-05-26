@@ -5,42 +5,63 @@ import subprocess
 import re
 import csv
 from pathlib import Path
+import sys, pprint
+import time
 
 
 from ExternalPrograms.EPDDL.parser import EPDDL_Parser
-from ExternalPrograms.S1Solver import s1_solver
+from ExternalPrograms.S1Solver import s1_planner
 from ExternalPrograms.S1Solver import getStates
 from ExternalPrograms.S1Solver import s1_distance
 
 # Constants
+systemALL = -1;
+systemONE = 1
+systemTWO = 2
+
+plannerALL = -1;
+plannerS2_1 = 1
+plannerS2_2 = 2
+
 maxGroundDepth = 2
 output_folder = "Output/"
 output_folderPl1 = output_folder + "Pl1/"
 output_folderEFP = output_folder + "EFP/"
 output_folderPDKB = output_folder + "PDKB/"
 scripts_folder = "Scripts/"
-db_folder = "DB/"
+dbFolder = "DB/"
 #db_file = "memory.db"
-json_file = "cases.json"
+jsonFilename = "cases.json"
 
+
+# Thresholds
+threshold1 = 20 #This threshold represents the minimun number of plan (existence) that needs to be generated from S2 (in the same domain) before accepting S1 solution
+threshold2 = 0.8 #The value which current_reward/average_revard must surpass to eploy S1 -- FOR NOW NOT EMPLOYED
+threshold3 = 0.9 #This value represents the risk-adversion of the system -- The higher it is the more incline to use S2 the system is
+threshold4 = 20 #This is the threshold that is used to set 'M' = 1 when S1 hasn't enough experience,
+epsilonS1 = 0.1
 
 # Global variables seen by all the functions
-domain_file = ""
-problem_file = ""
+domainFile = ""
+problemFile = ""
 context = ""
 instanceNameEFP = ""
+solutionS1 = []
+confidenceS1 = 0
+totalTIME = time.time()
+difficulty = 0
+
 
 
 # Global Objects
 parser = EPDDL_Parser()
 
 def createFolders():
-    Path(db_folder).mkdir(parents=True,exist_ok=True)
+    Path(dbFolder).mkdir(parents=True,exist_ok=True)
     Path(output_folder).mkdir(parents=True,exist_ok=True)
     Path(output_folderPl1).mkdir(parents=True,exist_ok=True)
     Path(output_folderEFP).mkdir(parents=True,exist_ok=True)
     Path(output_folderPDKB).mkdir(parents=True,exist_ok=True)
-
 
 def getVarFromFile(filename,varname):
     with open(filename) as myfile:
@@ -92,18 +113,17 @@ def readTimeFromFile(filename):
 
     raise Exception('Missing plan in '+ filename)
 
-
 def executeS1():
 
     #New S1###################
 
     mode = 1
     similarity_threshold = 0.7 # If < than this is not returned
-    json_path = db_folder+json_file
+    json_path = dbFolder+jsonFilename
     with open(json_path) as f:
         experience = json.load(f)
     cases = experience["cases"]
-    init,goal = getStates.States(problem_file) #reading initial and goal states from problem file
+    init,goal = getStates.States(problemFile) #reading initial and goal states from problem file
 
     #returned_list has records of this form <path_to_sol, similarity_score, problem_name>
     sol = ""
@@ -121,14 +141,13 @@ def executeS1():
     #########################
 
 
-#    solString = s1_solver.s1Solver(parser.domain_name,parser.problem_name,json_path)
+#    solString = s1_planner.s1Solver(parser.domain_name,parser.problem_name,json_path)
 #    solString = solString.replace(";", ",")
     resFile = instanceNameEFP.replace(".tmp", "S1.tmp")
     out = open(output_folderPl1 + resFile, "w")
     out.write("Solution = " + sol)
     out.close()
     return confidence, resFile;
-
 
 def solveWithS1():
     confidence, resFile = executeS1()
@@ -154,8 +173,8 @@ def generateEFPInstance():
     global instanceNameEFP
     global parser
 
-    parser.parse_domain(domain_file)
-    parser.parse_problem(problem_file)
+    parser.parse_domain(domainFile)
+    parser.parse_problem(problemFile)
     instanceNameEFP = parser.print_EFP(output_folderEFP)
 
 def estimateDifficulty(instanceDepth):
@@ -166,28 +185,28 @@ def estimateDifficulty(instanceDepth):
     return (pow(parser.ag_number, instanceDepth)*pow(2, parser.fl_number))
 
 def estimateTimeCons(planner,difficulty):
-    db_file_name = db_folder + json_file
+    dbFilename = dbFolder + jsonFilename
     range = 100
-    totalTimeConsumption = 0
-    match_count = 0
+    timeSTARTConsumption = 0
+    matchCount = 0
     #Controlla IL CSV e leggi valori
     try:
-        with open(db_file_name) as db:
+        with open(dbFilename) as db:
             db_reader = csv.reader(db, delimiter=',')
             for row in db_reader:
                 if(row[0] == parser.domain_name):
                     if(int(row[1]) == planner):
                         rowDiff = float(row[2])
                         if ((rowDiff < (difficulty + range)) and (rowDiff > (difficulty - range))):
-                            match_count += 1
-                            totalTimeConsumption += float(row[3])
+                            matchCount += 1
+                            timeSTARTConsumption += float(row[3])
     except IOError:
-        match_count = 0
+        matchCount = 0
 
     db.close()
 
-    if match_count > 0:
-        return (totalTimeConsumption/match_count)
+    if matchCount > 0:
+        return (timeSTARTConsumption/matchCount)
 
 
     else:
@@ -197,29 +216,35 @@ def estimateTimeCons(planner,difficulty):
 def checkDCK():
     return (parser.dynamicCK.lower() == "true")
 
-def solveWithS2(timeLimitCntx,planner):
-    if planner == 1:
+
+def solveWithS2(timeLimit):
+    solveWithS2(timeLimit, selectPlannerS2())
+
+def solveWithS2(timeLimit, planner):
+
+    if planner == plannerS2_1:
         domainNamePDKB, problemNamePDKB = parser.print_PDKB(output_folderPDKB)
-        result = subprocess.run(['sh','./'+ scripts_folder + 'PDKB_solve.sh', problemNamePDKB,  " " + output_folderPDKB, " " + str(int(timeLimitCntx))+"s"])
+        result = subprocess.run(['sh','./'+ scripts_folder + 'PDKB_solve.sh', problemNamePDKB,  " " + output_folderPDKB, " " + str(int(timeLimit))+"s"])
         solutionS2 = readSolutionFromFile("tmp/PDKB/" + problemNamePDKB)
         time = readTimeFromFile("tmp/PDKB/" + problemNamePDKB)
-    elif planner == 2:
-        result = subprocess.run(['sh','./'+ scripts_folder + 'EFP_solve.sh', instanceNameEFP, " " + output_folderEFP, " " + str(int(timeLimitCntx))+"s"])
+    elif planner == plannerS2_2:
+        result = subprocess.run(['sh','./'+ scripts_folder + 'EFP_solve.sh', instanceNameEFP, " " + output_folderEFP, " " + str(int(timeLimit))+"s"])
         solutionS2 = readSolutionFromFile("tmp/EFP/" + instanceNameEFP)
         time = readTimeFromFile("tmp/EFP/" + instanceNameEFP)
     else:
-        raise Exception('Planner '+ str(planner) +' is not a known S2-solver')
+        raise Exception('Planner '+ str(planner) +' is not a known S2-planner')
 
     if(time == "TO"):
-        return False, timeLimitCntx, None
+        #return False, timeLimit, None
+        print("The problem could not be solved by S2.")
+        return False
     else:
-        return True, float(time), solutionS2
+        memorizeSolution(systemTWO, planner, 1.0, float(time), 1.0, solutionS2)
+        #return True, float(time), solutionS2
 
+def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solution):
 
-
-def memorizeSolution(planner, difficulty, elapsedTime, solutionS2):
-
-    json_path = db_folder+json_file
+    json_path = dbFolder+jsonFilename
     memory_file = open(json_path)
 
     data = json.load(memory_file)
@@ -231,18 +256,24 @@ def memorizeSolution(planner, difficulty, elapsedTime, solutionS2):
 
     index += 1
 
+    #jsonformat established here
+
     data['cases'][str(index)] = {}
     data['cases'][str(index)]['domain_name'] = parser.domain_name
     data['cases'][str(index)]['problem_name'] = parser.problem_name
+    data['cases'][str(index)]['difficulty'] = difficulty
+    data['cases'][str(index)]['system'] = system
     data['cases'][str(index)]['planner'] = planner
-    data['cases'][str(index)]['complexity'] = difficulty
-    data['cases'][str(index)]['time_taken'] = elapsedTime
+    data['cases'][str(index)]['confidence'] = confidence
+    data['cases'][str(index)]['correctness'] = correctness
+    data['cases'][str(index)]['solving_time'] = elapsedTime
+    data['cases'][str(index)]['total_time'] = time.time()-timeSTART
 
-    init,goal = getStates.States(problem_file) #reading initial and goal states from problem file
+    init,goal = getStates.States(problemFile) #reading initial and goal states from problem file
 
     data['cases'][str(index)]['init'] = init
     data['cases'][str(index)]['goal'] = goal
-    data['cases'][str(index)]['plan'] = solutionS2
+    data['cases'][str(index)]['plan'] = solution
 
     json_object = json.dumps(data,indent=4)
 
@@ -251,71 +282,143 @@ def memorizeSolution(planner, difficulty, elapsedTime, solutionS2):
         out.write(json_object)
 
 
-def generateNamePDKB():
-    domainNamePDKB = EPPDL.getDomainPDKB(domain_file)
-    problemNamePDKB = EPPDL.getProblemPDKB(problem_file)
+    print("The solution is: " + str(solution) + " and has been found in " + str(elapsedTime) + "s by System " + str(system), end = '')
+    if (system != systemONE):
+        print(" using planner " + str(planner) +".")
+    sys.exit(0)
 
+def generateNamePDKB():
+    domainNamePDKB = EPPDL.getDomainPDKB(domainFile)
+    problemNamePDKB = EPPDL.getProblemPDKB(problemFile)
+
+#----NEW
+
+def countSolvedInstances(system,planner):
+    dbFilename = dbFolder + jsonFilename
+    matchCount = 0
+    totalCorrectness = 0
+
+    # Opening JSON file
+    f = open(dbFilename)
+    # returns JSON object as a dictionary
+    data = json.load(f)
+
+    index = 0
+    for row in data['cases']:
+        index += 1
+        if(row[str(index)]['domain_name'] == parser.domain_name):
+        #planner == systemALL means that we accept all the planners
+            if(int(row[str(index)]['system']) == system || system == systemALL):
+                if(int(row[str(index)]['planner']) == planner || planner == plannerALL):
+                    matchCount += 1
+
+        return matchCount
+
+def getAvgCorr(system,planner):
+    dbFilename = dbFolder + jsonFilename
+    matchCount = 0
+    totalCorrectness = 0
+
+    # Opening JSON file
+    f = open(dbFilename)
+    # returns JSON object as a dictionary
+    data = json.load(f)
+
+    index = 0
+    for row in data['cases']:
+        index += 1
+        if(row[str(index)]['domain_name'] == parser.domain_name):
+        #planner == systemALL means that we accept all the planners
+            if(int(row[str(index)]['system']) == system || system == systemALL):
+                if(int(row[str(index)]['planner']) == planner || planner == plannerALL):
+                    matchCount += 1
+                    totalCorrectness += float(row[str(index)]['correctness'])
+
+    if matchCount > 0:
+        return (totalCorrectness/matchCount)
+    else:
+        return 0
+
+def tryS1(plannerS1, solutionS1, confidenceS1, timeS1):
+    correctnessS1 = validateSolution(solutionS1)
+    if (correctnessS1 >= correctnessCntx):
+        memorizeSolution(systemONE, plannerS1, confidenceS1, timeS1, correctnessS1, solutionS1)
+    else:
+        solveWithS2(timeLimitCntx)
+
+def selectPlannerS2():
+    planner = plannerS2_1 #By default we use plannerS2_1 -- we use label to indicate the planners
+    instanceDepth = int(getVarFromFile(problemFile,"depth"))
+
+    if (instanceDepth > maxGroundDepth or checkDCK()): #Check if depth > 3 or if DCK is not required
+        planner = plannerS2_2
+
+    return planner
 
 #-----------------------------------------------
 # Main
 #-----------------------------------------------
 if __name__ == '__main__':
-    import sys, pprint
-
+    timeSTART = time.time()
     createFolders()
 
-    domain_file = sys.argv[1]
-    problem_file = sys.argv[2]
+    domainFile = sys.argv[1]
+    problemFile = sys.argv[2]
     context = sys.argv[3]
-    #Always used to verify the solution
+    #Always used to verify the solution anyway
     generateEFPInstance()
 
     correctnessCntx = float(getVarFromFile(context,"correctness"))
     timeLimitCntx = float(getVarFromFile(context,"timelimit"))
+    difficulty = estimateDifficulty(instanceDepth)
+
 
     ######### S1 metacognitive part
-    # Try to solve the problem with the metacognitive part
-    # if the returned value is within range of the given one, validate solution.
-    # if not go to s2 solving
-
-    #@TODO: Confidence magari è ridondante w.r.t. correctness
-
+    # AUTOMATICALLY CALL S1
+    timeS1 = time.time()
     solutionS1, confidenceS1 = solveWithS1();
-    #print("The solution is: " + str(solutionS1) + " found by System 1.")
-    #sys.exit(0)
-    if (confidenceS1 >= correctnessCntx): #@TODO: Errore cambia variabile
-        print("The solution is: " + str(solutionS1) + " found by System 1 with confidence " + str(confidenceS1))
-        sys.exit(0)
+    timeS1 = time.time() - timeS1
+    plannerS1 = 1
+
+
+    # IF NUMBER OF CASES IN JSON FILE (that match the domain) IS > THRESHOLD1 THEN CONTINUE WITH TO S1
+    if (countSolvedInstances(systemALL,plannerALL) > threshold1):
+        M = 0
+        if (countSolvedInstances(systemONE,plannerALL) > threshold4):
+            M = getAvgCorrS1(systemONE,plannerALL)
+        if (M > threshold3):
+            tryS1(plannerS1, solutionS1, confidenceS1, timeS1)
 
 
     # ######### S2 metacognitive part
     # # Employ the S2 metacognitive structure
-    correctnessS1 = validateSolution(solutionS1)
-    if(correctnessS1 >= correctnessCntx):
-        print("The solution is: " + str(solutionS1) + " found by System 1.")
-        sys.exit(0)
 
-    planner = 1 #By default we use Planner1 -- we use label to indicate the planners
-    instanceDepth = int(getVarFromFile(problem_file,"depth"))
 
-    if (instanceDepth > maxGroundDepth or checkDCK()): #Check if depth > 3 or if DCK is not required
-        planner = 2
 
-    difficulty = estimateDifficulty(instanceDepth)
-    EstimatedTimeCons2 = estimateTimeCons(planner, difficulty)
-    #print("Estimated Resource consumption is: " + str(EstimatedTimeCons2))
+    plannerS2 = selectPlannerS2()
+    estimatedTimeS2 = estimateTimeCons(plannerS2, difficulty)
+    estimatedCostS2 = Integer.MAX_VALUE
 
-    # #Is the found solution within the given times limits? We assume time is an Hard constraint
-    estimatedError = 0
-    allowedFluttation = 10
-    if (timeLimitCntx + (estimatedError + allowedFluttation) > EstimatedTimeCons2):
-    # # Here check if the tradeoff between consumption and accuracy in S2-solver beats the S1-solver
-    # if (isS2Worth(confidenceS1,EstimatedTimeCons2)):
-        isSolved, elapsedTime, solutionS2 = solveWithS2(timeLimitCntx,planner)
-        if (isSolved):
-            memorizeSolution(planner, difficulty, elapsedTime, solutionS2)
-            print("The solution is: " + str(solutionS2) + " and has been found in " + str(elapsedTime) + "s by Planner " + str(planner) + " (System 2)" ) #Aggiungi da che planner ha trovato la sol
-        else:
-            print("It was not possibile find any solution in the given time (" + str(elapsedTime) + "s)") #Metti anche la soluzione di Sys1
+    remainingTime = timeLimitCntx - (time.time() - timeSTART)
+    if(remainingTime - estimatedTimeS2 > 0):
+        estimatedCostS2 = estimatedTimeS2 / remainingTime
+
+    if (estimatedCostS2 > 1):
+        tryS1(plannerS1, solutionS1, confidenceS1, timeS1)
     else:
-        print("The only found solution (System 1) is: " + str(solutionS1))
+        probabilityS1 = (1-threshold3)*epsilonS1
+        #random() genrates a number between 0 and 1
+        if (probabilityS1 > random()):
+            tryS1(plannerS1, solutionS1, confidenceS1, timeS1)
+        else:
+            correctnessS1 = validateSolution(solutionS1)
+            if (correctnessS1 >= correctnessCntx):
+                if((1-estimatedCostS2) > (correctnessS1*()1-threshold3)):
+                    if (not solveWithS2(timeLimit,plannerS2)):
+                        memorizeSolution(systemONE, plannerS1, confidenceS1, timeS1, correctnessS1, solutionS1)
+                else:
+                    memorizeSolution(systemONE, plannerS1, confidenceS1, timeS1, correctnessS1, solutionS1)
+            else:
+                solveWithS2(timeLimit,plannerS2)
+
+    print("The problem could not be solved.")
