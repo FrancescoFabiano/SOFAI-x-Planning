@@ -405,6 +405,9 @@ void planner<T>::execute_given_actions(std::vector<std::string>& act_name)
 	}
 	T state;
 	state.build_initial();
+	
+	heuristics_manager h_manager(SUBGOALS, state);
+	int goal_lenght = h_manager.get_goals().size();
 
 	if (state.is_goal()) {
 		std::cout << "\nInitial was Goal:)\n";
@@ -470,11 +473,27 @@ void planner<T>::execute_given_actions(std::vector<std::string>& act_name)
 							std::cout << *it_stset2 << ", ";
 						}
 						std::cout << *it_stset << " :)\n\n\n";
+						//std::cout << "The solution score is: <<1.0>>\n";
+
 					}
+				
+					if(std::next(it_stset) == act_name.end())
+					{
+						h_manager.set_heuristic_value(state);
+						float confidence_score = (goal_lenght-state.get_heuristic_value())/(float) goal_lenght;
+						//std::cout << "The solution score is: <<" << confidence_score << ">> << "<< goal_lenght << ">>\n";
+						printf ("The solution score is: <<%f>>\n", confidence_score);
+
+					}
+				
 				} else {
 					std::cout << "The action " << (*it_acset).get_name() << " was not executable\n";
+					std::cout << "The solution score is: <<0.0>>\n";
 					return;
 				}
+				
+				
+				
 			}
 		}
 	}

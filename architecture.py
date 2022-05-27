@@ -10,7 +10,7 @@ import time
 
 
 from ExternalPrograms.EPDDL.parser import EPDDL_Parser
-from ExternalPrograms.S1Solver import s1_planner
+from ExternalPrograms.S1Solver import s1_solver
 from ExternalPrograms.S1Solver import getStates
 from ExternalPrograms.S1Solver import s1_distance
 
@@ -165,6 +165,10 @@ def validateSolution(solution):
     if ("Goal found" in res):
         #print("Found result is " + stringSolution)
         return 1.0
+    elif ("The solution score is: <<" in res):
+        res = re.findall(r'<<(.+)>>', res, re.MULTILINE)
+        return res[-1]
+
     else:
         #print("Goal not found")
         return 0.0
@@ -308,8 +312,8 @@ def countSolvedInstances(system,planner):
         index += 1
         if(row[str(index)]['domain_name'] == parser.domain_name):
         #planner == systemALL means that we accept all the planners
-            if(int(row[str(index)]['system']) == system || system == systemALL):
-                if(int(row[str(index)]['planner']) == planner || planner == plannerALL):
+            if(int(row[str(index)]['system']) == system or system == systemALL):
+                if(int(row[str(index)]['planner']) == planner or planner == plannerALL):
                     matchCount += 1
 
         return matchCount
@@ -329,8 +333,8 @@ def getAvgCorr(system,planner):
         index += 1
         if(row[str(index)]['domain_name'] == parser.domain_name):
         #planner == systemALL means that we accept all the planners
-            if(int(row[str(index)]['system']) == system || system == systemALL):
-                if(int(row[str(index)]['planner']) == planner || planner == plannerALL):
+            if(int(row[str(index)]['system']) == system or system == systemALL):
+                if(int(row[str(index)]['planner']) == planner or planner == plannerALL):
                     matchCount += 1
                     totalCorrectness += float(row[str(index)]['correctness'])
 
@@ -413,7 +417,7 @@ if __name__ == '__main__':
         else:
             correctnessS1 = validateSolution(solutionS1)
             if (correctnessS1 >= correctnessCntx):
-                if((1-estimatedCostS2) > (correctnessS1*()1-threshold3)):
+                if((1-estimatedCostS2) > (correctnessS1*(1-threshold3))):
                     if (not solveWithS2(timeLimit,plannerS2)):
                         memorizeSolution(systemONE, plannerS1, confidenceS1, timeS1, correctnessS1, solutionS1)
                 else:
