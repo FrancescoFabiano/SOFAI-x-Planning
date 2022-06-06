@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 # Four spaces as indentation [no tabs]
+import os
 import json
 import subprocess
 import re
 import csv
 from pathlib import Path
-import sys, pprint
+import sys
+import pprint
 import time
+import random
 
 
 from ExternalPrograms.EPDDL.parser import EPDDL_Parser
@@ -75,27 +78,37 @@ def getVarFromFile(filename,varname):
         raise Exception('Missing variable named '+ varname)
     raise Exception('Missing file named '+ filename)
 
+def readThreshold(thresholdFile):
+    threshold1 = float(getVarFromFile(thresholdFile,"threshold1"))
+    threshold2 = float(getVarFromFile(thresholdFile,"threshold2"))
+    threshold3 = float(getVarFromFile(thresholdFile,"threshold3"))
+    threshold4 = float(getVarFromFile(thresholdFile,"threshold4"))
+    epsilonS1  = float(getVarFromFile(thresholdFile,"epsilonS1"))
+
 #Every Solver stores the solution on a tmp file
 def readSolutionFromFile(filename):
-    with open(filename) as myfile:
-        for line in myfile:
-            if "Solution" in line:
-                if '=' in line:
-                    discard, sol = line.partition("=")[::2]
-                    res=[]
-                    sol = sol.replace(' ','')
-                    sol = sol.replace(';','')
-                    sol = sol.replace('\n','')
+    try:
+        with open(filename) as myfile:
+            for line in myfile:
+                if "Solution" in line:
+                    if '=' in line:
+                        discard, sol = line.partition("=")[::2]
+                        res=[]
+                        sol = sol.replace(' ','')
+                        sol = sol.replace(';','')
+                        sol = sol.replace('\n','')
 
-                    acts = sol.split(',')
+                        acts = sol.split(',')
 
-                    for act in acts:
-                        res.append(act)
+                        for act in acts:
+                            res.append(act)
 
-                    myfile.close()
-                    return res
+                        myfile.close()
+                        return res
 
-    raise Exception('Missing solution in '+ filename)
+        raise Exception('Missing solution in '+ filename)
+    except IOError:
+        return "noS1Solution"
 
 def readTimeFromFile(filename):
     with open(filename) as myfile:
@@ -118,36 +131,40 @@ def executeS1():
     #New S1###################
 
     mode = 1
-    similarity_threshold = 0.7 # If < than this is not returned
+    similarity_threshold = 0.2 # If < than this is not returned
     json_path = dbFolder+jsonFilename
-    with open(json_path) as f:
-        experience = json.load(f)
-    cases = experience["cases"]
-    init,goal = getStates.States(problemFile) #reading initial and goal states from problem file
+    try:
+        with open(json_path) as f:
+            experience = json.load(f)
 
-    #returned_list has records of this form <path_to_sol, similarity_score, problem_name>
-    sol = ""
-    confidence = 0
-    returned_list = s1_distance.doCaseMatch(cases, mode, parser.domain_name, init, goal, similarity_threshold)
-    if returned_list:
-        first_act = True
-        for act in returned_list[0][1]:
-            if first_act:
-                sol = act
-                first_act = False
-            else:
-                sol = sol + ", " + act
-        confidence = returned_list[0][0]
-    #########################
+        cases = experience["cases"]
+        init,goal = getStates.States(problemFile) #reading initial and goal states from problem file
+
+        #returned_list has records of this form <path_to_sol, similarity_score, problem_name>
+        sol = ""
+        confidence = 0
+        returned_list = s1_distance.doCaseMatch(cases, mode, parser.domain_name, init, goal, similarity_threshold)
+        if returned_list:
+            first_act = True
+            for act in returned_list[0][1]:
+                if first_act:
+                    sol = act
+                    first_act = False
+                else:
+                    sol = sol + ", " + act
+            confidence = returned_list[0][0]
+        #########################
 
 
-#    solString = s1_planner.s1Solver(parser.domain_name,parser.problem_name,json_path)
-#    solString = solString.replace(";", ",")
-    resFile = instanceNameEFP.replace(".tmp", "S1.tmp")
-    out = open(output_folderPl1 + resFile, "w")
-    out.write("Solution = " + sol)
-    out.close()
-    return confidence, resFile;
+    #    solString = s1_planner.s1Solver(parser.domain_name,parser.problem_name,json_path)
+    #    solString = solString.replace(";", ",")
+        resFile = instanceNameEFP.replace(".tmp", "S1.tmp")
+        out = open(output_folderPl1 + resFile, "w")
+        out.write("Solution = " + sol)
+        out.close()
+        return confidence, resFile;
+    except IOError:
+        return 0, "";
 
 def solveWithS1():
     confidence, resFile = executeS1()
@@ -204,10 +221,10 @@ def estimateTimeCons(planner,difficulty):
                         if ((rowDiff < (difficulty + range)) and (rowDiff > (difficulty - range))):
                             matchCount += 1
                             timeSTARTConsumption += float(row[3])
+
     except IOError:
         matchCount = 0
 
-    db.close()
 
     if matchCount > 0:
         return (timeSTARTConsumption/matchCount)
@@ -248,7 +265,12 @@ def solveWithS2(timeLimit, planner):
 
 def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solution):
 
+
     json_path = dbFolder+jsonFilename
+
+    if not os.path.exists(json_path):
+        open(json_path, 'w').close()
+
     memory_file = open(json_path)
 
     data = json.load(memory_file)
@@ -302,23 +324,27 @@ def countSolvedInstances(system,planner):
     matchCount = 0
     totalCorrectness = 0
 
-    # Opening JSON file
-    f = open(dbFilename)
-    # returns JSON object as a dictionary
-    data = json.load(f)
 
-    index = 0
-    for row in data['cases']:
-        index += 1
-        if(row[str(index)]['domain_name'] == parser.domain_name):
-        #planner == systemALL means that we accept all the planners
-            if(int(row[str(index)]['system']) == system or system == systemALL):
-                if(int(row[str(index)]['planner']) == planner or planner == plannerALL):
-                    matchCount += 1
+    # Opening JSON file
+    try:
+        f = open(dbFilename)
+        # returns JSON object as a dictionary
+        data = json.load(f)
+
+        index = 0
+        for row in data['cases']:
+            index += 1
+            if(data['cases'][str(index)]['domain_name'] == parser.domain_name):
+                #planner == systemALL means that we accept all the planners
+                if(int(data['cases'][str(index)]['system']) == system or system == systemALL):
+                    if(int(data['cases'][str(index)]['planner']) == planner or planner == plannerALL):
+                        matchCount += 1
 
         return matchCount
+    except IOError:
+        return 0
 
-def getAvgCorr(system,planner):
+def getAvgCorrS1(system,planner):
     dbFilename = dbFolder + jsonFilename
     matchCount = 0
     totalCorrectness = 0
@@ -331,12 +357,12 @@ def getAvgCorr(system,planner):
     index = 0
     for row in data['cases']:
         index += 1
-        if(row[str(index)]['domain_name'] == parser.domain_name):
-        #planner == systemALL means that we accept all the planners
-            if(int(row[str(index)]['system']) == system or system == systemALL):
-                if(int(row[str(index)]['planner']) == planner or planner == plannerALL):
+        if(data['cases'][str(index)]['domain_name'] == parser.domain_name):
+            #planner == systemALL means that we accept all the planners
+            if(int(data['cases'][str(index)]['system']) == system or system == systemALL):
+                if(int(data['cases'][str(index)]['planner']) == planner or planner == plannerALL):
                     matchCount += 1
-                    totalCorrectness += float(row[str(index)]['correctness'])
+                    totalCorrectness += float(data['cases'][str(index)]['correctness'])
 
     if matchCount > 0:
         return (totalCorrectness/matchCount)
@@ -358,11 +384,16 @@ def selectPlannerS2():
         planner = plannerS2_2
 
     return planner
-
 #-----------------------------------------------
 # Main
 #-----------------------------------------------
 if __name__ == '__main__':
+
+    if (len(sys.argv) > 4):
+        readThreshold(sys.argv[4])
+    else:
+        print("Len is " + str(len(sys.argv)))
+
     timeSTART = time.time()
     createFolders()
 
@@ -374,6 +405,7 @@ if __name__ == '__main__':
 
     correctnessCntx = float(getVarFromFile(context,"correctness"))
     timeLimitCntx = float(getVarFromFile(context,"timelimit"))
+    instanceDepth = int(getVarFromFile(problemFile,"depth"))
     difficulty = estimateDifficulty(instanceDepth)
 
 
@@ -385,11 +417,14 @@ if __name__ == '__main__':
     plannerS1 = 1
 
 
+    notEnoughS1Exp = True
+
     # IF NUMBER OF CASES IN JSON FILE (that match the domain) IS > THRESHOLD1 THEN CONTINUE WITH TO S1
     if (countSolvedInstances(systemALL,plannerALL) > threshold1):
         M = 0
         if (countSolvedInstances(systemONE,plannerALL) > threshold4):
             M = getAvgCorrS1(systemONE,plannerALL)
+            notEnoughS1Exp = False
         if (M > threshold3):
             tryS1(plannerS1, solutionS1, confidenceS1, timeS1)
 
@@ -401,7 +436,7 @@ if __name__ == '__main__':
 
     plannerS2 = selectPlannerS2()
     estimatedTimeS2 = estimateTimeCons(plannerS2, difficulty)
-    estimatedCostS2 = Integer.MAX_VALUE
+    estimatedCostS2 = sys.maxsize
 
     remainingTime = timeLimitCntx - (time.time() - timeSTART)
     if(remainingTime - estimatedTimeS2 > 0):
@@ -410,19 +445,22 @@ if __name__ == '__main__':
     if (estimatedCostS2 > 1):
         tryS1(plannerS1, solutionS1, confidenceS1, timeS1)
     else:
-        probabilityS1 = (1-threshold3)*epsilonS1
+        if (notEnoughS1Exp):
+            probabilityS1 = (1-threshold3)
+        else:
+            probabilityS1 = (1-threshold3)*epsilonS1
         #random() genrates a number between 0 and 1
-        if (probabilityS1 > random()):
+        if (probabilityS1 > random.random()):
             tryS1(plannerS1, solutionS1, confidenceS1, timeS1)
         else:
             correctnessS1 = validateSolution(solutionS1)
             if (correctnessS1 >= correctnessCntx):
                 if((1-estimatedCostS2) > (correctnessS1*(1-threshold3))):
-                    if (not solveWithS2(timeLimit,plannerS2)):
+                    if (not solveWithS2(remainingTime,plannerS2)):
                         memorizeSolution(systemONE, plannerS1, confidenceS1, timeS1, correctnessS1, solutionS1)
                 else:
                     memorizeSolution(systemONE, plannerS1, confidenceS1, timeS1, correctnessS1, solutionS1)
             else:
-                solveWithS2(timeLimit,plannerS2)
+                solveWithS2(remainingTime,plannerS2)
 
     print("The problem could not be solved.")
