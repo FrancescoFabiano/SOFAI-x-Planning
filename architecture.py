@@ -44,6 +44,8 @@ threshold3 = 0.9 #This value represents the risk-adversion of the system -- The 
 threshold4 = 20 #This is the threshold that is used to set 'M' = 1 when S1 hasn't enough experience,
 epsilonS1 = 0.1
 
+maxExperience = 1000
+
 # Global variables seen by all the functions
 domainFile = ""
 problemFile = ""
@@ -331,20 +333,22 @@ def countSolvedInstances(system,planner):
         # returns JSON object as a dictionary
         data = json.load(f)
 
-        index = 0
-        for row in data['cases']:
-            index += 1
+        index = len(data['cases'])
+        count = 0
+        while (index > 0) and (count < maxExperience):
             if(data['cases'][str(index)]['domain_name'] == parser.domain_name):
                 #planner == systemALL means that we accept all the planners
                 if(int(data['cases'][str(index)]['system']) == system or system == systemALL):
                     if(int(data['cases'][str(index)]['planner']) == planner or planner == plannerALL):
                         matchCount += 1
+            index -= 1
+            count += 1
 
         return matchCount
     except IOError:
         return 0
 
-def getAvgCorrS1(system,planner):
+def getAvgCorrS1(system,planner,slidingWindow):
     dbFilename = dbFolder + jsonFilename
     matchCount = 0
     totalCorrectness = 0
@@ -354,15 +358,21 @@ def getAvgCorrS1(system,planner):
     # returns JSON object as a dictionary
     data = json.load(f)
 
-    index = 0
-    for row in data['cases']:
-        index += 1
+    index = len(data['cases'])
+    count = 0
+    while (index > 0) and (count < maxExperience):
         if(data['cases'][str(index)]['domain_name'] == parser.domain_name):
             #planner == systemALL means that we accept all the planners
             if(int(data['cases'][str(index)]['system']) == system or system == systemALL):
                 if(int(data['cases'][str(index)]['planner']) == planner or planner == plannerALL):
-                    matchCount += 1
-                    totalCorrectness += float(data['cases'][str(index)]['correctness'])
+                    if (matchCount < slidingWindow):
+                        matchCount += 1
+                        totalCorrectness += float(data['cases'][str(index)]['correctness'])
+                    else:
+                        index = 0
+        index -= 1
+        count += 1
+
 
     if matchCount > 0:
         return (totalCorrectness/matchCount)
@@ -391,8 +401,6 @@ if __name__ == '__main__':
 
     if (len(sys.argv) > 4):
         readThreshold(sys.argv[4])
-    else:
-        print("Len is " + str(len(sys.argv)))
 
     timeSTART = time.time()
     createFolders()
@@ -403,7 +411,8 @@ if __name__ == '__main__':
     #Always used to verify the solution anyway
     generateEFPInstance()
 
-    correctnessCntx = float(getVarFromFile(context,"correctness"))
+    #correctnessCntx = float(getVarFromFile(context,"correctness"))
+    correctnessCntx = threshold3
     timeLimitCntx = float(getVarFromFile(context,"timelimit"))
     instanceDepth = int(getVarFromFile(problemFile,"depth"))
     difficulty = estimateDifficulty(instanceDepth)
@@ -415,17 +424,18 @@ if __name__ == '__main__':
     solutionS1, confidenceS1 = solveWithS1();
     timeS1 = time.time() - timeS1
     plannerS1 = 1
+    M = 1
 
 
-    notEnoughS1Exp = True
 
     # IF NUMBER OF CASES IN JSON FILE (that match the domain) IS > THRESHOLD1 THEN CONTINUE WITH TO S1
     if (countSolvedInstances(systemALL,plannerALL) > threshold1):
-        M = 0
         if (countSolvedInstances(systemONE,plannerALL) > threshold4):
-            M = getAvgCorrS1(systemONE,plannerALL)
-            notEnoughS1Exp = False
-        if (M > threshold3):
+            M = 1-getAvgCorrS1(systemONE,plannerALL,threshold4)
+        else:
+            M = 0
+
+        if (confidenceS1 * (1-M) > threshold3):
             tryS1(plannerS1, solutionS1, confidenceS1, timeS1)
 
 
@@ -445,17 +455,14 @@ if __name__ == '__main__':
     if (estimatedCostS2 > 1):
         tryS1(plannerS1, solutionS1, confidenceS1, timeS1)
     else:
-        if (notEnoughS1Exp):
-            probabilityS1 = (1-threshold3)
-        else:
-            probabilityS1 = (1-threshold3)*epsilonS1
+        probabilityS1 = (1-threshold3)*epsilonS1
         #random() genrates a number between 0 and 1
         if (probabilityS1 > random.random()):
             tryS1(plannerS1, solutionS1, confidenceS1, timeS1)
         else:
             correctnessS1 = validateSolution(solutionS1)
             if (correctnessS1 >= correctnessCntx):
-                if((1-estimatedCostS2) > (correctnessS1*(1-threshold3))):
+                if((1-(estimatedCostS2 * (1-threshold3))) > (correctnessS1*(1-M))):
                     if (not solveWithS2(remainingTime,plannerS2)):
                         memorizeSolution(systemONE, plannerS1, confidenceS1, timeS1, correctnessS1, solutionS1)
                 else:

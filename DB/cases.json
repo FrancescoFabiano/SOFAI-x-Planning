@@ -780,6 +780,696 @@
                 "open_a",
                 "peek_a"
             ]
+        },
+        "27": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "difficulty": 2304,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0023834705352783203,
+            "total_time": 0.5564413070678711,
+            "init": [
+                "tail",
+                "has_key a",
+                "looking a",
+                "[a b c](has_key a)",
+                "[a b c](not (has_key b))",
+                "[a b c](not (has_key c))",
+                "[a b c](not (opened))",
+                "[a b c](looking a)",
+                "[a b c](not (looking b))",
+                "[a b c](not (looking c))"
+            ],
+            "goal": [
+                "[a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "28": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "difficulty": 2304,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.002070903778076172,
+            "total_time": 0.5627267360687256,
+            "init": [
+                "tail",
+                "has_key a",
+                "looking a",
+                "[a b c](has_key a)",
+                "[a b c](not (has_key b))",
+                "[a b c](not (has_key c))",
+                "[a b c](not (opened))",
+                "[a b c](looking a)",
+                "[a b c](not (looking b))",
+                "[a b c](not (looking c))"
+            ],
+            "goal": [
+                "[a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "29": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "difficulty": 2304,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0017523765563964844,
+            "total_time": 0.5512428283691406,
+            "init": [
+                "tail",
+                "has_key a",
+                "looking a",
+                "[a b c](has_key a)",
+                "[a b c](not (has_key b))",
+                "[a b c](not (has_key c))",
+                "[a b c](not (opened))",
+                "[a b c](looking a)",
+                "[a b c](not (looking b))",
+                "[a b c](not (looking c))"
+            ],
+            "goal": [
+                "[a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "30": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "difficulty": 2304,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0018796920776367188,
+            "total_time": 0.5547258853912354,
+            "init": [
+                "tail",
+                "has_key a",
+                "looking a",
+                "[a b c](has_key a)",
+                "[a b c](not (has_key b))",
+                "[a b c](not (has_key c))",
+                "[a b c](not (opened))",
+                "[a b c](looking a)",
+                "[a b c](not (looking b))",
+                "[a b c](not (looking c))"
+            ],
+            "goal": [
+                "[a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "31": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "difficulty": 2304,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0023546218872070312,
+            "total_time": 0.56150221824646,
+            "init": [
+                "tail",
+                "has_key a",
+                "looking a",
+                "[a b c](has_key a)",
+                "[a b c](not (has_key b))",
+                "[a b c](not (has_key c))",
+                "[a b c](not (opened))",
+                "[a b c](looking a)",
+                "[a b c](not (looking b))",
+                "[a b c](not (looking c))"
+            ],
+            "goal": [
+                "[a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "32": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "difficulty": 2304,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0017790794372558594,
+            "total_time": 0.5549776554107666,
+            "init": [
+                "tail",
+                "has_key a",
+                "looking a",
+                "[a b c](has_key a)",
+                "[a b c](not (has_key b))",
+                "[a b c](not (has_key c))",
+                "[a b c](not (opened))",
+                "[a b c](looking a)",
+                "[a b c](not (looking b))",
+                "[a b c](not (looking c))"
+            ],
+            "goal": [
+                "[a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "33": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "difficulty": 2304,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.001750946044921875,
+            "total_time": 0.5625216960906982,
+            "init": [
+                "tail",
+                "has_key a",
+                "looking a",
+                "[a b c](has_key a)",
+                "[a b c](not (has_key b))",
+                "[a b c](not (has_key c))",
+                "[a b c](not (opened))",
+                "[a b c](looking a)",
+                "[a b c](not (looking b))",
+                "[a b c](not (looking c))"
+            ],
+            "goal": [
+                "[a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "34": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "difficulty": 2304,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0017905235290527344,
+            "total_time": 0.5569088459014893,
+            "init": [
+                "tail",
+                "has_key a",
+                "looking a",
+                "[a b c](has_key a)",
+                "[a b c](not (has_key b))",
+                "[a b c](not (has_key c))",
+                "[a b c](not (opened))",
+                "[a b c](looking a)",
+                "[a b c](not (looking b))",
+                "[a b c](not (looking c))"
+            ],
+            "goal": [
+                "[a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "35": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "difficulty": 2304,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.002137422561645508,
+            "total_time": 0.5583889484405518,
+            "init": [
+                "tail",
+                "has_key a",
+                "looking a",
+                "[a b c](has_key a)",
+                "[a b c](not (has_key b))",
+                "[a b c](not (has_key c))",
+                "[a b c](not (opened))",
+                "[a b c](looking a)",
+                "[a b c](not (looking b))",
+                "[a b c](not (looking c))"
+            ],
+            "goal": [
+                "[a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "36": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "difficulty": 2304,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0018587112426757812,
+            "total_time": 0.558922290802002,
+            "init": [
+                "tail",
+                "has_key a",
+                "looking a",
+                "[a b c](has_key a)",
+                "[a b c](not (has_key b))",
+                "[a b c](not (has_key c))",
+                "[a b c](not (opened))",
+                "[a b c](looking a)",
+                "[a b c](not (looking b))",
+                "[a b c](not (looking c))"
+            ],
+            "goal": [
+                "[a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "37": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "difficulty": 2304,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0018548965454101562,
+            "total_time": 0.5558264255523682,
+            "init": [
+                "tail",
+                "has_key a",
+                "looking a",
+                "[a b c](has_key a)",
+                "[a b c](not (has_key b))",
+                "[a b c](not (has_key c))",
+                "[a b c](not (opened))",
+                "[a b c](looking a)",
+                "[a b c](not (looking b))",
+                "[a b c](not (looking c))"
+            ],
+            "goal": [
+                "[a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "38": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "difficulty": 2304,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0018465518951416016,
+            "total_time": 0.5500118732452393,
+            "init": [
+                "tail",
+                "has_key a",
+                "looking a",
+                "[a b c](has_key a)",
+                "[a b c](not (has_key b))",
+                "[a b c](not (has_key c))",
+                "[a b c](not (opened))",
+                "[a b c](looking a)",
+                "[a b c](not (looking b))",
+                "[a b c](not (looking c))"
+            ],
+            "goal": [
+                "[a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "39": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "difficulty": 2304,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0017838478088378906,
+            "total_time": 0.5506312847137451,
+            "init": [
+                "tail",
+                "has_key a",
+                "looking a",
+                "[a b c](has_key a)",
+                "[a b c](not (has_key b))",
+                "[a b c](not (has_key c))",
+                "[a b c](not (opened))",
+                "[a b c](looking a)",
+                "[a b c](not (looking b))",
+                "[a b c](not (looking c))"
+            ],
+            "goal": [
+                "[a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "40": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "difficulty": 2304,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0018320083618164062,
+            "total_time": 0.5586190223693848,
+            "init": [
+                "tail",
+                "has_key a",
+                "looking a",
+                "[a b c](has_key a)",
+                "[a b c](not (has_key b))",
+                "[a b c](not (has_key c))",
+                "[a b c](not (opened))",
+                "[a b c](looking a)",
+                "[a b c](not (looking b))",
+                "[a b c](not (looking c))"
+            ],
+            "goal": [
+                "[a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "41": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "difficulty": 2304,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0018393993377685547,
+            "total_time": 0.5837647914886475,
+            "init": [
+                "tail",
+                "has_key a",
+                "looking a",
+                "[a b c](has_key a)",
+                "[a b c](not (has_key b))",
+                "[a b c](not (has_key c))",
+                "[a b c](not (opened))",
+                "[a b c](looking a)",
+                "[a b c](not (looking b))",
+                "[a b c](not (looking c))"
+            ],
+            "goal": [
+                "[a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "42": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "difficulty": 2304,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.002803802490234375,
+            "total_time": 0.5640809535980225,
+            "init": [
+                "tail",
+                "has_key a",
+                "looking a",
+                "[a b c](has_key a)",
+                "[a b c](not (has_key b))",
+                "[a b c](not (has_key c))",
+                "[a b c](not (opened))",
+                "[a b c](looking a)",
+                "[a b c](not (looking b))",
+                "[a b c](not (looking c))"
+            ],
+            "goal": [
+                "[a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "43": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "difficulty": 2304,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0018999576568603516,
+            "total_time": 0.5613183975219727,
+            "init": [
+                "tail",
+                "has_key a",
+                "looking a",
+                "[a b c](has_key a)",
+                "[a b c](not (has_key b))",
+                "[a b c](not (has_key c))",
+                "[a b c](not (opened))",
+                "[a b c](looking a)",
+                "[a b c](not (looking b))",
+                "[a b c](not (looking c))"
+            ],
+            "goal": [
+                "[a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "44": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "difficulty": 2304,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 1.497099,
+            "total_time": 4.112810850143433,
+            "init": [
+                "tail",
+                "has_key a",
+                "looking a",
+                "[a b c](has_key a)",
+                "[a b c](not (has_key b))",
+                "[a b c](not (has_key c))",
+                "[a b c](not (opened))",
+                "[a b c](looking a)",
+                "[a b c](not (looking b))",
+                "[a b c](not (looking c))"
+            ],
+            "goal": [
+                "[a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "45": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "difficulty": 2304,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 1.498949,
+            "total_time": 4.185150861740112,
+            "init": [
+                "tail",
+                "has_key a",
+                "looking a",
+                "[a b c](has_key a)",
+                "[a b c](not (has_key b))",
+                "[a b c](not (has_key c))",
+                "[a b c](not (opened))",
+                "[a b c](looking a)",
+                "[a b c](not (looking b))",
+                "[a b c](not (looking c))"
+            ],
+            "goal": [
+                "[a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "46": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "difficulty": 2304,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.00240325927734375,
+            "total_time": 0.5959060192108154,
+            "init": [
+                "tail",
+                "has_key a",
+                "looking a",
+                "[a b c](has_key a)",
+                "[a b c](not (has_key b))",
+                "[a b c](not (has_key c))",
+                "[a b c](not (opened))",
+                "[a b c](looking a)",
+                "[a b c](not (looking b))",
+                "[a b c](not (looking c))"
+            ],
+            "goal": [
+                "[a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "47": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "difficulty": 2304,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0019156932830810547,
+            "total_time": 0.5580494403839111,
+            "init": [
+                "tail",
+                "has_key a",
+                "looking a",
+                "[a b c](has_key a)",
+                "[a b c](not (has_key b))",
+                "[a b c](not (has_key c))",
+                "[a b c](not (opened))",
+                "[a b c](looking a)",
+                "[a b c](not (looking b))",
+                "[a b c](not (looking c))"
+            ],
+            "goal": [
+                "[a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "48": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "difficulty": 2304,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.002299070358276367,
+            "total_time": 0.6406950950622559,
+            "init": [
+                "tail",
+                "has_key a",
+                "looking a",
+                "[a b c](has_key a)",
+                "[a b c](not (has_key b))",
+                "[a b c](not (has_key c))",
+                "[a b c](not (opened))",
+                "[a b c](looking a)",
+                "[a b c](not (looking b))",
+                "[a b c](not (looking c))"
+            ],
+            "goal": [
+                "[a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
+        },
+        "49": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb2",
+            "difficulty": 2304,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0019202232360839844,
+            "total_time": 0.5843138694763184,
+            "init": [
+                "tail",
+                "has_key a",
+                "looking a",
+                "[a b c](has_key a)",
+                "[a b c](not (has_key b))",
+                "[a b c](not (has_key c))",
+                "[a b c](not (opened))",
+                "[a b c](looking a)",
+                "[a b c](not (looking b))",
+                "[a b c](not (looking c))"
+            ],
+            "goal": [
+                "[a](tail)"
+            ],
+            "plan": [
+                "open_a",
+                "peek_a"
+            ]
         }
     }
 }
