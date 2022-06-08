@@ -186,7 +186,7 @@ def validateSolution(solution):
         return 1.0
     elif ("The solution score is: <<" in res):
         res = re.findall(r'<<(.+)>>', res, re.MULTILINE)
-        return res[-1]
+        return float(res[-1])
 
     else:
         #print("Goal not found")

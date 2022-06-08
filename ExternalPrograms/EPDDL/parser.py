@@ -12,6 +12,8 @@ from pathlib import Path
 
 from .action import Action
 
+DEBUG = False
+
 class EPDDL_Parser:
 
     SUPPORTED_REQUIREMENTS = [':strips', ':negative-preconditions', ':typing', ':no-duplicates', ':mep']
@@ -1012,7 +1014,7 @@ class EPDDL_Parser:
                             raise Exception('PDKB coversion cannot handle mutiple Fully Observants Group, make use of the explicit fields.')
 
                         visited = True
-                        if  len(ags[3]) >0:
+                        if  (len(ags[3]) > 0) and DEBUG:
                             print("\n********CONVERSION WARNING********")
                             print("The \'diff\' operator cannot be directly translated to PDKB and therefore will be ignored.")
                             print("You should make use of the more explicit fields.")
@@ -1157,7 +1159,7 @@ class EPDDL_Parser:
                                                 out.write(' [' + p_ag + '][' + ag + '](or')
                                                 out.write(' ('+fluent + ')')
                                                 out.write(' (!'+fluent + '))')
-                                            else:
+                                            elif (DEBUG):
                                                 print("\n********CONVERSION WARNING********")
                                                 print("Partial observability has not fully integrated the FORALL operator.")
                                                 print("You should make use of the more explicit fields if the results are not correct.")
@@ -1166,7 +1168,7 @@ class EPDDL_Parser:
                                     out.write(')')
                                     p_ag_printed = False
 
-                            else:
+                            elif (DEBUG):
                                 print("\n********CONVERSION WARNING********")
                                 print("Observability has not fully integrated the FORALL operator.")
                                 print("Please, check the resulting conversion.\nYou should make use of the more explicit fields if the results are not correct.")
