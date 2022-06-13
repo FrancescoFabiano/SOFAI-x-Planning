@@ -1,12 +1,8 @@
 #!/usr/bin/env bash
-#This script prints out the time for executing a plan, giventhe actions, on the same domain with the two version of PDKB
-#USAGE EXAMPLE (from the project root folder): ". scripts/givenplan_comparison.sh exp/paper/CC/CC_2_2_3.txt right_a left_b a_check_3"
+#USAGE EXAMPLE (from the project root folder): "./Scripts/batch_test.sh coininthebox"
 #	where:
-#			"exp/paper/CC/CC_2_2_3.txt" is the path to the domain name
-#			"right_a left_b a_check_3" are the names of three actions (the number of actions can be any n > 0)
+#			"coininthebox" is the name of the folder containing the domain and the instaces to be solved
 INPATH="$1" # Name of the domain
-
-
 
 mkdir -p tmp/SOL/
 touch tmp/SOL/"sol.out"
@@ -19,7 +15,7 @@ for context in $(find "Input/contexts"/ -type f); do
       for instance in $(find "Input/"$INPATH"/instances"/ -type f); do
 
         echo -e "    Solving the instance \"$(basename ${instance%%.*})\" with context \"$(basename ${context%%.*})\" and thresholds \"$(basename ${threshold%%.*})\"";
-        python3 architecture.py "$domain" "$instance" "$context" "$threshold" >> tmp/SOL/"sol.out";
+        python3 architecture.py "$domain" "$instance" "$context" "$threshold" "-d" 2 P2 >> tmp/SOL/"sol.out";
         echo -e "" >> tmp/SOL/"sol.out";
 
       done

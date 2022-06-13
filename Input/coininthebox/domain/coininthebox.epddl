@@ -1,5 +1,5 @@
 (define (domain coininthebox)
-  (:requirements :strips :negative-preconditions :mep)
+  (:requirements :strips :negative-preconditions :mep :no-duplicates)
   (:predicates (opened) (has_key ?ag - agent) (looking ?ag - agent) (tail))
  
 
@@ -18,21 +18,22 @@
     :effect (when (looking ?ag) (tail))
 	:observers	(?ag)
 	:p_observers (and (forall (diff(?ag2)(?ag)) (when (looking ?ag2) (?ag2))))
-	)
+	:exp_effect (and (when (looking ?ag2) [?ag2][?ag](or (tail) (!tail))) ([?ag](tail)))
+  )
   
 
   (:action signal
     :parameters (?ag1 ?ag2 - agent)
     :precondition (and ([?ag1](looking ?ag1)) ([?ag2](not (looking ?ag2))) )
     :effect (looking ?ag2)
-	:observers (?ag1 ?ag2)
+	:observers (and (forall (diff(?ag3)(?ag2)) (when (looking ?ag3) (?ag3))) (?ag2))
   )
 
   (:action distract
     :parameters (?ag1 ?ag2 - agent)
     :precondition (and ([?ag1](looking ?ag1)) ([?ag2](looking ?ag2)))
     :effect (not (looking ?ag2))
-	:observers (?ag1 ?ag2)
+	:observers (and (forall (diff(?ag3)(?ag2)) (when (looking ?ag3) (?ag3))) (?ag2))
   )
   
   

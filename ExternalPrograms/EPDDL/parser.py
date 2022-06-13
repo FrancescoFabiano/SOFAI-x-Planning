@@ -345,6 +345,7 @@ class EPDDL_Parser:
         else:
             group = [group]
         for predicate in group:
+            #print("Here with predicate[0] == " + str(predicate[0]))
             if 'B(' in predicate[0] or 'C(' in predicate[0]:
                 if type(predicate[1]) is list:
                     if predicate[1][0] == 'not':
@@ -366,6 +367,7 @@ class EPDDL_Parser:
                 if len(predicate) != 2:
                     raise Exception('Unexpected not in ' + name + part)
                 negative.append(predicate[-1])
+                #print("Appended " + str(predicate[-1]))
             else:
                 positive.append(predicate)
 
@@ -640,9 +642,9 @@ class EPDDL_Parser:
             out.write(goal_fs + ';\n')
 
         for goal_f in self.negative_goals:
-            out.write('goal ')
+            out.write('goal (-')
             goal_fs = self.unify_fluent_EFP(goal_f)
-            out.write(goal_fs + ';\n')
+            out.write(goal_fs + ');\n')
 
         out.write('\n')
         out.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
@@ -978,7 +980,7 @@ class EPDDL_Parser:
 
         for goal_f in self.negative_goals:
             goal_fs = self.unify_fluent_PDKB(goal_f)
-            out.write('\n\t  ' + goal_fs)
+            out.write('\n\t  !' + goal_fs)
         out.write('\n\t)')
         out.write('\n)')
         return pdkb_problem_name
@@ -1076,6 +1078,7 @@ class EPDDL_Parser:
     def print_expl_effects_PDKB(self,action,out):
         if (len(action.explicit_eff) > 0):
             out.write('\t\t:effect\t\t\t\t (')
+            print ("Effects are: " + str(action.explicit_eff) + " normal are " + str(action.positive_preconditions))
             out.write(self.unify_fluent_PDKB(action.explicit_eff, True))
             out.write(')\n')
             return True

@@ -229,7 +229,7 @@ class Action:
                     fluent += Action.unify_fluent_PDKB(given_list[l], no_change,from_bf)
                     l += len(given_list[l])
                 #fluent += (str(i))
-
+            
             else:
                 if from_bf:
                     fluent += '('

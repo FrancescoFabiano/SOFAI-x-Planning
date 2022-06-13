@@ -245,6 +245,7 @@ def solveWithS2(timeLimit):
 
 def solveWithS2(timeLimit, planner):
 
+    planner = plannerS2_2
     if planner == plannerS2_1:
         domainNamePDKB, problemNamePDKB = parser.print_PDKB(output_folderPDKB)
         result = subprocess.run(['sh','./'+ scripts_folder + 'PDKB_solve.sh', problemNamePDKB,  " " + output_folderPDKB, " " + str(int(timeLimit))+"s"])
@@ -310,7 +311,7 @@ def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solu
         out.write(json_object)
 
 
-    print("The solution is: " + str(solution) + " and has been found in " + str(elapsedTime) + "s by System " + str(system), end = '')
+    print("The solution is: " + str(solution) + " with correctness " + str(correctness) + " and has been found in " + str(elapsedTime) + "s by System " + str(system), end = '')
     if (system != systemONE):
         print(" using planner " + str(planner) +".")
     sys.exit(0)
@@ -399,7 +400,24 @@ def selectPlannerS2():
 #-----------------------------------------------
 if __name__ == '__main__':
 
-    if (len(sys.argv) > 4):
+    forceP1 = False
+    forceP2 = False
+    forceDepth = False
+    forcedDepth = 0
+
+    for arg in sys.argv:
+        if forceDepth and forcedDepth == 0:
+            forcedDepth = int(arg)
+
+        if (arg == "-d"):
+            forceDepth = True
+
+        if (arg == "P1"):
+            forceP1 = True
+        elif (arg == "P2"):
+            forceP2 = True
+
+    if (len(sys.argv) > 4 and not forceP1 and not forceP2):
         readThreshold(sys.argv[4])
 
     timeSTART = time.time()
@@ -415,7 +433,19 @@ if __name__ == '__main__':
     correctnessCntx = threshold3
     timeLimitCntx = float(getVarFromFile(context,"timelimit"))
     instanceDepth = int(getVarFromFile(problemFile,"depth"))
+    if forcedDepth > 0:
+        instanceDepth = forcedDepth
+
+    #print("Instance Depth is " + str(instanceDepth))
+
+    if (forceP1):
+        solveWithS2(timeLimitCntx - (time.time() - timeSTART),plannerS2_1)
+    elif (forceP2):
+        solveWithS2(timeLimitCntx - (time.time() - timeSTART),plannerS2_2)
+
+
     difficulty = estimateDifficulty(instanceDepth)
+
 
 
     ######### S1 metacognitive part
