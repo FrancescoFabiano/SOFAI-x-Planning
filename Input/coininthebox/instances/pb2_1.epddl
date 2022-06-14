@@ -1,8 +1,0 @@
-(define (problem pb2_1)
-  (:domain coininthebox)
-  (:agents a b)
-  (:depth 3)
-  (:dynck false)
-  (:init (tail) (has_key a) (looking a) ([a b](has_key a)) ([a b](not (has_key b))) ([a b](not (opened))) ([a b](looking a)) ([a b](not (looking b))))
-  (:goal ([a](opened)))
-)

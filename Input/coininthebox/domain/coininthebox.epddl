@@ -1,23 +1,39 @@
 (define (domain coininthebox)
   (:requirements :strips :negative-preconditions :mep :no-duplicates)
-  (:predicates (opened) (has_key ?ag - agent) (looking ?ag - agent) (tail))
+  (:predicates (opened) (has_key ?ag - agent) (looking ?ag - agent) (tail) (in_room_box ?ag - agent) (in_room_empty ?ag - agent))
  
+ 
+   (:action move_to_box
+	:act_type 	ontic
+    :parameters (?ag - agent)
+    :precondition (and ([?ag](in_room_empty ?ag)) (in_room_empty ?ag))
+    :effect (and (in_room_box ?ag) (-in_room_empty ?ag))
+	:observers (and (forall (?ag2) (?ag2)))
+  )
+  
+  (:action move_to_empty
+	:act_type 	ontic
+    :parameters (?ag - agent)
+    :precondition (and ([?ag](in_room_box ?ag)) (in_room_box ?ag))
+    :effect (and (in_room_empty ?ag) (-in_room_box ?ag))
+	:observers (and (forall (?ag2) (?ag2)))
+  )
 
   (:action open
 	:act_type 	ontic
     :parameters (?ag - agent)
-    :precondition (and ([?ag](has_key ?ag)) (has_key ?ag))
+    :precondition (and ([?ag](has_key ?ag)) (has_key ?ag) (in_room_box ?ag))
     :effect (opened)
-	:observers (and (forall (diff(?ag2)(?ag)) (when (looking ?ag2) (?ag2))) (?ag))
+	:observers (and (forall (diff(?ag2)(?ag)) (when (and (looking ?ag2) (in_room_box ?ag2)) (?ag2))) (?ag))
   )
 
   (:action peek
 	:act_type	sensing
     :parameters (?ag - agent)
-    :precondition (and ([?ag](opened)) ([?ag](looking ?ag)) (looking ?ag) (opened))
+    :precondition (and ([?ag](opened)) ([?ag](looking ?ag)) (looking ?ag) (opened) (in_room_box ?ag))
     :effect (when (looking ?ag) (tail))
 	:observers	(?ag)
-	:p_observers (and (forall (diff(?ag2)(?ag)) (when (looking ?ag2) (?ag2))))
+	:p_observers (and (forall (diff(?ag2)(?ag)) (when (and (looking ?ag2) (in_room_box ?ag2)) (?ag2))))
 	:exp_effect (and (when (looking ?ag2) [?ag2][?ag](or (tail) (!tail))) ([?ag](tail)))
   )
   
@@ -37,12 +53,21 @@
   )
   
   
-  (:action announce
+  (:action announce_room_box
 	:act_type	announcement
     :parameters (?ag - agent)
-    :precondition (and ([?ag](tail)) (tail))
+    :precondition (and ([?ag](tail)) (tail) (in_room_box ?ag))
     :effect (tail)
-	:observers (and (forall (diff(?ag2)(?ag)) (when (looking ?ag2) (?ag2))) (?ag))
-   )
+	:observers (and (forall (diff(?ag2)(?ag)) (when (and (looking ?ag2) (in_room_box ?ag2)) (?ag2))) (?ag))
+  )
+   
+  
+  (:action announce_room_empty
+	:act_type	announcement
+    :parameters (?ag - agent)
+    :precondition (and ([?ag](tail)) (tail) (in_room_empty ?ag))
+    :effect (tail)
+	:observers (and (forall (diff(?ag2)(?ag)) (when (and (looking ?ag2) (in_room_empty ?ag2)) (?ag2))) (?ag))
+  )
 	
 )

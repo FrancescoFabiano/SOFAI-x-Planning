@@ -108,9 +108,10 @@ def readSolutionFromFile(filename):
                         myfile.close()
                         return res
 
-        raise Exception('Missing solution in '+ filename)
+        #raise Exception('Missing solution in '+ filename)
+        return "noSolution"
     except IOError:
-        return "noS1Solution"
+        return "noSolution"
 
 def readTimeFromFile(filename):
     with open(filename) as myfile:
@@ -126,7 +127,8 @@ def readTimeFromFile(filename):
                     myfile.close()
                     return ret
 
-    raise Exception('Missing plan in '+ filename)
+    #raise Exception('Missing plan in '+ filename)
+    return "TO"
 
 def executeS1():
 
@@ -240,7 +242,7 @@ def checkDCK():
     return (parser.dynamicCK.lower() == "true")
 
 
-def solveWithS2(timeLimit):
+def solveWithS2NoPlan(timeLimit):
     solveWithS2(timeLimit, selectPlannerS2())
 
 def solveWithS2(timeLimit, planner):
@@ -258,9 +260,9 @@ def solveWithS2(timeLimit, planner):
     else:
         raise Exception('Planner '+ str(planner) +' is not a known S2-planner')
 
-    if(time == "TO"):
+    if(time == "TO" or solutionS2 == "noSolution"):
         #return False, timeLimit, None
-        print("The problem could not be solved by S2.")
+        print("Problem </pro>" + parser.problem_name + "</> could not be solved by System </sys>" + str(systemTWO) + "</> using planner </pla>" + str(planner) +"</>.")
         return False
     else:
         memorizeSolution(systemTWO, planner, 1.0, float(time), 1.0, solutionS2)
@@ -311,9 +313,11 @@ def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solu
         out.write(json_object)
 
 
-    print("The solution is: " + str(solution) + " with correctness " + str(correctness) + " and has been found in " + str(elapsedTime) + "s by System " + str(system), end = '')
+    print("The solution of </pro>" + parser.problem_name + "</> is </sol>" + str(solution) + "</> with correctness </cor>" + str(correctness) + "</> and has been found in </tim>" + str(elapsedTime) + "s</> by System </sys>" + str(system) + "</>", end = '')
     if (system != systemONE):
-        print(" using planner " + str(planner) +".")
+        print(" using planner </pla>" + str(planner) +"</>.")
+    else:
+        print("")
     sys.exit(0)
 
 def generateNamePDKB():
@@ -385,7 +389,7 @@ def tryS1(plannerS1, solutionS1, confidenceS1, timeS1):
     if (correctnessS1 >= correctnessCntx):
         memorizeSolution(systemONE, plannerS1, confidenceS1, timeS1, correctnessS1, solutionS1)
     else:
-        solveWithS2(timeLimitCntx)
+        solveWithS2NoPlan(timeLimitCntx)
 
 def selectPlannerS2():
     planner = plannerS2_1 #By default we use plannerS2_1 -- we use label to indicate the planners
@@ -440,8 +444,11 @@ if __name__ == '__main__':
 
     if (forceP1):
         solveWithS2(timeLimitCntx - (time.time() - timeSTART),plannerS2_1)
+        sys.exit()
     elif (forceP2):
         solveWithS2(timeLimitCntx - (time.time() - timeSTART),plannerS2_2)
+        sys.exit()
+
 
 
     difficulty = estimateDifficulty(instanceDepth)

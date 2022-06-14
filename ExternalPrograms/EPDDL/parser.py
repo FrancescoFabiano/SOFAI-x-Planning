@@ -471,7 +471,7 @@ class EPDDL_Parser:
                                     i = i+1
                                 self.recoursive_reading(parsed_rule[0],parsed_rule[1],parsed_rule[2], diff, subProcedure, positive, negative, name, part)
                             else:
-                                raise Exception('To many nested command in the agents\' observability')
+                                raise Exception('To many nested command in the agents\' observability\n' + str(rule))
 
 
         elif body[0] == 'not':
@@ -512,7 +512,7 @@ class EPDDL_Parser:
         fluents = set()
         ground_actions = []
         for action in self.actions:
-            for act in action.groundify(self.objects, self.types,  self.requirements, fluents):
+            for act in action.groundify(self.objects, self.types, self.requirements, fluents):
                 act_name = act.name
                 for parameter in act.parameters:
                     act_name += '_'+parameter
@@ -658,17 +658,17 @@ class EPDDL_Parser:
 
         for ini_f in self.state:
             fluent = self.unify_fluent_EFP(ini_f)
-            if 'B(' not in fluent and 'C(' not in fluent:
+            if 'B(' not in fluent and 'C(' not in fluent and not '-' in fluent:
                 fluents_set.add(fluent)
 
         for goal_f in self.positive_goals:
             fluent = self.unify_fluent_EFP(goal_f)
-            if 'B(' not in fluent and 'C(' not in fluent:
+            if 'B(' not in fluent and 'C(' not in fluent and not '-' in fluent:
                 fluents_set.add(fluent)
 
         for goal_f in self.negative_goals:
             fluent = self.unify_fluent_EFP(goal_f)
-            if 'B(' not in fluent and 'C(' not in fluent:
+            if 'B(' not in fluent and 'C(' not in fluent and not '-' in fluent:
                 fluents_set.add(fluent)
 
         #duplicates = True
@@ -709,7 +709,7 @@ class EPDDL_Parser:
                             pred[pred.index(v)] = assignment[iv]
                         iv += 1
                     fluent = self.unify_fluent_EFP(pred)
-                    if 'B(' not in fluent and 'C(' not in fluent:
+                    if 'B(' not in fluent and 'C(' not in fluent and not '-' in fluent:
                         fluents_set.add(fluent)
 
     def print_precondition_EFP(self,action,out):
