@@ -1,4 +1,4 @@
-(define (problem pb1_3)
+(define (problem pb7_3)
   (:domain coininthebox)
   (:agents a b c d e)
   (:depth 2)
