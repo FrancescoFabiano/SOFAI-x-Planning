@@ -434,7 +434,7 @@ if __name__ == '__main__':
     generateEFPInstance()
 
     #correctnessCntx = float(getVarFromFile(context,"correctness"))
-    reduced_risk_adversion = 0.2
+    reduced_risk_adversion = 0.4
     correctnessCntx = threshold3 - reduced_risk_adversion
     timeLimitCntx = float(getVarFromFile(context,"timelimit"))
     instanceDepth = int(getVarFromFile(problemFile,"depth"))
@@ -508,4 +508,4 @@ if __name__ == '__main__':
             else:
                 solveWithS2(remainingTime,plannerS2)
 
-    print("The problem could not be solved.")
+    print("Problem </pro>" + parser.problem_name + "</> could not be solved by System </sys>Metacognitive</>.")
