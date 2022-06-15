@@ -434,7 +434,8 @@ if __name__ == '__main__':
     generateEFPInstance()
 
     #correctnessCntx = float(getVarFromFile(context,"correctness"))
-    correctnessCntx = threshold3
+    reduced_risk_adversion = 0.2
+    correctnessCntx = threshold3 - reduced_risk_adversion
     timeLimitCntx = float(getVarFromFile(context,"timelimit"))
     instanceDepth = int(getVarFromFile(problemFile,"depth"))
     if forcedDepth > 0:
