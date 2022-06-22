@@ -56,9 +56,15 @@ if __name__ == '__main__':
                 problem = getVarFromLine(line,"pro")
                 if (problem != ''):
                     if "could not be solved" in line:
-                        print(problem + ", -1,-1,-1",file=f)
+                        time = 90
+                        cor = "0"
+                        sys = "-1"
                     else:
-                        print(problem + ", "+ getVarFromLine(line,"tim")[:-1]+ "," + getVarFromLine(line,"cor")+ "," +getVarFromLine(line,"sys"),file=f)
+                        time = float(getVarFromLine(line,"tim")[:-1])
+                        cor = getVarFromLine(line,"cor")
+                        sys = getVarFromLine(line,"sys")
+                    time = time * 1000.00
+                    print(problem + ", "+ str(time)+ "," + str(cor)+ "," +str(sys),file=f)
                         #sys.exit()
             myfile.close()
 
