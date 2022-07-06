@@ -17,12 +17,18 @@ from ExternalPrograms.S1Solver import s1_solver
 from ExternalPrograms.S1Solver import getStates
 from ExternalPrograms.S1Solver import s1_distance
 
+
 # Constants
 systemALL = -1;
 systemONE = 1
 systemTWO = 2
 
 plannerALL = -1;
+
+plannerS1_Dist1 = 1
+plannerS1_Dist2 = 2
+plannerS1_Random = 3
+
 plannerS2_1 = 1
 plannerS2_2 = 2
 
@@ -133,8 +139,8 @@ def readTimeFromFile(filename):
 def executeS1():
 
     #New S1###################
+    plannerS1 = 3
 
-    mode = 1
     similarity_threshold = 0.2 # If < than this is not returned
     json_path = dbFolder+jsonFilename
     try:
@@ -142,23 +148,40 @@ def executeS1():
             experience = json.load(f)
 
         cases = experience["cases"]
-        init,goal = getStates.States(problemFile) #reading initial and goal states from problem file
 
-        #returned_list has records of this form <path_to_sol, similarity_score, problem_name>
-        sol = ""
-        confidence = 0
-        returned_list = s1_distance.doCaseMatch(cases, mode, parser.domain_name, init, goal, similarity_threshold)
-        if returned_list:
+        if (plannerS1 == plannerS1_Dist1 or plannerS1 == plannerS1_Dist2):
+
+            if (plannerS1 == plannerS1_Dist1):
+                mode = 1
+            elif (plannerS1 == plannerS1_Dist2):
+                mode = 0
+
+            init,goal = getStates.States(problemFile) #reading initial and goal states from problem file
+
+            #returned_list has records of this form <path_to_sol, similarity_score, problem_name>
+            sol = ""
+            confidence = 0
+            returned_list = s1_distance.doCaseMatch(cases, mode, parser.domain_name, init, goal, similarity_threshold)
+            if returned_list:
+                first_act = True
+                for act in returned_list[0][1]:
+                    if first_act:
+                        sol = act
+                        first_act = False
+                    else:
+                        sol = sol + ", " + act
+                confidence = returned_list[0][0]
+
+        elif (plannerS1 == plannerS1_Random):
+            sol = ""
+            confidence, plan = s1_solver.randomSolve(cases)
             first_act = True
-            for act in returned_list[0][1]:
+            for act in plan:
                 if first_act:
                     sol = act
                     first_act = False
                 else:
                     sol = sol + ", " + act
-            confidence = returned_list[0][0]
-        #########################
-
 
     #    solString = s1_planner.s1Solver(parser.domain_name,parser.problem_name,json_path)
     #    solString = solString.replace(";", ",")
@@ -248,6 +271,10 @@ def solveWithS2NoPlan(timeLimit):
 def solveWithS2(timeLimit, planner):
 
     planner = plannerS2_2
+    #print("Problem </pro>" + parser.problem_name + "</> solved by System </sys>" + str(systemTWO) + "</> using planner </pla>" + str(planner) +"</>.")
+    #sys.exit(0)
+
+
     if planner == plannerS2_1:
         domainNamePDKB, problemNamePDKB = parser.print_PDKB(output_folderPDKB)
         result = subprocess.run(['sh','./'+ scripts_folder + 'PDKB_solve.sh', problemNamePDKB,  " " + output_folderPDKB, " " + str(int(timeLimit))+"s"])
@@ -424,6 +451,8 @@ if __name__ == '__main__':
     if (len(sys.argv) > 4 and not forceP1 and not forceP2):
         readThreshold(sys.argv[4])
 
+
+
     timeSTART = time.time()
     createFolders()
 
@@ -459,7 +488,7 @@ if __name__ == '__main__':
     ######### S1 metacognitive part
     # AUTOMATICALLY CALL S1
     timeS1 = time.time()
-    solutionS1, confidenceS1 = solveWithS1();
+    solutionS1, confidenceS1 = solveWithS1()
     timeS1 = time.time() - timeS1
     plannerS1 = 1
     M = 1
@@ -472,6 +501,8 @@ if __name__ == '__main__':
             M = 1-getAvgCorrS1(systemONE,plannerALL,threshold4)
         else:
             M = 0
+
+        M = 0
 
         if (confidenceS1 * (1-M) > threshold3):
             tryS1(plannerS1, solutionS1, confidenceS1, timeS1)

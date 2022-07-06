@@ -1,6 +1,6 @@
 #importing required packages
 import json
-
+import random
 #s1 solver searches through the existing plans in the memory and returns cases - plan and goal
 def s1Solver(domain, problem,json_path):
 
@@ -26,3 +26,11 @@ def s1Solver(domain, problem,json_path):
                     problem_plan = ';'.join(data['cases'][str(i)]['plan'])
 
         return problem_plan
+
+def randomSolve(data):
+    tot_cases = len(data)
+    if tot_cases > 1:
+        key = random.randrange(1,tot_cases)
+        return 1,data[str(key)]['plan']
+    else:
+        return 0,[""]

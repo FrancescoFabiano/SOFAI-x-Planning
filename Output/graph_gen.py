@@ -90,21 +90,21 @@ if __name__ == '__main__':
             print("Problem-SOFAI,Time-SOFAI,Corr-SOFAI,Sys-SOFAI,Problem-EFP,Time-EFP,Corr-EFP,Sys-EFP",file=f)
             for line1, line2 in zip(file1, file2):
                 line1 = line1.strip()
-                if (not("-1" in line1 or "-1" in line2)):
-                    print(line1+","+line2,file=f)
+                #if (not("-1" in line1 or "-1" in line2)):
+                print(line1+","+line2,file=f)
 
 
 
     plt.rcParams["figure.figsize"] = [14.00, 8.00]
     plt.rcParams["figure.autolayout"] = True
     # Make a list of columns
-    plotting_val = "Time"
+    plotting_val = "Corr"
     columns = [plotting_val+'-SOFAI', plotting_val+'-EFP']
 
 
 
     colors = ['#89FAB4', '#FAE4A0']
-    styles = ['-o', 'x']
+    styles = ['o', 'x']
     sort_order = [plotting_val+'-SOFAI', plotting_val+'-EFP']
     #sort_order = [plotting_val+'-EFP', plotting_val+'-SOFAI']
 

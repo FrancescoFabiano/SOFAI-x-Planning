@@ -575,7 +575,8 @@ void planner<T>::check_actions_names(std::vector<std::string>& act_name)
 		(*it_stset).erase(std::remove((*it_stset).begin(), (*it_stset).end(), ','), (*it_stset).end());
 
 		if (domain_act.find(*it_stset) == domain_act.end()) {
-			std::cerr << "\nERROR in giving the action list: the action " << *it_stset << " does not exist.\n";
+			std::cout << "\nERROR in giving the action list: the action " << *it_stset << " does not exist.";
+			std::cout << "\nThe solution score is: <<0.0>>\n";
 			exit(1);
 		}
 	}
