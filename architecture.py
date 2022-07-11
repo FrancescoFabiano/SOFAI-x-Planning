@@ -184,15 +184,14 @@ def executeS1():
             returned_list0 = s1_distance.doCaseMatch(cases, 0, parser.domain_name, init, goal, similarity_threshold)
             returned_list1 = s1_distance.doCaseMatch(cases, 1, parser.domain_name, init, goal, similarity_threshold)
 
-            if (returned_list0[0][0] < returned_list1[0][0]):
-                returned_list = returned_list1
-                mode = 1
-            else:
-                returned_list = returned_list0
-                mode = 0
+            if returned_list0 and returned_list1:
+                if (returned_list0[0][0] < returned_list1[0][0]):
+                    returned_list = returned_list1
+                    mode = 1
+                else:
+                    returned_list = returned_list0
+                    mode = 0
 
-
-            if returned_list:
                 first_act = True
                 for act in returned_list[0][1]:
                     if first_act:
