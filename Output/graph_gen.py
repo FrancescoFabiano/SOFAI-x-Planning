@@ -67,45 +67,58 @@ def sol_reader(filename,rootFilename):
 
 if __name__ == '__main__':
 
-    filename1 = sys.argv[1]
-    filename2 = sys.argv[2]
+    narg = int(sys.argv[1])
+    print("Arg is " +  str(narg))
 
-    rootFilename1 = os.path.splitext(filename1)[0]
-    rootFilename2 = os.path.splitext(filename2)[0]
+    filenames = []
+    rootFilenames = []
+    modfilenames = []
+    count = 2
+    while count < narg+2:
+        temp = sys.argv[count]
+        print("Temp is " +  str(temp))
+        filenames.append(temp)
+        rootFilenames.append(os.path.splitext(temp)[0])
+        sol_reader(filenames[count-2],rootFilenames[count-2])
+        modfilenames.append(rootFilenames[count-2]+'.csv')
+        path, rootFilenames[count-2] = os.path.split(rootFilenames[count-2])
+        count += 1
 
-    sol_reader(filename1,rootFilename1)
-    sol_reader(filename2,rootFilename2)
 
-    modfilename1 = rootFilename1+'.csv'
-    modfilename2 = rootFilename2+'.csv'
 
-    path, rootFilename1 = os.path.split(rootFilename1)
-    path, rootFilename2 = os.path.split(rootFilename2)
-
-    merged_name = path + "/merged_"+rootFilename1+"_"+rootFilename2+".csv"
-    sorted_name = path + "/sorted_merged_"+rootFilename1+"_"+rootFilename2+".csv"
+    os.makedirs(path+"/tmp", exist_ok=True)
+    merged_name = path + "/tmp/merged.csv"
+    sorted_name = path + "/tmp/sorted_merged.csv"
 
     with open(merged_name, 'w') as f:
-        with open(modfilename1) as file1, open(modfilename2) as file2:
-            print("Problem-SOFAI,Time-SOFAI,Corr-SOFAI,Sys-SOFAI,Problem-EFP,Time-EFP,Corr-EFP,Sys-EFP",file=f)
-            for line1, line2 in zip(file1, file2):
+        with open(modfilenames[0]) as file1, open(modfilenames[1]) as file2, open(modfilenames[2]) as file3,  open(modfilenames[3]) as file4:
+            print("Problem-SOFAI_JAC,Time-SOFAI_JAC,Corr-SOFAI_JAC,Sys-SOFAI_JAC,",end="",file=f)
+            print("Problem-SOFAI_LEV,Time-SOFAI_LEV,Corr-SOFAI_LEV,Sys-SOFAI_LEV,",end="",file=f)
+            print("Problem-SOFAI_RNG,Time-SOFAI_RNG,Corr-SOFAI_RNG,Sys-SOFAI_RNG,",end="",file=f)
+            print("Problem-EFP,Time-EFP,Corr-EFP,Sys-EFP",end="\n",file=f)
+            for line1, line2, line3, line4 in zip(file1, file2, file3, file4):
                 line1 = line1.strip()
+                line2 = line2.strip()
+                line3 = line3.strip()
+                line4 = line4.strip()
                 #if (not("-1" in line1 or "-1" in line2)):
-                print(line1+","+line2,file=f)
+                print(line1+","+line2+","+line3+","+line4,file=f)
 
 
 
     plt.rcParams["figure.figsize"] = [14.00, 8.00]
     plt.rcParams["figure.autolayout"] = True
     # Make a list of columns
-    plotting_val = "Corr"
-    columns = [plotting_val+'-SOFAI', plotting_val+'-EFP']
+    plotting_val = "Time"
+    mydata = [plotting_val+'-SOFAI_JAC',plotting_val+'-SOFAI_LEV', plotting_val+'-SOFAI_RNG', plotting_val+'-EFP']
+    mydata = [plotting_val+'-SOFAI_JAC',plotting_val+'-SOFAI_LEV',plotting_val+'-SOFAI_RNG']
+    columns = mydata
 
 
 
-    colors = ['#89FAB4', '#FAE4A0']
-    styles = ['o', 'x']
-    sort_order = [plotting_val+'-SOFAI', plotting_val+'-EFP']
+    styles = ['o', 'x', '^', 'D']
+    sort_order = mydata
+    #sort_order = [plotting_val+'-SOFAI_LEV', plotting_val+'-SOFAI_JAC', plotting_val+'-EFP']
     #sort_order = [plotting_val+'-EFP', plotting_val+'-SOFAI']
 
     # Read a CSV file
