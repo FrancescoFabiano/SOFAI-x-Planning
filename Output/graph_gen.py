@@ -91,18 +91,20 @@ if __name__ == '__main__':
     sorted_name = path + "/tmp/sorted_merged.csv"
 
     with open(merged_name, 'w') as f:
-        with open(modfilenames[0]) as file1, open(modfilenames[1]) as file2, open(modfilenames[2]) as file3,  open(modfilenames[3]) as file4:
+        with open(modfilenames[0]) as file1, open(modfilenames[1]) as file2, open(modfilenames[2]) as file3,  open(modfilenames[3]) as file4, open(modfilenames[4]) as file5:
             print("Problem-SOFAI_JAC,Time-SOFAI_JAC,Corr-SOFAI_JAC,Sys-SOFAI_JAC,",end="",file=f)
             print("Problem-SOFAI_LEV,Time-SOFAI_LEV,Corr-SOFAI_LEV,Sys-SOFAI_LEV,",end="",file=f)
+            print("Problem-SOFAI_MIX,Time-SOFAI_MIX,Corr-SOFAI_MIX,Sys-SOFAI_MIX,",end="",file=f)
             print("Problem-SOFAI_RNG,Time-SOFAI_RNG,Corr-SOFAI_RNG,Sys-SOFAI_RNG,",end="",file=f)
             print("Problem-EFP,Time-EFP,Corr-EFP,Sys-EFP",end="\n",file=f)
-            for line1, line2, line3, line4 in zip(file1, file2, file3, file4):
+            for line1, line2, line3, line4,line5 in zip(file1, file2, file3, file4, file5):
                 line1 = line1.strip()
                 line2 = line2.strip()
                 line3 = line3.strip()
                 line4 = line4.strip()
+                line5 = line5.strip()
                 #if (not("-1" in line1 or "-1" in line2)):
-                print(line1+","+line2+","+line3+","+line4,file=f)
+                print(line1+","+line2+","+line3+","+line4+","+line5,file=f)
 
 
 
@@ -110,13 +112,13 @@ if __name__ == '__main__':
     plt.rcParams["figure.autolayout"] = True
     # Make a list of columns
     plotting_val = "Time"
-    mydata = [plotting_val+'-SOFAI_JAC',plotting_val+'-SOFAI_LEV', plotting_val+'-SOFAI_RNG', plotting_val+'-EFP']
-    mydata = [plotting_val+'-SOFAI_JAC',plotting_val+'-SOFAI_LEV',plotting_val+'-SOFAI_RNG']
+    mydata = [plotting_val+'-SOFAI_JAC',plotting_val+'-SOFAI_LEV',plotting_val+'-SOFAI_MIX', plotting_val+'-SOFAI_RNG', plotting_val+'-EFP']
+    mydata = [plotting_val+'-SOFAI_JAC',plotting_val+'-EFP']#,plotting_val+'-EFP']
     columns = mydata
 
 
 
-    styles = ['o', 'x', '^', 'D']
+    styles = ['o', 'x', '-' , '^', 'D']
     sort_order = mydata
     #sort_order = [plotting_val+'-SOFAI_LEV', plotting_val+'-SOFAI_JAC', plotting_val+'-EFP']
     #sort_order = [plotting_val+'-EFP', plotting_val+'-SOFAI']
@@ -143,3 +145,20 @@ if __name__ == '__main__':
 
     #plt.yscale('log')
     plt.savefig(plotting_val+".png")
+
+
+    #Adding special fileds to CSV
+    with open(merged_name, 'a') as f:
+        countCases = 0
+        while countCases < narg:
+            increaser = countCases*4
+            print("\"=SUBTOTAL(3,"+chr(ord('A') + increaser)+"2:"+chr(ord('A') + increaser)+"241)\",",end="",file=f)
+            print("\"=SUBTOTAL(1,"+chr(ord('B') + increaser)+"2:"+chr(ord('B') + increaser)+"241)\",",end="",file=f)
+            print("\"=SUBTOTAL(1,"+chr(ord('C') + increaser)+"2:"+chr(ord('C') + increaser)+"241)\",",end="",file=f)
+            print("\"=COUNTIF("+chr(ord('D') + increaser)+"2:"+chr(ord('D') + increaser)+"241,1)\"",end="",file=f)
+            if countCases < narg:
+                print(",",end="",file=f)
+            else:
+                print("\n",end="",file=f)
+
+            countCases+=1
