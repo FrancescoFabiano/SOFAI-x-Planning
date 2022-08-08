@@ -16,7 +16,7 @@ for context in $(find "Input/contexts"/ -type f); do
       for instance in $(find "Input/"$INPATH"/instances"/ -type f); do
 
         echo -e "    Solving the instance \"$(basename ${instance%%.*})\" with context \"$(basename ${context%%.*})\" and thresholds \"$(basename ${threshold%%.*})\"";
-        python3 architecture.py "$domain" "$instance" "$context" "$threshold" "-d" 2 >> tmp/SOL/"sol.out";
+        python3 architecture.py "$domain" "$instance" "$context" "$threshold" "-d" 2 P2 >> tmp/SOL/"sol.out";
       #  echo -e "" >> tmp/SOL/"sol.out";
 
       done

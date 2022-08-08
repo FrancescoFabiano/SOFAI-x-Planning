@@ -4,10 +4,6 @@
 #			"coininthebox" is the name of the folder containing the domain and the instaces to be solved
 INPATH="$1" # Name of the domain
 
-mkdir -p tmp/SOL/
-touch tmp/SOL/"sol.out"
-echo "" > tmp/SOL/"sol.out"
-
 echo -e "\nExecution of architecture in all the instances in Input/"$INPATH"/instances\n"
 
 for instance in $(find $INPATH"/instances"/ -type f); do

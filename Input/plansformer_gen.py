@@ -91,12 +91,13 @@ if __name__ == '__main__':
                             plan = plan.replace("[","")
                             plan = plan.replace("]","")
                             plan = plan.replace("\'","")
-                            if not plan == "":
-                                print("\""+plan+"\"", end='\n', file=f)
-                                count = count +1
-                            else:
-                                print("NOT FOUND", end='\n', file=f)
-                                print("Input/coininthebox/instances/" + filename,file=out)
+
+                    if not plan == "":
+                        print("\""+plan+"\"", end='\n', file=f)
+                        count = count +1
+                    else:
+                        print("NOT FOUND", end='\n', file=f)
+                        print("Input/coininthebox/instances/" + filename,file=out)
                     if neverfound:
                         print(to_check + "NOT EXISTENT", end='\n', file=f)
 

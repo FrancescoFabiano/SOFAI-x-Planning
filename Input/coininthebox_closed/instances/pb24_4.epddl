@@ -1,0 +1,8 @@
+(define (problem pb24_4)
+  (:domain coininthebox)
+  (:agents a b c d e)
+  (:depth   2)
+  (:dynck   false)
+  (:init   (tail) (has_key a) (looking a) (looking b) (looking c) (in_room_empty a) (in_room_empty b) (in_room_empty c) (in_room_empty d) (in_room_empty e) ([a b c d e](in_room_empty a)) ([a b c d e](in_room_empty b)) ([a b c d e](in_room_empty c)) ([a b c d e](in_room_empty d)) ([a b c d e](in_room_empty e)) ([a b c d e](not (in_room_box a))) ([a b c d e](not (in_room_box b))) ([a b c d e](not (in_room_box c))) ([a b c d e](not (in_room_box d))) ([a b c d e](not (in_room_box e))) ([a b c d e](has_key a)) ([a b c d e](not (has_key b))) ([a b c d e](not (has_key c))) ([a b c d e](not (has_key d))) ([a b c d e](not (has_key e))) ([a b c d e](not (opened))) ([a b c d e](looking a)) ([a b c d e](looking b)) ([a b c d e](looking c)) ([a b c d e](not (looking d))) ([a b c d e](not (looking e))))
+  (:goal (not(opened))   (in_room_empty a) (in_room_empty b) (in_room_empty c) (in_room_empty d) (in_room_empty e)  ([b](tail)))
+)

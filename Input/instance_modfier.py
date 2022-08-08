@@ -52,9 +52,9 @@ if __name__ == '__main__':
     iter_number = int((re.sub(r'(pb)(\d+)(\_)(\d+)(\.epddl)', r'\4',name)))
 
     #print("Name is " + name + " and number is " +  str(instance_number))
-    instance_number += 12
+    instance_number += 0
 
-    modfilename = path + "/pb" + str(instance_number) + "_" + str(iter_number) + ".epddl"
+    modfilename = "/mnt/c/Users/Francesco/Documents/Code/MetacognitiveEpistemicPlanning/Input/coininthebox-mod/instances/pb" + str(instance_number) + "_" + str(iter_number) + ".epddl"
     #print("ModName is " + modfilename + " and number is " +  str(instance_number))
 
     with open(modfilename, 'w') as f:
@@ -68,7 +68,6 @@ if __name__ == '__main__':
         print("  (:dynck "+str(dynck), end='', file=f)
         print("  (:init "+str(init), end='', file=f)
         print("  (:goal ", end='', file=f)
-        for agent in agents:
-            print(" (in_room_empty " + str(agent) +")",end = '', file=f)
+        print("(not(opened))", end='', file=f)
         print(" " + goal, end='', file=f)
         print(")", file=f)
