@@ -46,7 +46,7 @@ def sol_reader(filename,rootFilename):
             myfile.close()
 
     with open(modfilename, 'w') as f:
-        #print("Problem,Time,Correctness,System",file=f)
+        #print("Problem,Time,Correctnessectness,System",file=f)
         with open(newfilename) as myfile:
             for line in myfile:
                 problem = getVarFromLine(line,"pro")
@@ -92,11 +92,11 @@ if __name__ == '__main__':
 
     with open(merged_name, 'w') as f:
         with open(modfilenames[0]) as file1, open(modfilenames[1]) as file2, open(modfilenames[2]) as file3,  open(modfilenames[3]) as file4, open(modfilenames[4]) as file5:
-            print("Problem-SOFAI_JAC,Time-SOFAI_JAC,Corr-SOFAI_JAC,Sys-SOFAI_JAC,",end="",file=f)
-            print("Problem-SOFAI_LEV,Time-SOFAI_LEV,Corr-SOFAI_LEV,Sys-SOFAI_LEV,",end="",file=f)
-            print("Problem-SOFAI_MIX,Time-SOFAI_MIX,Corr-SOFAI_MIX,Sys-SOFAI_MIX,",end="",file=f)
-            print("Problem-SOFAI_RNG,Time-SOFAI_RNG,Corr-SOFAI_RNG,Sys-SOFAI_RNG,",end="",file=f)
-            print("Problem-EFP,Time-EFP,Corr-EFP,Sys-EFP",end="\n",file=f)
+            print("Problem-JACCARD,Time-JACCARD,Correctness-JACCARD,Sys-JACCARD,",end="",file=f)
+            print("Problem-SOFAI_LEV,Time-SOFAI_LEV,Correctness-SOFAI_LEV,Sys-SOFAI_LEV,",end="",file=f)
+            print("Problem-SOFAI_MIX,Time-SOFAI_MIX,Correctness-SOFAI_MIX,Sys-SOFAI_MIX,",end="",file=f)
+            print("Problem-SOFAI_RNG,Time-SOFAI_RNG,Correctness-SOFAI_RNG,Sys-SOFAI_RNG,",end="",file=f)
+            print("Problem-EFP 2.0,Time-EFP 2.0,Correctness-EFP 2.0,Sys-EFP 2.0",end="\n",file=f)
             for line1, line2, line3, line4,line5 in zip(file1, file2, file3, file4, file5):
                 line1 = line1.strip()
                 line2 = line2.strip()
@@ -111,17 +111,19 @@ if __name__ == '__main__':
     plt.rcParams["figure.figsize"] = [14.00, 8.00]
     plt.rcParams["figure.autolayout"] = True
     # Make a list of columns
-    plotting_val = "Time"
-    mydata = [plotting_val+'-SOFAI_JAC',plotting_val+'-SOFAI_LEV',plotting_val+'-SOFAI_MIX', plotting_val+'-SOFAI_RNG', plotting_val+'-EFP']
-    mydata = [plotting_val+'-SOFAI_JAC',plotting_val+'-EFP']#,plotting_val+'-EFP']
+    plotting_val = "Correctness"
+    mydata = [plotting_val+'-JACCARD',plotting_val+'-SOFAI_LEV',plotting_val+'-SOFAI_MIX', plotting_val+'-SOFAI_RNG', plotting_val+'-EFP 2.0']
+    #mydata = [plotting_val+'-JACCARD',plotting_val+'-EFP 2.0']#,plotting_val+'-EFP 2.0']
+    mydata = [plotting_val+'-JACCARD',plotting_val+'-EFP 2.0']
+
     columns = mydata
 
 
 
-    styles = ['o', 'x', '-' , '^', 'D']
+    styles = ['o', 'x', 'h' , '^', 'D']
     sort_order = mydata
-    #sort_order = [plotting_val+'-SOFAI_LEV', plotting_val+'-SOFAI_JAC', plotting_val+'-EFP']
-    #sort_order = [plotting_val+'-EFP', plotting_val+'-SOFAI']
+    #sort_order = [plotting_val+'-SOFAI_LEV', plotting_val+'-JACCARD', plotting_val+'-EFP 2.0']
+    #sort_order = [plotting_val+'-EFP 2.0', plotting_val+'-SOFAI']
 
     # Read a CSV file
     df = pd.read_csv(merged_name, usecols=columns)
@@ -134,10 +136,11 @@ if __name__ == '__main__':
 
 
     # Plot the lines
-    df.plot(y=columns, style=styles, figsize=(16, 9))
-    plt.title(plotting_val + " comparsion between SOFAI and EFP", weight='bold')
+    df.plot(y=columns, style=styles, figsize=(12,4))
+    #plt.title(plotting_val + " comparsion between Fast and Slow Arch. and EFP 2.0", weight='bold')
     # label the x and y axes
     plt.xlabel('Instances', weight='bold', size='large')
+    #plt.ylabel(plotting_val + (" (ms)"), weight='bold', size='large')
     plt.ylabel(plotting_val, weight='bold', size='large')
 
     #plt.xlim(1, 240)
