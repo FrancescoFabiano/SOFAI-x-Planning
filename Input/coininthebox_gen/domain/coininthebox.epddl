@@ -26,6 +26,15 @@
     :effect (opened)
 	:observers (and (forall (diff(?ag2)(?ag)) (when (and (looking ?ag2) (in_room_box ?ag2)) (?ag2))) (?ag))
   )
+  
+  
+  (:action close
+	:act_type 	ontic
+    :parameters (?ag - agent)
+    :precondition (and ([?ag](has_key ?ag)) (has_key ?ag) (in_room_box ?ag))
+    :effect (-opened)
+	:observers (and (forall (diff(?ag2)(?ag)) (when (and (looking ?ag2) (in_room_box ?ag2)) (?ag2))) (?ag))
+  )
 
   (:action peek
 	:act_type	sensing

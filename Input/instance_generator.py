@@ -36,7 +36,7 @@ def generate_random_initial_state(tot_agents):
         tmp_agent += 1
 
     #which agent has the key
-    key_agent = random.randint(0, tot_agents)
+    key_agent = random.randint(0, tot_agents-1)
     initial_state += " (has_key " + str(list_agents[key_agent])+ ")"
 
     #The coin state
@@ -44,14 +44,14 @@ def generate_random_initial_state(tot_agents):
     if(coin_state):
         initial_state += " (tail)"
 #    else:
-#        initial_state += " (not (tail))"
+#        initial_state += " (-tail)"
 
     #The box state
     box_state = bool(random.getrandbits(1)) #If true then the box is open
     if(box_state):
         initial_state += " (opened)"
 #    else:
-#        initial_state += " (not (opened))"
+#        initial_state += " (-opened)"
 
     #The looking agents (at least one)
     agents_look = np.random.choice(sample_arr, size=tot_agents)
@@ -66,7 +66,7 @@ def generate_random_initial_state(tot_agents):
         tmp_agent += 1
 
     if (none_looking):
-        look_agent = random.randint(0, tot_agents)
+        look_agent = random.randint(0, tot_agents-1)
         initial_state += " (looking " + str(list_agents[look_agent])+ ")"
 
 
@@ -85,10 +85,10 @@ def generate_random_initial_state(tot_agents):
     while tmp_agent < tot_agents:
         if (agents_pos[tmp_agent]):
             initial_state += common_knowledge + "(in_room_empty " + str(list_agents[tmp_agent])+ "))"
-            initial_state += common_knowledge + "(not (in_room_box " + str(list_agents[tmp_agent])+ ")))"
+            initial_state += common_knowledge + "(-in_room_box " + str(list_agents[tmp_agent])+ "))"
         else:
             initial_state += common_knowledge + "(in_room_box " + str(list_agents[tmp_agent])+ "))"
-            initial_state += common_knowledge + "(not (in_room_empty " + str(list_agents[tmp_agent])+ ")))"
+            initial_state += common_knowledge + "(-in_room_empty " + str(list_agents[tmp_agent])+ "))"
         tmp_agent += 1
 
     #which agent has the key
@@ -97,14 +97,14 @@ def generate_random_initial_state(tot_agents):
         if (tmp_agent == key_agent):
             initial_state += common_knowledge + "(has_key " + str(list_agents[tmp_agent])+ "))"
         else:
-            initial_state += common_knowledge + "(not (has_key " + str(list_agents[tmp_agent])+ ")))"
+            initial_state += common_knowledge + "(-has_key " + str(list_agents[tmp_agent])+ "))"
         tmp_agent += 1
 
     #The box state
     if(box_state):
         initial_state += common_knowledge + "(opened))"
     else:
-        initial_state += common_knowledge + "(not (opened)))"
+        initial_state += common_knowledge + "(-opened))"
 
 
     #The looking agents (at least one)
@@ -114,14 +114,14 @@ def generate_random_initial_state(tot_agents):
             if (tmp_agent == look_agent):
                 initial_state += common_knowledge + "(looking " + str(list_agents[tmp_agent])+ "))"
             else:
-                initial_state += common_knowledge + "(not (looking " + str(list_agents[tmp_agent])+ ")))"
+                initial_state += common_knowledge + "(-looking " + str(list_agents[tmp_agent])+ "))"
             tmp_agent += 1
     else:
         while tmp_agent < tot_agents:
             if (agents_look[tmp_agent]):
                 initial_state += common_knowledge + "(looking " + str(list_agents[tmp_agent])+ "))"
             else:
-                initial_state += common_knowledge + "(not (looking " + str(list_agents[tmp_agent])+ ")))"
+                initial_state += common_knowledge + "(-looking " + str(list_agents[tmp_agent])+ "))"
             tmp_agent += 1
 
     return initial_state
@@ -135,7 +135,7 @@ def generate_random_goal_state(tot_agents):
         nesting = random.randint(0, max_nesting)
         nest_count = 0
         while nest_count < nesting:
-            ag = random.randint(0, tot_agents)
+            ag = random.randint(0, tot_agents-1)
             subgoal += "[" + str(list_agents[ag])+ "]"
             nest_count += 1
             if (nest_count == nesting):
@@ -149,12 +149,12 @@ def generate_random_goal_state(tot_agents):
             if (selected_fluent < 2):
                 fluent = fluents_goal_list[selected_fluent]
             else:
-                fluent = fluents_goal_list[selected_fluent] + " " + str(list_agents[random.randint(0, tot_agents)])
+                fluent = fluents_goal_list[selected_fluent] + " " + str(list_agents[random.randint(0, tot_agents-1)])
 
             if(bool(random.getrandbits(1))):
                 subgoal += fluent + ")"
             else:
-                subgoal += "not (" + fluent + "))"
+                subgoal += "-" + fluent + ")"
 
             if nesting > 0:
                 subgoal += ")"

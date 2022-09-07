@@ -130,6 +130,7 @@ dmypy.json
 
 # MyFolders
 Output/
+Input/coininthebox_gen/instances/*
 tmp/
 *.tmp
 .problem-cache/
