@@ -1,0 +1,209 @@
+[18:53:43] [Data]: Reading data...                                               <ipython-input-11-416e50ba3b08>:26
+                                                                                                                   
+FULL Dataset: (480, 2)
+TRAIN Dataset: (384, 2)
+TEST Dataset: (96, 2)
+
+           [Initiating Fine Tuning]...                                           <ipython-input-11-416e50ba3b08>:77
+                                                                                                                   
+                               Training Status                               
++---------------------------------------------------------------------------+
+|Epoch | Steps |                            Loss                            |
+|------+-------+------------------------------------------------------------|
+|  0   |   0   | tensor(5.3052, device='cuda:0', grad_fn=<NllLossBackward0>)|
++---------------------------------------------------------------------------+
+                               Training Status                               
++---------------------------------------------------------------------------+
+|Epoch | Steps |                            Loss                            |
+|------+-------+------------------------------------------------------------|
+|  0   |   0   | tensor(5.3052, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  10   | tensor(0.8850, device='cuda:0', grad_fn=<NllLossBackward0>)|
++---------------------------------------------------------------------------+
+                               Training Status                               
++---------------------------------------------------------------------------+
+|Epoch | Steps |                            Loss                            |
+|------+-------+------------------------------------------------------------|
+|  0   |   0   | tensor(5.3052, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  10   | tensor(0.8850, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  20   | tensor(0.4346, device='cuda:0', grad_fn=<NllLossBackward0>)|
++---------------------------------------------------------------------------+
+                               Training Status                               
++---------------------------------------------------------------------------+
+|Epoch | Steps |                            Loss                            |
+|------+-------+------------------------------------------------------------|
+|  0   |   0   | tensor(5.3052, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  10   | tensor(0.8850, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  20   | tensor(0.4346, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  30   | tensor(0.2887, device='cuda:0', grad_fn=<NllLossBackward0>)|
++---------------------------------------------------------------------------+
+                               Training Status                               
++---------------------------------------------------------------------------+
+|Epoch | Steps |                            Loss                            |
+|------+-------+------------------------------------------------------------|
+|  0   |   0   | tensor(5.3052, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  10   | tensor(0.8850, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  20   | tensor(0.4346, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  30   | tensor(0.2887, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  40   | tensor(0.2161, device='cuda:0', grad_fn=<NllLossBackward0>)|
++---------------------------------------------------------------------------+
+                               Training Status                               
++---------------------------------------------------------------------------+
+|Epoch | Steps |                            Loss                            |
+|------+-------+------------------------------------------------------------|
+|  0   |   0   | tensor(5.3052, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  10   | tensor(0.8850, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  20   | tensor(0.4346, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  30   | tensor(0.2887, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  40   | tensor(0.2161, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |   0   | tensor(0.2529, device='cuda:0', grad_fn=<NllLossBackward0>)|
++---------------------------------------------------------------------------+
+                               Training Status                               
++---------------------------------------------------------------------------+
+|Epoch | Steps |                            Loss                            |
+|------+-------+------------------------------------------------------------|
+|  0   |   0   | tensor(5.3052, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  10   | tensor(0.8850, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  20   | tensor(0.4346, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  30   | tensor(0.2887, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  40   | tensor(0.2161, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |   0   | tensor(0.2529, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  10   | tensor(0.2418, device='cuda:0', grad_fn=<NllLossBackward0>)|
++---------------------------------------------------------------------------+
+                               Training Status                               
++---------------------------------------------------------------------------+
+|Epoch | Steps |                            Loss                            |
+|------+-------+------------------------------------------------------------|
+|  0   |   0   | tensor(5.3052, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  10   | tensor(0.8850, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  20   | tensor(0.4346, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  30   | tensor(0.2887, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  40   | tensor(0.2161, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |   0   | tensor(0.2529, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  10   | tensor(0.2418, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  20   | tensor(0.1853, device='cuda:0', grad_fn=<NllLossBackward0>)|
++---------------------------------------------------------------------------+
+                               Training Status                               
++---------------------------------------------------------------------------+
+|Epoch | Steps |                            Loss                            |
+|------+-------+------------------------------------------------------------|
+|  0   |   0   | tensor(5.3052, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  10   | tensor(0.8850, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  20   | tensor(0.4346, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  30   | tensor(0.2887, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  40   | tensor(0.2161, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |   0   | tensor(0.2529, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  10   | tensor(0.2418, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  20   | tensor(0.1853, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  30   | tensor(0.2252, device='cuda:0', grad_fn=<NllLossBackward0>)|
++---------------------------------------------------------------------------+
+                               Training Status                               
++---------------------------------------------------------------------------+
+|Epoch | Steps |                            Loss                            |
+|------+-------+------------------------------------------------------------|
+|  0   |   0   | tensor(5.3052, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  10   | tensor(0.8850, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  20   | tensor(0.4346, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  30   | tensor(0.2887, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  40   | tensor(0.2161, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |   0   | tensor(0.2529, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  10   | tensor(0.2418, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  20   | tensor(0.1853, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  30   | tensor(0.2252, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  40   | tensor(0.1652, device='cuda:0', grad_fn=<NllLossBackward0>)|
++---------------------------------------------------------------------------+
+                               Training Status                               
++---------------------------------------------------------------------------+
+|Epoch | Steps |                            Loss                            |
+|------+-------+------------------------------------------------------------|
+|  0   |   0   | tensor(5.3052, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  10   | tensor(0.8850, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  20   | tensor(0.4346, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  30   | tensor(0.2887, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  40   | tensor(0.2161, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |   0   | tensor(0.2529, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  10   | tensor(0.2418, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  20   | tensor(0.1853, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  30   | tensor(0.2252, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  40   | tensor(0.1652, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  2   |   0   | tensor(0.3364, device='cuda:0', grad_fn=<NllLossBackward0>)|
++---------------------------------------------------------------------------+
+                               Training Status                               
++---------------------------------------------------------------------------+
+|Epoch | Steps |                            Loss                            |
+|------+-------+------------------------------------------------------------|
+|  0   |   0   | tensor(5.3052, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  10   | tensor(0.8850, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  20   | tensor(0.4346, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  30   | tensor(0.2887, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  40   | tensor(0.2161, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |   0   | tensor(0.2529, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  10   | tensor(0.2418, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  20   | tensor(0.1853, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  30   | tensor(0.2252, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  40   | tensor(0.1652, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  2   |   0   | tensor(0.3364, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  2   |  10   | tensor(0.1680, device='cuda:0', grad_fn=<NllLossBackward0>)|
++---------------------------------------------------------------------------+
+                               Training Status                               
++---------------------------------------------------------------------------+
+|Epoch | Steps |                            Loss                            |
+|------+-------+------------------------------------------------------------|
+|  0   |   0   | tensor(5.3052, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  10   | tensor(0.8850, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  20   | tensor(0.4346, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  30   | tensor(0.2887, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  40   | tensor(0.2161, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |   0   | tensor(0.2529, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  10   | tensor(0.2418, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  20   | tensor(0.1853, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  30   | tensor(0.2252, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  40   | tensor(0.1652, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  2   |   0   | tensor(0.3364, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  2   |  10   | tensor(0.1680, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  2   |  20   | tensor(0.1798, device='cuda:0', grad_fn=<NllLossBackward0>)|
++---------------------------------------------------------------------------+
+                               Training Status                               
++---------------------------------------------------------------------------+
+|Epoch | Steps |                            Loss                            |
+|------+-------+------------------------------------------------------------|
+|  0   |   0   | tensor(5.3052, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  10   | tensor(0.8850, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  20   | tensor(0.4346, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  30   | tensor(0.2887, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  40   | tensor(0.2161, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |   0   | tensor(0.2529, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  10   | tensor(0.2418, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  20   | tensor(0.1853, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  30   | tensor(0.2252, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  40   | tensor(0.1652, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  2   |   0   | tensor(0.3364, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  2   |  10   | tensor(0.1680, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  2   |  20   | tensor(0.1798, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  2   |  30   | tensor(0.1877, device='cuda:0', grad_fn=<NllLossBackward0>)|
++---------------------------------------------------------------------------+
+                               Training Status                               
++---------------------------------------------------------------------------+
+|Epoch | Steps |                            Loss                            |
+|------+-------+------------------------------------------------------------|
+|  0   |   0   | tensor(5.3052, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  10   | tensor(0.8850, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  20   | tensor(0.4346, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  30   | tensor(0.2887, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  0   |  40   | tensor(0.2161, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |   0   | tensor(0.2529, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  10   | tensor(0.2418, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  20   | tensor(0.1853, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  30   | tensor(0.2252, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  1   |  40   | tensor(0.1652, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  2   |   0   | tensor(0.3364, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  2   |  10   | tensor(0.1680, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  2   |  20   | tensor(0.1798, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  2   |  30   | tensor(0.1877, device='cuda:0', grad_fn=<NllLossBackward0>)|
+|  2   |  40   | tensor(0.1519, device='cuda:0', grad_fn=<NllLossBackward0>)|
++---------------------------------------------------------------------------+
+[18:55:27] [Saving Model]...                                                     <ipython-input-11-416e50ba3b08>:82
+                                                                                                                   
+[18:55:31] [Initiating Validation]...                                            <ipython-input-11-416e50ba3b08>:90
+                                                                                                                   
+Completed 0
+Completed 10

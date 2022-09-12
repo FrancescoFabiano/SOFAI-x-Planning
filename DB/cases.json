@@ -4526,6 +4526,46 @@
                 "move_to_box_a",
                 "signal_a_c"
             ]
+        },
+        "100": {
+            "domain_name": "coininthebox",
+            "problem_name": "pb0_0",
+            "difficulty": 0,
+            "system": 2,
+            "planner": 2,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.16699,
+            "total_time": 1.4329991340637207,
+            "init": [
+                "in_room_empty a",
+                "in_room_empty b",
+                "has_key a",
+                "looking a",
+                "looking b",
+                "[a b](in_room_empty a)",
+                "[a b](-in_room_box a)",
+                "[a b](in_room_empty b)",
+                "[a b](-in_room_box b)",
+                "[a b](has_key a)",
+                "[a b](-has_key b)",
+                "[a b](-opened)",
+                "[a b](looking a)",
+                "[a b](looking b)"
+            ],
+            "goal": [
+                "-opened",
+                "[a](-tail)",
+                "[b](opened)))"
+            ],
+            "plan": [
+                "move_to_box_a",
+                "move_to_box_b",
+                "open_a",
+                "distract_a_b",
+                "peek_a",
+                "close_a"
+            ]
         }
     }
 }

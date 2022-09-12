@@ -13,9 +13,10 @@ import random
 
 
 from ExternalPrograms.EPDDL.parser import EPDDL_Parser
-from ExternalPrograms.S1Solver import s1_solver
-from ExternalPrograms.S1Solver import getStates
-from ExternalPrograms.S1Solver import s1_distance
+from ExternalPrograms.CaseBasedS1 import caseBased_s1_solver
+from ExternalPrograms.CaseBasedS1 import getStates
+from ExternalPrograms.CaseBasedS1 import caseBased_s1_distance
+from ExternalPrograms.PlansformerS1 import plansformer_s1
 
 
 # Constants
@@ -29,6 +30,7 @@ plannerS1_Dist1 = 1
 plannerS1_Dist2 = 2
 plannerS1_Random = 3
 plannerS1_Combined = 4
+plannerS1_Plansformer = 5
 
 plannerS2_1 = 1
 plannerS2_2 = 2
@@ -143,7 +145,7 @@ def executeS1():
 
     similarity_threshold = 0.2 # If < than this is not returned
     json_path = dbFolder+jsonFilename
-    mode = -1
+    mode = plannerS1
     try:
         with open(json_path) as f:
             experience = json.load(f)
@@ -152,17 +154,12 @@ def executeS1():
 
         if (plannerS1 == plannerS1_Dist1 or plannerS1 == plannerS1_Dist2):
 
-            if (plannerS1 == plannerS1_Dist1):
-                mode = 1
-            elif (plannerS1 == plannerS1_Dist2):
-                mode = 0
-
             init,goal = getStates.States(problemFile) #reading initial and goal states from problem file
 
             #returned_list has records of this form <path_to_sol, similarity_score, problem_name>
             sol = ""
             confidence = 0
-            returned_list = s1_distance.doCaseMatch(cases, mode, parser.domain_name, init, goal, similarity_threshold)
+            returned_list = caseBased_s1_distance.doCaseMatch(cases, mode, parser.domain_name, init, goal, similarity_threshold)
             if returned_list:
                 first_act = True
                 for act in returned_list[0][1]:
@@ -174,6 +171,7 @@ def executeS1():
                 confidence = returned_list[0][0]
 
 
+
         elif(plannerS1 == plannerS1_Combined):
 
             init,goal = getStates.States(problemFile) #reading initial and goal states from problem file
@@ -181,16 +179,16 @@ def executeS1():
             #returned_list has records of this form <path_to_sol, similarity_score, problem_name>
             sol = ""
             confidence = 0
-            returned_list0 = s1_distance.doCaseMatch(cases, 0, parser.domain_name, init, goal, similarity_threshold)
-            returned_list1 = s1_distance.doCaseMatch(cases, 1, parser.domain_name, init, goal, similarity_threshold)
+            returned_list0 = caseBased_s1_distance.doCaseMatch(cases, 0, parser.domain_name, init, goal, similarity_threshold)
+            returned_list1 = caseBased_s1_distance.doCaseMatch(cases, 1, parser.domain_name, init, goal, similarity_threshold)
 
             if returned_list0 and returned_list1:
                 if (returned_list0[0][0] < returned_list1[0][0]):
                     returned_list = returned_list1
-                    mode = 1
+                    mode = plannerS1_Dist1
                 else:
                     returned_list = returned_list0
-                    mode = 0
+                    mode = plannerS1_Dist2
 
                 first_act = True
                 for act in returned_list[0][1]:
@@ -202,9 +200,8 @@ def executeS1():
                 confidence = returned_list[0][0]
 
         elif (plannerS1 == plannerS1_Random):
-            mode = 3
             sol = ""
-            confidence, plan = s1_solver.randomSolve(cases)
+            confidence, plan = caseBased_s1_solver.randomSolve(cases)
             first_act = True
             for act in plan:
                 if first_act:
@@ -212,6 +209,14 @@ def executeS1():
                     first_act = False
                 else:
                     sol = sol + ", " + act
+
+        elif (plannerS1 == plannerS1_Plansformer):
+            confidence, plan = plansformer_s1.solve(domainFile,problemFile)
+            print("The confidence is " + str(confidence))
+            print("The plan is " + str(plan))
+            sys.exit()
+        else:
+            raise Exception("The requested System 1 has not been implemented yet.")
 
     #    solString = s1_planner.s1Solver(parser.domain_name,parser.problem_name,json_path)
     #    solString = solString.replace(";", ",")
@@ -293,7 +298,6 @@ def estimateTimeCons(planner,difficulty):
 
 def checkDCK():
     return (parser.dynamicCK.lower() == "true")
-
 
 def solveWithS2NoPlan(timeLimit):
     solveWithS2(timeLimit, selectPlannerS2())
@@ -517,7 +521,7 @@ if __name__ == '__main__':
 
     ######### S1 metacognitive part
     # AUTOMATICALLY CALL S1
-    plannerS1 = plannerS1_Combined
+    plannerS1 = plannerS1_Plansformer
     mode = -1
     timeS1 = time.time()
     solutionS1, confidenceS1, mode = solveWithS1()
