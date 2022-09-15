@@ -1,0 +1,3 @@
+[submodule "Planners/FastDownward"]
+	path = Planners/FastDownward
+	url = https://github.com/aibasel/downward.git

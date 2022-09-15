@@ -12,11 +12,11 @@ import time
 import random
 
 
-from ExternalPrograms.EPDDL.parser import EPDDL_Parser
-from ExternalPrograms.CaseBasedS1 import caseBased_s1_solver
-from ExternalPrograms.CaseBasedS1 import getStates
-from ExternalPrograms.CaseBasedS1 import caseBased_s1_distance
-from ExternalPrograms.PlansformerS1 import plansformer_s1
+from Planners.EPDDL.parser import EPDDL_Parser
+from Planners.CaseBasedS1 import caseBased_s1_solver
+from Planners.CaseBasedS1 import getStates
+from Planners.CaseBasedS1 import caseBased_s1_distance
+from Planners.PlansformerS1 import plansformer_s1
 
 
 # Constants
@@ -41,7 +41,7 @@ output_folderPl1 = output_folder + "Pl1/"
 output_folderEFP = output_folder + "EFP/"
 output_folderPDKB = output_folder + "PDKB/"
 scripts_folder = "Scripts/"
-dbFolder = "DB/"
+dbFolder = "Memory/"
 #db_file = "memory.db"
 jsonFilename = "cases.json"
 
@@ -238,7 +238,7 @@ def validateSolution(solution):
     for elem in solution:
         stringSolution += " "
         stringSolution += elem
-    #print("Execution Line is:  sh ./ExternalPrograms/EFP/scripts/validate_solution.sh " + instanceNameEFP + " " + stringSolution)
+    #print("Execution Line is:  sh ./Planners/EFP/scripts/validate_solution.sh " + instanceNameEFP + " " + stringSolution)
     result = subprocess.run(['sh','./'+ scripts_folder + 'validate_solution.sh', output_folderEFP + instanceNameEFP, stringSolution], stdout=subprocess.PIPE)
     res = result.stdout.decode('utf-8')
     if ("Goal found" in res):
@@ -524,7 +524,7 @@ if __name__ == '__main__':
     plannerS1 = plannerS1_Plansformer
     mode = -1
     timeS1 = time.time()
-    solutionS1, confidenceS1, mode = solveWithS1()
+    solutionS1, confidenceS1 = solveWithS1()
     timeS1 = time.time() - timeS1
     M = 1
 

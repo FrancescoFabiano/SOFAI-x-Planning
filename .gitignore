@@ -134,6 +134,7 @@ Input/coininthebox_gen/instances/*
 tmp/
 *.tmp
 .problem-cache/
-ExternalPrograms/PlansformerS1/model_files/
-ExternalPrograms/PlansformerS1/.ipynb_checkpoints
-ExternalPrograms/PlansformerS1/__pycache__
+Planners/PlansformerS1/model_files/
+Planners/PlansformerS1/.ipynb_checkpoints
+Planners/PlansformerS1/__pycache__
+

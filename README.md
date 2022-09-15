@@ -3,44 +3,58 @@
 ## Description
 
 ### Summary
-The main objective is to implement an epistemic-cognitive-agent. That is, an agent that decides which type of epistemic reasoning is more appropriate given a certain problem. This agent will be selecting between several strategies:
-* Planner-Sys1: A solver that relies on experience (neural based solver)
-* Planner-1: A planner that grounds the epistemic-planning into a classical one and then exploits state-of-the-art classical solving techniques (PDKB)
-* Planner-2: A full-fledged epistemic planner that solves epistemic problems by reasoning on actual epistemic states (EFP)
-While the last two planners can solve the same families of problems, except for the ones that requires Dynamic Common Knowledge/Belief (only solvable by the Planner-2), their differences are reflected in the use of resources. In particular, Planner-1 is very fast whenever the problem to be solved does not require an high level of nesting in the belief formulae (usually < 3) but it is outperformed by Planner-2 in the other cases.
-Therefore, the idea is to devise a framework---representing the epistemic-cognitive-agent---that taken as input a problem specified in a unique format is able to select the best solving process.
+The main objective is to implement an architecture, called SOFAI x Planning, that is able to decide which type of planning process is more appropriate given a certain problem. SOFAI will be selecting between these strategies:
+* System-1: A strategy that relies on experience to quickly find solution to new problems. This approach usually gets solutions very quickly but is prone to errors and imprecisions. 
+* System-2: This strategy envisioned the use of state-of-the-art planners that solve problems by using search techniques. This approach is slower and its performances depends on the problem complexity but is way less prone to error w.r.t. System-1 
+Let us note that System-1 and System-2 represent two different class of planners rather than two specific approaches. This means that SOFAI can be equipped with different S1 and S2 and can be configured to use any combination of the two.
+
+While we envisioned SOFAI to be able to reason within various planning settings (e.g., classical, epistemic and so on) and to automatically select the best strategy to solve the incoming problem, in the current status the architecture is not able to automatically discern between different planning settings.
+This means that, for example, SOFAI must be configured to adopt classical solving techniques when a classical planning problem is given as input.
+The selection of solving techniques (that is the System-1 ans System-2) can be easily done with execution parameters. 
+
+### Planning Domains
+SOFAI x Planning aims to become an approach general enough to tackle all the planning problems by adopting already exiting techniques in the literature and exploiting them in their filed of comptence.
+While at the moment the architecture is not able to automatically discern which type of planning setting we are reasoning one, we still allow for two differet setting to be solved thanks to SOFAI.
+* As first type of setting we decided to embed in SOFAI the capabilities to solve classical planning problems
+* Secondly we include in SOFAI the capabilities to tackle Multi-Agent Epistemic Planning problems
+
+Let us note that while System-2 planners are ad-hoc solution for their specific setting, usually System-1 solvers can be adopted in different settings as they only rely on experience.
+We hope that any interested planning researcher would embed in SOFAI their tool to increase its capability:)
 
 ### The Pipeline
-While the description of the meatcognitive reasoning has been formalized in a scientific work (yet to be published) we can give an high level description of this process.
-* Input: a problem instance in EPDDL (input format for epistemic planning) and meta-data, e.g. resources availability, accuracy required, to emulate the limits represented by various situations (file called context).
+While the description of the Architecture has been formalized in a scientific works (yet to be published) we can give an high level description of this process.
+* Input: a problem instance and meta-data, e.g. resources availability, accuracy required, to emulate the limits represented by various situations (file called context).
 * Procedure:
 	* System-1 Metacognitive-Agent:
-		* Checks whether there is enough experience to retrieve a plan from past instances that solves respecting the given constraints (input) and returns it if exist.
+		* Checks whether there is enough experience to retrieve a plan from past instances, using System-1, that solves respecting the given constraints (input) and returns it if exist.
 		* If there is not than System-2 Metacognitive-Agent is adopted
 	* System-2 Metacognitive-Agent:
-		* Analyze problem and select if best Planner-1 or Planner-2 based on some factors (depth and presence of dynamic common knowledge)
-		* Evaluate problem difficulty and derive expected resource consumption from that (w.r.t to the selected planner)
+		* Analyze problem and select the best System-2 planner based on some factors
+		* Evaluate problem difficulty and derive expected resource consumption from that (w.r.t. to the selected planner)
 		* Checks if the solving process is within the constraints (if not adopt S1 solution)
-		* If within constraints check if the extra resources are worth the extra accuracy (w.r.t. Planner-Sys1 solution) using precise formula introduce by the metacognitive workstream
+		* If within constraints check if the extra resources are worth the extra accuracy (w.r.t. System-1 Planner solution) using precise formula introduce by the metacognitive workstream
 		* If it is worth then solve the problem and then validate and save the solution; otherwise use S1-solution
 
 ### Adopted Techniques
 
-#### Input Definition and Parsing
+#### Input Definition and Parsing for Epistemic Planning
 This part of the process is tackled by the E-PDDL parser found in <https://github.com/FrancescoFabiano/E-PDDL>. For further information on this topic we then address the reader to the README that can be found in <https://github.com/FrancescoFabiano/E-PDDL>.
 The only file with different structure is the one that symbolizes context. An example can be found in "Input/context/contextEx.epddl".
 
-#### Planner-Sys1
-This part of the process is completely addressed by <https://github.com/FrancescoFabiano/E-PDDL>.
+#### System-1 Planners
+This part of the process is completely addressed by Planners/CaseBasedS1 and  <https://github.com/VishalPallagani/plansformer>.
 
-#### Planner-1
+#### FastDownward -- System 2 for Classical Planning
+This part of the process is completely addressed by <https://www.fast-downward.org/ObtainingAndRunningFastDownward>.
+
+#### PDKB -- System 2 for Epistemic Planning
 This part of the process is completely addressed by <https://github.com/QuMuLab/pdkb-planning>.
 
-#### Planner-2
+#### EFP -- System 2 for Epistemic Planning
 This part of the process is completely addressed by <https://github.com/FrancescoFabiano/EFP>.
 
 ### Example of Execution
-Let us rember that before eecuting the overall architecture each part must be prepared. Please follow the instructions for Planner-1 and Planner-2 to prepare the enviroment (found in the respective repos)
+Let us member that before executing the overall architecture each part must be prepared. Please follow the instructions to prepare the environment (found in the respective repos)
 An example of execution is as follows: (from the main folder)
 * "python architecture.py Input/coininthebox/coininthebox.epddl Input/coininthebox/pb2.epddl Input/context/contextEx.epddl"
 
@@ -66,6 +80,7 @@ Where:
 	- This version of the repo is actually an upgraded version w.r.t. one in the EPDDL repo.
 
 ## TODO
-* [ ] Make EFP, PDKB, and EPPDL submodules
-* [ ] Make scripts that automaically prepare the environment
+* [ ] Clean Memory
+* [ ] Make EFP, PDKB, PLANSFORMER, and EPPDL submodules
+* [ ] Make scripts that automatically prepare the environment
 * [ ] Only generate a new domain file for PDKB from EPDDL if does not exist already
