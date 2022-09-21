@@ -13,7 +13,7 @@ mkdir -p tmp/PDKB/
 touch tmp/PDKB/$PROBLEM
 
 
-timeout "$TIMEOUT" python3 ExternalPrograms/PDKB/pdkb/planner.py $DOMAINFOLDER$PROBLEM > tmp/PDKB/$PROBLEM;
+timeout "$TIMEOUT" python3 Planners/PDKB/pdkb/planner.py $DOMAINFOLDER$PROBLEM > tmp/PDKB/$PROBLEM;
 
 if [ $? -eq 124 ]; then
   echo -e "PDKB TIMED-OUT" >> tmp/PDKB/$DOMAIN;

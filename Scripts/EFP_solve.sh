@@ -14,7 +14,7 @@ if [ -f tmp/EFP/$DOMAIN ] ; then
     rm tmp/EFP/$DOMAIN
 fi;
 
-timeout "$TIMEOUT" ExternalPrograms/EFP/bin/efp.out $DOMAINFOLDER$DOMAIN -st "POSS" -check_visited -results_file > res.tmp;
+timeout "$TIMEOUT" Planners/EFP/bin/efp.out $DOMAINFOLDER$DOMAIN -st "POSS" -check_visited -results_file > res.tmp;
 
 if [ $? -eq 124 ]; then
   echo -e "EFP TIMED-OUT" >> tmp/EFP/$DOMAIN;

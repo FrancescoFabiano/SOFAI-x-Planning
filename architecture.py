@@ -234,7 +234,7 @@ def validateSolution(solution):
     for elem in solution:
         stringSolution += " "
         stringSolution += elem
-    #print("Execution Line is:  sh ./ExternalPrograms/EFP/scripts/validate_solution.sh " + instanceNameEFP + " " + stringSolution)
+    #print("Execution Line is:  sh ./Planners/EFP/scripts/validate_solution.sh " + instanceNameEFP + " " + stringSolution)
     result = subprocess.run(['sh','./'+ scripts_folder + 'validate_solution.sh', output_folderEFP + instanceNameEFP, stringSolution], stdout=subprocess.PIPE)
     res = result.stdout.decode('utf-8')
     if ("Goal found" in res):
