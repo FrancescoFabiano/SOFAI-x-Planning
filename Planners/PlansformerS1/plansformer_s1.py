@@ -84,7 +84,7 @@ def convert_input_to_string(domain_name,instance_name):
 
 def solve(domain, problem):
     #path to plansformer model files
-    model_path = "ExternalPrograms/PlansformerS1/model_files"
+    model_path = "Planners/PlansformerS1/model_files"
 
     #using plansformer's tokenizer and model weights
     tokenizer = RobertaTokenizer.from_pretrained(model_path, local_files_only = True)

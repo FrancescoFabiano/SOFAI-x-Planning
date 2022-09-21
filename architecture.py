@@ -12,11 +12,11 @@ import time
 import random
 
 
-from ExternalPrograms.EPDDL.parser import EPDDL_Parser
-from ExternalPrograms.CaseBasedS1 import caseBased_s1_solver
-from ExternalPrograms.CaseBasedS1 import getStates
-from ExternalPrograms.CaseBasedS1 import caseBased_s1_distance
-from ExternalPrograms.PlansformerS1 import plansformer_s1
+from Planners.EPDDL.parser import EPDDL_Parser
+from Planners.CaseBasedS1 import caseBased_s1_solver
+from Planners.CaseBasedS1 import getStates
+from Planners.CaseBasedS1 import caseBased_s1_distance
+from Planners.PlansformerS1 import plansformer_s1
 
 
 # Constants
