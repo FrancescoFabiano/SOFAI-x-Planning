@@ -12,11 +12,11 @@ import time
 import random
 
 
-from Planners.EPDDL.parser import EPDDL_Parser
-from Planners.CaseBasedS1 import caseBased_s1_solver
-from Planners.CaseBasedS1 import getStates
-from Planners.CaseBasedS1 import caseBased_s1_distance
-from Planners.PlansformerS1 import plansformer_s1
+from ExternalPrograms.EPDDL.parser import EPDDL_Parser
+from ExternalPrograms.CaseBasedS1 import caseBased_s1_solver
+from ExternalPrograms.CaseBasedS1 import getStates
+from ExternalPrograms.CaseBasedS1 import caseBased_s1_distance
+from ExternalPrograms.PlansformerS1 import plansformer_s1
 
 
 # Constants
@@ -41,7 +41,7 @@ output_folderPl1 = output_folder + "Pl1/"
 output_folderEFP = output_folder + "EFP/"
 output_folderPDKB = output_folder + "PDKB/"
 scripts_folder = "Scripts/"
-dbFolder = "Memory/"
+dbFolder = "DB/"
 #db_file = "memory.db"
 jsonFilename = "cases.json"
 
@@ -142,7 +142,6 @@ def readTimeFromFile(filename):
 def executeS1():
 
     #New S1###################
-
     similarity_threshold = 0.2 # If < than this is not returned
     json_path = dbFolder+jsonFilename
     mode = plannerS1
@@ -153,7 +152,6 @@ def executeS1():
         cases = experience["cases"]
 
         if (plannerS1 == plannerS1_Dist1 or plannerS1 == plannerS1_Dist2):
-
             init,goal = getStates.States(problemFile) #reading initial and goal states from problem file
 
             #returned_list has records of this form <path_to_sol, similarity_score, problem_name>
@@ -173,7 +171,6 @@ def executeS1():
 
 
         elif(plannerS1 == plannerS1_Combined):
-
             init,goal = getStates.States(problemFile) #reading initial and goal states from problem file
 
             #returned_list has records of this form <path_to_sol, similarity_score, problem_name>
@@ -217,7 +214,6 @@ def executeS1():
             sys.exit()
         else:
             raise Exception("The requested System 1 has not been implemented yet.")
-
     #    solString = s1_planner.s1Solver(parser.domain_name,parser.problem_name,json_path)
     #    solString = solString.replace(";", ",")
         resFile = instanceNameEFP.replace(".tmp", "S1.tmp")
@@ -229,16 +225,16 @@ def executeS1():
         return 0, "";
 
 def solveWithS1():
-    confidence, resFile, mode = executeS1()
+    confidence, resFile = executeS1()
     solutionS1 = readSolutionFromFile(output_folderPl1 + resFile)
-    return solutionS1, confidence, mode
+    return solutionS1, confidence
 
 def validateSolution(solution):
     stringSolution = ""
     for elem in solution:
         stringSolution += " "
         stringSolution += elem
-    #print("Execution Line is:  sh ./Planners/EFP/scripts/validate_solution.sh " + instanceNameEFP + " " + stringSolution)
+    #print("Execution Line is:  sh ./ExternalPrograms/EFP/scripts/validate_solution.sh " + instanceNameEFP + " " + stringSolution)
     result = subprocess.run(['sh','./'+ scripts_folder + 'validate_solution.sh', output_folderEFP + instanceNameEFP, stringSolution], stdout=subprocess.PIPE)
     res = result.stdout.decode('utf-8')
     if ("Goal found" in res):

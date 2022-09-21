@@ -4,12 +4,14 @@
 #!pip install transformers
 
 # Setting up the device for GPU usage
+import pwd
 from torch import cuda
 device = 'cuda' if cuda.is_available() else 'cpu'
 
 #imports
 import torch
 import torch.nn.functional as F
+import re
 
 #imports
 from transformers import RobertaTokenizer, T5ForConditionalGeneration
@@ -63,9 +65,9 @@ def getVarFromLine(line,varname):
 
 def convert_input_to_string(domain_name,instance_name):
 
-    init = getRawVarFromFile(readingFile,"init")
+    init = getRawVarFromFile(instance_name,"init")
     init = cleanString(init)
-    goal = getRawVarFromFile(readingFile,"goal")
+    goal = getRawVarFromFile(instance_name,"goal")
     goal = cleanString(goal)
 
     #This works only for coin_in_the_box
@@ -82,13 +84,12 @@ def convert_input_to_string(domain_name,instance_name):
 
 def solve(domain, problem):
     #path to plansformer model files
-    model_path = "model_files"
+    model_path = "ExternalPrograms/PlansformerS1/model_files"
 
     #using plansformer's tokenizer and model weights
     tokenizer = RobertaTokenizer.from_pretrained(model_path, local_files_only = True)
     model = T5ForConditionalGeneration.from_pretrained(model_path, local_files_only = True)
     model = model.to(device)
-
     #input problem/task
     problem = convert_input_to_string(domain,problem)
 
@@ -102,7 +103,6 @@ def solve(domain, problem):
     #obtaining the predicted plan from Plansformer for given input
     predicted_plan = [tokenizer.decode(g, skip_special_tokens=True) for g in generated_ids.sequences]
 
-
     gen_sequences = generated_ids.sequences[:1,1:]
 
     probs = torch.stack(generated_ids.scores, dim=1).softmax(-1)
@@ -111,6 +111,4 @@ def solve(domain, problem):
 
     #gen_probs
 
-    torch.prod(gen_probs)
-
-    return torch.prod(gen_probs), predicted_plan
+    return torch.mean(gen_probs), predicted_plan
