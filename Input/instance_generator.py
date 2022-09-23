@@ -5,8 +5,8 @@ import random
 import numpy as np
 
 #Some Global Variables
-tot_inst = 1000
-tot_iter = 10
+tot_inst = 1
+tot_iter = 1
 
 depth = 2
 dynck = "false"
@@ -172,7 +172,9 @@ if __name__ == '__main__':
 
     n_inst = 0
 
-    dir_path = "coininthebox_gen/instances/"
+    dir_path = "coinintheboxgen/instances/"
+    os.makedirs(dir_path, exist_ok=True)
+
 
     while n_inst < tot_inst:
 
@@ -206,7 +208,7 @@ if __name__ == '__main__':
 
                 print("  (:init " + str(initial_state) + ")", file=gen_f)
 
-                print("  (:goal ", str(generate_random_goal_state(tot_agents)) + ")", file=gen_f)
+                print("  (:goal", str(generate_random_goal_state(tot_agents)) + ")", file=gen_f)
 
                 print(")", file=gen_f)
 

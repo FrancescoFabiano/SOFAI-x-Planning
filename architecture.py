@@ -41,7 +41,7 @@ output_folderPl1 = output_folder + "Pl1/"
 output_folderEFP = output_folder + "EFP/"
 output_folderPDKB = output_folder + "PDKB/"
 scripts_folder = "Scripts/"
-dbFolder = "DB/"
+dbFolder = "Memory/"
 #db_file = "memory.db"
 jsonFilename = "cases.json"
 
@@ -517,7 +517,7 @@ if __name__ == '__main__':
 
     ######### S1 metacognitive part
     # AUTOMATICALLY CALL S1
-    plannerS1 = plannerS1_Plansformer
+    plannerS1 = plannerS1_Dist1
     mode = -1
     timeS1 = time.time()
     solutionS1, confidenceS1 = solveWithS1()
