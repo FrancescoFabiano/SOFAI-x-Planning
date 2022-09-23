@@ -156,7 +156,7 @@ def executeS1():
             #returned_list has records of this form <path_to_sol, similarity_score, problem_name>
             sol = ""
             confidence = 0
-            returned_list = caseBased_s1_distance.doCaseMatch(cases, parser.domain_name, init, goal, similarity_threshold)
+            returned_list = caseBased_s1_distance.doCaseMatch(cases, plannerS1, parser.domain_name, init, goal, similarity_threshold)
             if returned_list:
                 first_act = True
                 for act in returned_list[0][1]:
