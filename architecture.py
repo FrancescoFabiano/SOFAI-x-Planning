@@ -16,7 +16,7 @@ from Planners.EPDDL.parser import EPDDL_Parser
 from Planners.CaseBasedS1 import caseBased_s1_solver
 from Planners.CaseBasedS1 import getStates
 from Planners.CaseBasedS1 import caseBased_s1_distance
-from Planners.PlansformerS1 import plansformer_s1
+#from Planners.PlansformerS1 import plansformer_s1
 
 
 # Constants
@@ -144,7 +144,6 @@ def executeS1():
     #New S1###################
     similarity_threshold = 0.2 # If < than this is not returned
     json_path = dbFolder+jsonFilename
-    mode = plannerS1
     try:
         with open(json_path) as f:
             experience = json.load(f)
@@ -157,7 +156,7 @@ def executeS1():
             #returned_list has records of this form <path_to_sol, similarity_score, problem_name>
             sol = ""
             confidence = 0
-            returned_list = caseBased_s1_distance.doCaseMatch(cases, mode, parser.domain_name, init, goal, similarity_threshold)
+            returned_list = caseBased_s1_distance.doCaseMatch(cases, parser.domain_name, init, goal, similarity_threshold)
             if returned_list:
                 first_act = True
                 for act in returned_list[0][1]:
@@ -182,10 +181,8 @@ def executeS1():
             if returned_list0 and returned_list1:
                 if (returned_list0[0][0] < returned_list1[0][0]):
                     returned_list = returned_list1
-                    mode = plannerS1_Dist1
                 else:
                     returned_list = returned_list0
-                    mode = plannerS1_Dist2
 
                 first_act = True
                 for act in returned_list[0][1]:
@@ -220,7 +217,7 @@ def executeS1():
         out = open(output_folderPl1 + resFile, "w")
         out.write("Solution = " + sol)
         out.close()
-        return confidence, resFile, mode;
+        return confidence, resFile;
     except IOError:
         return 0, "";
 
@@ -325,7 +322,7 @@ def solveWithS2(timeLimit, planner):
         memorizeSolution(systemTWO, planner, 1.0, float(time), 1.0, solutionS2)
         #return True, float(time), solutionS2
 
-def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solution, mode = -1):
+def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solution):
 
 
     json_path = dbFolder+jsonFilename
@@ -374,7 +371,7 @@ def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solu
     if (system != systemONE):
         print(" using planner </pla>" + str(planner) +"</>.")
     else:
-        print(" using mode </mod>" + str(mode) +"</>.")
+        print(" using mode </mod>" + str(plannerS1) +"</>.")
     sys.exit(0)
 
 def generateNamePDKB():
@@ -441,10 +438,10 @@ def getAvgCorrS1(system,planner,slidingWindow):
     else:
         return 0
 
-def tryS1(plannerS1, solutionS1, confidenceS1, timeS1,mode):
+def tryS1(plannerS1, solutionS1, confidenceS1, timeS1):
     correctnessS1 = validateSolution(solutionS1)
     if (correctnessS1 >= correctnessCntx):
-        memorizeSolution(systemONE, plannerS1, confidenceS1, timeS1, correctnessS1, solutionS1,mode)
+        memorizeSolution(systemONE, plannerS1, confidenceS1, timeS1, correctnessS1, solutionS1)
     else:
         solveWithS2NoPlan(timeLimitCntx)
 
@@ -518,7 +515,6 @@ if __name__ == '__main__':
     ######### S1 metacognitive part
     # AUTOMATICALLY CALL S1
     plannerS1 = plannerS1_Dist1
-    mode = -1
     timeS1 = time.time()
     solutionS1, confidenceS1 = solveWithS1()
     timeS1 = time.time() - timeS1
@@ -536,7 +532,7 @@ if __name__ == '__main__':
         M = 0
 
         if (confidenceS1 * (1-M) > threshold3):
-            tryS1(plannerS1, solutionS1, confidenceS1, timeS1,mode)
+            tryS1(plannerS1, solutionS1, confidenceS1, timeS1)
 
 
     # ######### S2 metacognitive part
@@ -553,12 +549,12 @@ if __name__ == '__main__':
         estimatedCostS2 = estimatedTimeS2 / remainingTime
 
     if (estimatedCostS2 > 1):
-        tryS1(plannerS1, solutionS1, confidenceS1, timeS1,mode)
+        tryS1(plannerS1, solutionS1, confidenceS1, timeS1)
     else:
         probabilityS1 = (1-threshold3)*epsilonS1
         #random() genrates a number between 0 and 1
         if (probabilityS1 > random.random()):
-            tryS1(plannerS1, solutionS1, confidenceS1, timeS1,mode)
+            tryS1(plannerS1, solutionS1, confidenceS1, timeS1)
         else:
             correctnessS1 = validateSolution(solutionS1)
             if (correctnessS1 >= correctnessCntx):
