@@ -4,6 +4,8 @@
 #			"coininthebox" is the name of the folder containing the domain and the instaces to be solved
 INPATH="$1" # Name of the domain
 mkdir -p tmp/SOL/
+mkdir -p Output/SOL/
+
 
 echo -e "\nExecution of architecture in all the instances in Input/"$INPATH"/instances\n"
 for context in $(find "Input/contexts"/ -type f); do
@@ -32,9 +34,8 @@ for context in $(find "Input/contexts"/ -type f); do
       c=$(( c+1 ))
     done
 
-    mkdir -p Output/SOL/
     SOLNAMEOUT=sol_"$(basename ${domain%%.*})"_"$(basename ${context%%.*})"_"$(basename ${threshold%%.*})"_"$c".out
-    #cp tmp/SOL/$SOLNAMETMP Output/SOL/$SOLNAMEOUT
+    cp tmp/SOL/$SOLNAMETMP Output/SOL/$SOLNAMEOUT
 
   done
 done
