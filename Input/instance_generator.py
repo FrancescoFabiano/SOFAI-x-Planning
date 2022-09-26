@@ -5,8 +5,8 @@ import random
 import numpy as np
 
 #Some Global Variables
-tot_inst = 1
-tot_iter = 1
+tot_inst = 2
+tot_iter = 2
 
 depth = 2
 dynck = "false"

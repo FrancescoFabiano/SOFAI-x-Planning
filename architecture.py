@@ -16,7 +16,7 @@ from Planners.EPDDL.parser import EPDDL_Parser
 from Planners.CaseBasedS1 import caseBased_s1_solver
 from Planners.CaseBasedS1 import getStates
 from Planners.CaseBasedS1 import caseBased_s1_distance
-#from Planners.PlansformerS1 import plansformer_s1
+from Planners.PlansformerS1 import plansformer_s1
 
 
 # Constants
@@ -205,10 +205,17 @@ def executeS1():
                     sol = sol + ", " + act
 
         elif (plannerS1 == plannerS1_Plansformer):
-            confidence, plan = plansformer_s1.solve(domainFile,problemFile)
-            print("The confidence is " + str(confidence))
-            print("The plan is " + str(plan))
-            sys.exit()
+            tens_confidence, plan = plansformer_s1.solve(domainFile,problemFile)
+            str_confidence= re.sub(r'tensor\((.+)\)', r'\1', str(tens_confidence))
+            confidence = float(str_confidence)
+            sol = ""
+            first_act = True
+            for act in plan:
+                if first_act:
+                    sol = act
+                    first_act = False
+                else:
+                    sol = sol + ", " + act
         else:
             raise Exception("The requested System 1 has not been implemented yet.")
     #    solString = s1_planner.s1Solver(parser.domain_name,parser.problem_name,json_path)
@@ -298,8 +305,8 @@ def solveWithS2NoPlan(timeLimit):
 def solveWithS2(timeLimit, planner):
 
     planner = plannerS2_2
-    #print("Problem </pro>" + parser.problem_name + "</> solved by System </sys>" + str(systemTWO) + "</> using planner </pla>" + str(planner) +"</>.")
-    #sys.exit(0)
+    print("Problem </pro>" + parser.problem_name + "</> solved by System </sys>" + str(systemTWO) + "</> using planner </pla>" + str(planner) +"</>.")
+    sys.exit(0)
 
 
     if planner == plannerS2_1:
@@ -514,7 +521,7 @@ if __name__ == '__main__':
 
     ######### S1 metacognitive part
     # AUTOMATICALLY CALL S1
-    plannerS1 = plannerS1_Dist1
+    plannerS1 = plannerS1_Plansformer
     timeS1 = time.time()
     solutionS1, confidenceS1 = solveWithS1()
     timeS1 = time.time() - timeS1
