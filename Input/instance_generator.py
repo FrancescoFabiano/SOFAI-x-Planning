@@ -4,9 +4,9 @@ from pathlib import Path
 import random
 import numpy as np
 
-#Some Global Variables
-tot_inst = 2
-tot_iter = 2
+tot_inst = 1000
+tot_iter = 10
+
 
 depth = 2
 dynck = "false"
