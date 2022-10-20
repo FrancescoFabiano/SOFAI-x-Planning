@@ -1,3 +1,9 @@
+#
+# This Python File generates the graphs with the solutions from the raw output files
+#
+# Run it with "python3 graph_gen.py n_solutions sol1.out sol2.out .. solN.out".
+#
+
 import os
 import re
 from pathlib import Path

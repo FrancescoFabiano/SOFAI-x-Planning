@@ -1,3 +1,10 @@
+#
+# This Python File generates a modfied instance, with the extra goal "(not(opened)))", from the input one
+#
+# Run it with "python3 instance_modifier.py filename" to generate the modfied filename in "coininthebox-mod/instances".
+#
+
+
 import os
 import json
 import subprocess
@@ -54,7 +61,7 @@ if __name__ == '__main__':
     #print("Name is " + name + " and number is " +  str(instance_number))
     instance_number += 0
 
-    modfilename = "/mnt/c/Users/Francesco/Documents/Code/MetacognitiveEpistemicPlanning/Input/coininthebox-mod/instances/pb" + str(instance_number) + "_" + str(iter_number) + ".epddl"
+    modfilename = "../../Input/coininthebox-mod/instances/pb" + str(instance_number) + "_" + str(iter_number) + ".epddl"
     #print("ModName is " + modfilename + " and number is " +  str(instance_number))
 
     with open(modfilename, 'w') as f:

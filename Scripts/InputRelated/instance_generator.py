@@ -1,3 +1,9 @@
+#
+# This Python File generates tot_inst * tot_iter instances of the coininthebox domain
+#
+# Run it with "python3 instance_generator.py" to generate in the folder  "coinintheboxgen/instances" the instances.
+#
+
 import os
 import string
 from pathlib import Path
@@ -172,7 +178,7 @@ if __name__ == '__main__':
 
     n_inst = 0
 
-    dir_path = "coinintheboxgen/instances/"
+    dir_path = "../../coinintheboxgen/instances/"
     os.makedirs(dir_path, exist_ok=True)
 
 

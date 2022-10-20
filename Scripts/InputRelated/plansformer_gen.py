@@ -1,3 +1,9 @@
+#
+# This Python File generates the testbed for Plansformer from the results file
+#
+# Run it with "python3 plansformer_gen.py" to generate the results, considering the "instances_folder" and "res_filename"
+#
+
 import os
 import json
 import subprocess
@@ -50,11 +56,11 @@ def getVarFromLine(line,varname):
 
 if __name__ == '__main__':
 
-    instances_folder = "/mnt/c/Users/Francesco/Documents/Code/MetacognitiveEpistemicPlanning/Input/coininthebox_closed/instances"
+    instances_folder = "../../Input/coininthebox_closed/instances"
     act_string = "<ACTION> move_to_box <ACT_TYPE> ontic <PRE> [?ag](in_room_empty ?ag), in_room_empty ?ag <EFFECT> in_room_box ?ag, -in_room_empty ?ag <ACTION> move_to_empty <ACT_TYPE> ontic <PRE> [?ag](in_room_box ?ag), in_room_box ?ag <EFFECT> in_room_empty ?ag, -in_room_box ?ag <ACTION> open <ACT_TYPE> ontic <PRE> [?ag](has_key ?ag), has_key ?ag, in_room_box ?ag <EFFECT> opened <ACTION> close <ACT_TYPE> ontic <PRE> [?ag](has_key ?ag), has_key ?ag, in_room_box ?ag <EFFECT> -opened <ACTION> signal <ACT_TYPE> ontic <PRE> [?ag1](looking ?ag1), [?ag2](not (looking ?ag2)) <EFFECT> looking ?ag2 <ACTION> peek <ACT_TYPE> sensing <PRE> [?ag](opened), [?ag](looking ?ag), looking ?ag, opened, in_room_box ?ag <EFFECT> tail <ACTION> distract <ACT_TYPE> ontic <PRE> [?ag1](looking ?ag1), [?ag2](looking ?ag2) <EFFECT> not (looking ?ag2) <ACTION> announce_room_box <ACT_TYPE> announcement <PRE> [?ag](tail), tail, in_room_box ?ag <EFFECT> tail <ACTION> announce_room_empty <ACT_TYPE> announcement <PRE> [?ag](tail), tail, in_room_empty ?ag <EFFECT> tail"
     #act_string = ""
     outfile = "testbed_new.csv"
-    res_filename = "/mnt/c/Users/Francesco/Documents/Code/MetacognitiveEpistemicPlanning/Output/SOL/solSys2_new.txt"
+    res_filename = "../../Output/SOL/solSys2_new.txt"
     #print("ModName is " + modfilename + " and number is " +  str(instance_number))
     count = 0
     with open(outfile, 'w') as f:

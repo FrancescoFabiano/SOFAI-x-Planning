@@ -134,6 +134,7 @@ dmypy.json
 # MyFolders
 Output/
 Input/coinintheboxgen/instances/*
+Input/blocksworld/instances/*
 tmp/
 *.tmp
 .problem-cache/

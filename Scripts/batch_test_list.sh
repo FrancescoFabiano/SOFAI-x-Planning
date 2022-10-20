@@ -2,6 +2,7 @@
 #USAGE EXAMPLE (from the project root folder): "./Scripts/batch_test.sh coininthebox"
 #	where:
 #			"coininthebox" is the name of the folder containing the domain and the instaces to be solved
+# Moreover the fles check if each instance is in "list.tmp" before solving it
 INPATH="$1" # Name of the domain
 
 mkdir -p tmp/SOL/
