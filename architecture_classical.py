@@ -16,6 +16,8 @@ from Planners.CaseBasedS1 import caseBased_s1_solver
 from Planners.CaseBasedS1 import getStates
 from Planners.CaseBasedS1 import caseBased_s1_distance
 from Planners.PlansformerS1 import plansformer_s1
+from Planners.PDDL_parser import classical_parser
+from Planners.PDDL_parser import SubgoalCompleteness
 
 
 # Constants
@@ -36,12 +38,10 @@ plannerS2_2 = 2
 
 output_folder = "Output/"
 output_folderPl1 = output_folder + "Pl1/"
-output_folderEFP = output_folder + "EFP/"
-output_folderPDKB = output_folder + "PDKB/"
 scripts_folder = "Scripts/"
 dbFolder = "Memory/"
 #db_file = "memory.db"
-jsonFilename = "cases.json"
+jsonFilename = "cases_classical.json"
 
 
 # Thresholds
@@ -56,16 +56,23 @@ maxExperience = 1000
 # Global variables seen by all the functions
 domainFile = ""
 problemFile = ""
+
+domainFileNoPath = ""
+domainPath = ""
+problemFileNoPath = ""
+problemPath = ""
+
 context = ""
 solutionS1 = []
 confidenceS1 = 0
 totalTIME = time.time()
 difficulty = 0
 
-
-
-# Global Objects
-parser = EPDDL_Parser()
+# Parsing Variables
+domain_name = ""
+problem_name = ""
+init_States = ""
+goal_States = ""
 
 def createFolders():
     Path(dbFolder).mkdir(parents=True,exist_ok=True)
@@ -101,14 +108,15 @@ def readSolutionFromFile(filename):
                     if '=' in line:
                         discard, sol = line.partition("=")[::2]
                         res=[]
-                        sol = sol.replace(' ','')
+                        #sol = sol.replace(' ','')
                         sol = sol.replace(';','')
                         sol = sol.replace('\n','')
 
                         acts = sol.split(',')
 
                         for act in acts:
-                            res.append(act)
+                            if act and not act.isspace():
+                                res.append(act.strip())
 
                         myfile.close()
                         return res
@@ -123,11 +131,13 @@ def readTimeFromFile(filename):
         for line in myfile:
             if "TIMED-OUT" in line:
                 return "TO"
-            elif "completed the search" in line:
+            elif "completed the search" or "Search time" in line:
                 if ':' in line:
                     discard, ret = line.partition(":")[::2]
                     ret = ret.replace(' ','')
                     ret = ret.replace('\n','')
+                    ret = ret.replace('s','')
+
 
                     myfile.close()
                     return ret
@@ -152,7 +162,7 @@ def executeS1():
             #returned_list has records of this form <path_to_sol, similarity_score, problem_name>
             sol = ""
             confidence = 0
-            returned_list = caseBased_s1_distance.doCaseMatch(cases, plannerS1, parser.domain_name, init, goal, similarity_threshold)
+            returned_list = caseBased_s1_distance.doCaseMatch(cases, plannerS1, domain_name, init, goal, similarity_threshold)
             if returned_list:
                 first_act = True
                 for act in returned_list[0][1]:
@@ -171,8 +181,8 @@ def executeS1():
             #returned_list has records of this form <path_to_sol, similarity_score, problem_name>
             sol = ""
             confidence = 0
-            returned_list0 = caseBased_s1_distance.doCaseMatch(cases, 0, parser.domain_name, init, goal, similarity_threshold)
-            returned_list1 = caseBased_s1_distance.doCaseMatch(cases, 1, parser.domain_name, init, goal, similarity_threshold)
+            returned_list0 = caseBased_s1_distance.doCaseMatch(cases, 0, domain_name, init, goal, similarity_threshold)
+            returned_list1 = caseBased_s1_distance.doCaseMatch(cases, 1, domain_name, init, goal, similarity_threshold)
 
             if returned_list0 and returned_list1:
                 if (returned_list0[0][0] < returned_list1[0][0]):
@@ -214,9 +224,9 @@ def executeS1():
                     sol = sol + ", " + act
         else:
             raise Exception("The requested System 1 has not been implemented yet.")
-    #    solString = s1_planner.s1Solver(parser.domain_name,parser.problem_name,json_path)
+    #    solString = s1_planner.s1Solver(domain_name,problem_name,json_path)
     #    solString = solString.replace(";", ",")
-        resFile = instanceNameEFP.replace(".tmp", "S1.tmp")
+        resFile = os.path.splitext(domainFileNoPath)[0]+os.path.splitext(problemFileNoPath)[0]+"S1.tmp"
         out = open(output_folderPl1 + resFile, "w")
         out.write("Solution = " + sol)
         out.close()
@@ -232,36 +242,23 @@ def solveWithS1():
 def validateSolution(solution):
     stringSolution = ""
     for elem in solution:
-        stringSolution += " "
+        stringSolution += ", "
         stringSolution += elem
     #print("Execution Line is:  sh ./Planners/EFP/scripts/validate_solution.sh " + instanceNameEFP + " " + stringSolution)
-    result = subprocess.run(['sh','./'+ scripts_folder + 'validate_solution.sh', output_folderEFP + instanceNameEFP, stringSolution], stdout=subprocess.PIPE)
-    res = result.stdout.decode('utf-8')
-    if ("Goal found" in res):
-        #print("Found result is " + stringSolution)
-        return 1.0
-    elif ("The solution score is: <<" in res):
-        res = re.findall(r'<<(.+)>>', res, re.MULTILINE)
-        return float(res[-1])
+    #Classical
+    return SubgoalCompleteness.get_correctness(domainFile,stringSolution,problemFile)
 
-    else:
-        #print("Goal not found")
-        return 0.0
-
-def generateEFPInstance():
-    global instanceNameEFP
-    global parser
-
-    parser.parse_domain(domainFile)
-    parser.parse_problem(problemFile)
-    instanceNameEFP = parser.print_EFP(output_folderEFP)
-
-def estimateDifficulty(instanceDepth):
+def estimateDifficulty():
     #For now difficulty evaluation that does not consider goal or initial state (Maybe include planning grpah lenght?)
-    #parser.ag_number
-    #parser.act_number
-    #parser.fl_number
-    return (pow(parser.ag_number, instanceDepth)*pow(2, parser.fl_number))
+
+    domain_name, problem_name, init_States, goal_States, number_of_actions, number_of_predicates = classical_parser.get_details(domainFile,problemFile)
+    intersection = [value for value in goal_States if value in init_States]
+    diff_fluents = len(goal_States) - len(intersection)
+
+    #print("Difficulty is: " + str(diff_fluents*number_of_actions*pow(2, number_of_predicates)))
+    #sys.exit(0)
+
+    return (diff_fluents*number_of_actions*pow(2, number_of_predicates))
 
 def estimateTimeCons(planner,difficulty):
     dbFilename = dbFolder + jsonFilename
@@ -273,7 +270,7 @@ def estimateTimeCons(planner,difficulty):
         with open(dbFilename) as db:
             db_reader = csv.reader(db, delimiter=',')
             for row in db_reader:
-                if(row[0] == parser.domain_name):
+                if(row[0] == domain_name):
                     if(int(row[1]) == planner):
                         rowDiff = float(row[2])
                         if ((rowDiff < (difficulty + range)) and (rowDiff > (difficulty - range))):
@@ -292,29 +289,38 @@ def estimateTimeCons(planner,difficulty):
         noMatchConsumption = 5
         return noMatchConsumption
 
-def checkDCK():
-    return (parser.dynamicCK.lower() == "true")
 
 def solveWithS2NoPlan(timeLimit):
     solveWithS2(timeLimit, selectPlannerS2())
 
 def solveWithS2(timeLimit, planner):
 
-    print("Problem </pro>" + parser.problem_name + "</> solved by System </sys>" + str(systemTWO) + "</> using planner </pla>" + str(planner) +"</>.")
-    sys.exit(0)
+    #print("Problem </pro>" + problem_name + "</> solved by System </sys>" + str(systemTWO) + "</> using planner </pla>" + str(planner) +"</>.")
+    #sys.exit(0)
 
 
     if planner == plannerS2_1:
-        domainNamePDKB, problemNamePDKB = parser.print_PDKB(output_folderPDKB)
-        result = subprocess.run(['sh','./'+ scripts_folder + 'FASTDOWNWARD_solve.sh', problemNamePDKB,  " " + output_folderPDKB, " " + str(int(timeLimit))+"s"])
-        solutionS2 = readSolutionFromFile("tmp/PDKB/" + problemNamePDKB)
-        time = readTimeFromFile("tmp/PDKB/" + problemNamePDKB)
+
+        head_tail = os.path.split(domainFile)
+        domainFileNoPath = head_tail[1]
+        domainPath = head_tail[0] + "/"
+
+        head_tail = os.path.split(problemFile)
+        problemFileNoPath = head_tail[1]
+        problemPath = head_tail[0] + "/"
+
+        result = subprocess.run(['bash','./'+ scripts_folder + 'FASTDOWNWARD_solve.sh', domainFileNoPath, domainPath, problemFileNoPath, problemPath, " " + str(int(timeLimit))+"s"])
+
+        resFilename = os.path.splitext(domainFileNoPath)[0]+os.path.splitext(problemFileNoPath)[0]+".out"
+        solutionS2 = readSolutionFromFile("tmp/FastDownward/" + resFilename)
+        time = readTimeFromFile("tmp/FastDownward/" + resFilename)
+
     else:
         raise Exception('Planner '+ str(planner) +' is not a known S2-planner')
 
     if(time == "TO" or solutionS2 == "noSolution"):
         #return False, timeLimit, None
-        print("Problem </pro>" + parser.problem_name + "</> could not be solved by System </sys>" + str(systemTWO) + "</> using planner </pla>" + str(planner) +"</>.")
+        print("Problem </pro>" + problem_name + "</> could not be solved by System </sys>" + str(systemTWO) + "</> using planner </pla>" + str(planner) +"</>.")
         return False
     else:
         memorizeSolution(systemTWO, planner, 1.0, float(time), 1.0, solutionS2)
@@ -342,8 +348,8 @@ def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solu
     #jsonformat established here
 
     data['cases'][str(index)] = {}
-    data['cases'][str(index)]['domain_name'] = parser.domain_name
-    data['cases'][str(index)]['problem_name'] = parser.problem_name
+    data['cases'][str(index)]['domain_name'] = domain_name
+    data['cases'][str(index)]['problem_name'] = problem_name
     data['cases'][str(index)]['difficulty'] = difficulty
     data['cases'][str(index)]['system'] = system
     data['cases'][str(index)]['planner'] = planner
@@ -365,16 +371,12 @@ def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solu
         out.write(json_object)
 
 
-    print("The solution of </pro>" + parser.problem_name + "</> is </sol>" + str(solution) + "</> with correctness </cor>" + str(correctness) + "</> and has been found in </tim>" + str(elapsedTime) + "s</> by System </sys>" + str(system) + "</>", end = '')
+    print("The solution of </pro>" + problem_name + "</> is </sol>" + str(solution) + "</> with correctness </cor>" + str(correctness) + "</> and has been found in </tim>" + str(elapsedTime) + "s</> by System </sys>" + str(system) + "</>", end = '')
     if (system != systemONE):
         print(" using planner </pla>" + str(planner) +"</>.")
     else:
         print(" using mode </mod>" + str(plannerS1) +"</>.")
     sys.exit(0)
-
-def generateNamePDKB():
-    domainNamePDKB = EPPDL.getDomainPDKB(domainFile)
-    problemNamePDKB = EPPDL.getProblemPDKB(problemFile)
 
 #----NEW
 
@@ -393,7 +395,7 @@ def countSolvedInstances(system,planner):
         index = len(data['cases'])
         count = 0
         while (index > 0) and (count < maxExperience):
-            if(data['cases'][str(index)]['domain_name'] == parser.domain_name):
+            if(data['cases'][str(index)]['domain_name'] == domain_name):
                 #planner == systemALL means that we accept all the planners
                 if(int(data['cases'][str(index)]['system']) == system or system == systemALL):
                     if(int(data['cases'][str(index)]['planner']) == planner or planner == plannerALL):
@@ -418,7 +420,7 @@ def getAvgCorrS1(system,planner,slidingWindow):
     index = len(data['cases'])
     count = 0
     while (index > 0) and (count < maxExperience):
-        if(data['cases'][str(index)]['domain_name'] == parser.domain_name):
+        if(data['cases'][str(index)]['domain_name'] == domain_name):
             #planner == systemALL means that we accept all the planners
             if(int(data['cases'][str(index)]['system']) == system or system == systemALL):
                 if(int(data['cases'][str(index)]['planner']) == planner or planner == plannerALL):
@@ -471,13 +473,17 @@ if __name__ == '__main__':
     timeLimitCntx = float(getVarFromFile(context,"timelimit"))
 
     #@TODO: Redefine for classical -- Get infor from parsing (??)
-    difficulty = estimateDifficulty(instanceDepth)
+    difficulty = estimateDifficulty()
 
+    #Test
+    #plannerS2 = selectPlannerS2()
+    #solveWithS2(1000000,plannerS2)
+    #sys.exit(0)
 
 
     ######### S1 metacognitive part
     # AUTOMATICALLY CALL S1
-    plannerS1 = plannerS1_Plansformer
+    plannerS1 = plannerS1_Dist1
     timeS1 = time.time()
     solutionS1, confidenceS1 = solveWithS1()
     timeS1 = time.time() - timeS1
@@ -517,14 +523,17 @@ if __name__ == '__main__':
         if (probabilityS1 > random.random()):
             tryS1(plannerS1, solutionS1, confidenceS1, timeS1)
         else:
-            correctnessS1 = validateSolution(solutionS1)
-            if (correctnessS1 >= correctnessCntx):
-                if((1-(estimatedCostS2 * (1-threshold3))) > (correctnessS1*(1-M))):
-                    if (not solveWithS2(remainingTime,plannerS2)):
+            if (len(solutionS1) > 0):
+                correctnessS1 = validateSolution(solutionS1)
+                if (correctnessS1 >= correctnessCntx):
+                    if((1-(estimatedCostS2 * (1-threshold3))) > (correctnessS1*(1-M))):
+                        if (not solveWithS2(remainingTime,plannerS2)):
+                            memorizeSolution(systemONE, plannerS1, confidenceS1, timeS1, correctnessS1, solutionS1)
+                    else:
                         memorizeSolution(systemONE, plannerS1, confidenceS1, timeS1, correctnessS1, solutionS1)
                 else:
-                    memorizeSolution(systemONE, plannerS1, confidenceS1, timeS1, correctnessS1, solutionS1)
+                    solveWithS2(remainingTime,plannerS2)
             else:
                 solveWithS2(remainingTime,plannerS2)
 
-    print("Problem </pro>" + parser.problem_name + "</> could not be solved by System </sys>Metacognitive</>.")
+    print("Problem </pro>" + problem_name + "</> could not be solved by System </sys>Metacognitive</>.")

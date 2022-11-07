@@ -5000,6 +5000,540 @@
                 "move_to_box_b",
                 "move_to_box_d"
             ]
+        },
+        "111": {
+            "domain_name": "",
+            "problem_name": "",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.001574,
+            "total_time": 0.7477109432220459,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1)"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4)\n\n)\n"
+            ],
+            "plan": [
+                "unstack b2 b4",
+                "put-down b2",
+                "unstack b4 b1",
+                "put-down b4",
+                "pick-up b2",
+                "stack b2 b4",
+                "unstack b1 b3",
+                "stack b1 b2"
+            ]
+        },
+        "112": {
+            "domain_name": "",
+            "problem_name": "",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0012818,
+            "total_time": 3.576647996902466,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1)"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4)\n\n)\n"
+            ],
+            "plan": [
+                "-e"
+            ]
+        },
+        "113": {
+            "domain_name": "",
+            "problem_name": "",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0020501,
+            "total_time": 3.7735204696655273,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1)"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4)\n\n)\n"
+            ],
+            "plan": [
+                "-e"
+            ]
+        },
+        "114": {
+            "domain_name": "",
+            "problem_name": "",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0016108,
+            "total_time": 3.668823480606079,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1)"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4)\n\n)\n"
+            ],
+            "plan": [
+                "-e"
+            ]
+        },
+        "115": {
+            "domain_name": "",
+            "problem_name": "",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0021628,
+            "total_time": 3.481961488723755,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1)"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4)\n\n)\n"
+            ],
+            "plan": [
+                "-e"
+            ]
+        },
+        "116": {
+            "domain_name": "",
+            "problem_name": "",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0012585,
+            "total_time": 3.478255033493042,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1)"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4)\n\n)\n"
+            ],
+            "plan": [
+                "-e"
+            ]
+        },
+        "117": {
+            "domain_name": "",
+            "problem_name": "",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0019406,
+            "total_time": 2.8333616256713867,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1)"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4)\n\n)\n"
+            ],
+            "plan": [
+                "unstack b2 b4",
+                "put-down b2",
+                "unstack b4 b1",
+                "put-down b4",
+                "pick-up b2",
+                "stack b2 b4",
+                "unstack b1 b3",
+                "stack b1 b2",
+                "cost = 8 (unit cost",
+                "-e"
+            ]
+        },
+        "118": {
+            "domain_name": "",
+            "problem_name": "",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0013994,
+            "total_time": 2.64428448677063,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1)"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4)\n\n)\n"
+            ],
+            "plan": [
+                "unstack b2 b4",
+                "put-down b2",
+                "unstack b4 b1",
+                "put-down b4",
+                "pick-up b2",
+                "stack b2 b4",
+                "unstack b1 b3",
+                "stack b1 b2",
+                "cost = 8 (unit cost"
+            ]
+        },
+        "119": {
+            "domain_name": "",
+            "problem_name": "",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0014273,
+            "total_time": 3.424941062927246,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1)"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4)\n\n)\n"
+            ],
+            "plan": []
+        },
+        "120": {
+            "domain_name": "",
+            "problem_name": "",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0014079,
+            "total_time": 3.3988428115844727,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1)"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4)\n\n)\n"
+            ],
+            "plan": []
+        },
+        "121": {
+            "domain_name": "",
+            "problem_name": "",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0017971,
+            "total_time": 3.4970223903656006,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1)"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4)\n\n)\n"
+            ],
+            "plan": []
+        },
+        "122": {
+            "domain_name": "",
+            "problem_name": "",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0017189,
+            "total_time": 3.508122205734253,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1)"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4)\n\n)\n"
+            ],
+            "plan": []
+        },
+        "123": {
+            "domain_name": "",
+            "problem_name": "",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0012777,
+            "total_time": 3.413027048110962,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1)"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4)\n\n)\n"
+            ],
+            "plan": []
+        },
+        "124": {
+            "domain_name": "",
+            "problem_name": "",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0012608,
+            "total_time": 3.4701855182647705,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1)"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4)\n\n)\n"
+            ],
+            "plan": []
+        },
+        "125": {
+            "domain_name": "",
+            "problem_name": "",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0014641,
+            "total_time": 3.4999401569366455,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1)"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4)\n\n)\n"
+            ],
+            "plan": []
+        },
+        "126": {
+            "domain_name": "",
+            "problem_name": "",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0016177,
+            "total_time": 2.6077890396118164,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1)"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4)\n\n)\n"
+            ],
+            "plan": [
+                "unstack b2 b4",
+                "put-down b2",
+                "unstack b4 b1",
+                "put-down b4",
+                "pick-up b2",
+                "stack b2 b4",
+                "unstack b1 b3",
+                "stack b1 b2"
+            ]
+        },
+        "127": {
+            "domain_name": "",
+            "problem_name": "",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.001905,
+            "total_time": 2.788421630859375,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1)"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4)\n\n)\n"
+            ],
+            "plan": [
+                "unstack b2 b4",
+                "put-down b2",
+                "unstack b4 b1",
+                "put-down b4",
+                "pick-up b2",
+                "stack b2 b4",
+                "unstack b1 b3",
+                "stack b1 b2"
+            ]
         }
     }
 }

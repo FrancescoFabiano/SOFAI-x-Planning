@@ -9,10 +9,16 @@ DOMAINFOLDER="$2"
 TIMEOUT="$3" #Max allowe time
 
 
+mkdir -p tmp/EFP/
+
+
 #REMOVE OLD COPIES
 if [ -f tmp/EFP/$DOMAIN ] ; then
     rm tmp/EFP/$DOMAIN
 fi;
+
+touch tmp/EFP/$DOMAIN
+
 
 timeout "$TIMEOUT" Planners/EFP/bin/efp.out $DOMAINFOLDER$DOMAIN -st "POSS" -check_visited -results_file > res.tmp;
 
