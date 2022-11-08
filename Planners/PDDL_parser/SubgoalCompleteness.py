@@ -125,7 +125,7 @@ def subgoal_completeness(goal, plan, domain): #goal, plan generate, domainFile
 
 
 def get_correctness(domain_path,plan_text,instance_path):
-    read_domain(domain_path)
-    read_plan(plan_text)
-    read_goal(instance_path)
+    domain = read_domain(domain_path)
+    plan = read_plan(plan_text)
+    goal = read_goal(instance_path)
     return subgoal_completeness(goal, plan, domain)
