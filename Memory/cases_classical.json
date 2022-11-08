@@ -1,42 +1,4 @@
 {
     "size_limit": 1000,
-    "cases": {
-        "1": {
-            "domain_name": "",
-            "problem_name": "",
-            "difficulty": 512,
-            "system": 2,
-            "planner": 1,
-            "confidence": 1.0,
-            "correctness": 1.0,
-            "solving_time": 0.0015622,
-            "total_time": 2.7793774604797363,
-            "init": [
-                "handempty",
-                "on b1 b3",
-                "on b2 b4",
-                "clear b2",
-                "ontable b3",
-                "on b4 b1)"
-            ],
-            "goal": [
-                "on b1 b2",
-                "clear b1",
-                "on b2 b4",
-                "ontable b3",
-                "clear b3",
-                "ontable b4)\n\n)\n"
-            ],
-            "plan": [
-                "unstack b2 b4",
-                "put-down b2",
-                "unstack b4 b1",
-                "put-down b4",
-                "pick-up b2",
-                "stack b2 b4",
-                "unstack b1 b3",
-                "stack b1 b2"
-            ]
-        }
-    }
+	"cases": {}
 }

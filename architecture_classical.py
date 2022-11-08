@@ -13,7 +13,6 @@ import random
 
 
 from Planners.CaseBasedS1 import caseBased_s1_solver
-from Planners.CaseBasedS1 import getStates
 from Planners.CaseBasedS1 import caseBased_s1_distance
 from Planners.PlansformerS1 import plansformer_s1
 from Planners.PDDL_parser import classical_parser
@@ -73,6 +72,8 @@ domain_name = ""
 problem_name = ""
 init_States = ""
 goal_States = ""
+number_of_actions = 0
+number_of_predicates = 0
 
 def createFolders():
     Path(dbFolder).mkdir(parents=True,exist_ok=True)
@@ -157,12 +158,12 @@ def executeS1():
         cases = experience["cases"]
 
         if (plannerS1 == plannerS1_Dist1 or plannerS1 == plannerS1_Dist2):
-            init,goal = getStates.States(problemFile) #reading initial and goal states from problem file
+            #init,goal = getStates.States(problemFile) #reading initial and goal states from problem file
 
             #returned_list has records of this form <path_to_sol, similarity_score, problem_name>
             sol = ""
             confidence = 0
-            returned_list = caseBased_s1_distance.doCaseMatch(cases, plannerS1, domain_name, init, goal, similarity_threshold)
+            returned_list = caseBased_s1_distance.doCaseMatch(cases, plannerS1, domain_name, init_States, goal_States, similarity_threshold)
             if returned_list:
                 first_act = True
                 for act in returned_list[0][1]:
@@ -176,13 +177,13 @@ def executeS1():
 
 
         elif(plannerS1 == plannerS1_Combined):
-            init,goal = getStates.States(problemFile) #reading initial and goal states from problem file
+            #init_States,goal = getStates.States(problemFile) #reading initial and goal states from problem file
 
             #returned_list has records of this form <path_to_sol, similarity_score, problem_name>
             sol = ""
             confidence = 0
-            returned_list0 = caseBased_s1_distance.doCaseMatch(cases, 0, domain_name, init, goal, similarity_threshold)
-            returned_list1 = caseBased_s1_distance.doCaseMatch(cases, 1, domain_name, init, goal, similarity_threshold)
+            returned_list0 = caseBased_s1_distance.doCaseMatch(cases, 0, domain_name, init_States, goal_States, similarity_threshold)
+            returned_list1 = caseBased_s1_distance.doCaseMatch(cases, 1, domain_name, init_States, goal_States, similarity_threshold)
 
             if returned_list0 and returned_list1:
                 if (returned_list0[0][0] < returned_list1[0][0]):
@@ -251,7 +252,7 @@ def validateSolution(solution):
 def estimateDifficulty():
     #For now difficulty evaluation that does not consider goal or initial state (Maybe include planning grpah lenght?)
 
-    domain_name, problem_name, init_States, goal_States, number_of_actions, number_of_predicates = classical_parser.get_details(domainFile,problemFile)
+    #domain_name, problem_name, init_States, goal_States, number_of_actions, number_of_predicates = classical_parser.get_details(domainFile,problemFile)
     intersection = [value for value in goal_States if value in init_States]
     diff_fluents = len(goal_States) - len(intersection)
 
@@ -358,10 +359,10 @@ def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solu
     data['cases'][str(index)]['solving_time'] = elapsedTime
     data['cases'][str(index)]['total_time'] = time.time()-timeSTART
 
-    init,goal = getStates.States(problemFile) #reading initial and goal states from problem file
+    #init,goal = getStates.States(problemFile) #reading initial and goal states from problem file
 
-    data['cases'][str(index)]['init'] = init
-    data['cases'][str(index)]['goal'] = goal
+    data['cases'][str(index)]['init'] = init_States
+    data['cases'][str(index)]['goal'] = goal_States
     data['cases'][str(index)]['plan'] = solution
 
     json_object = json.dumps(data,indent=4)
@@ -465,6 +466,9 @@ if __name__ == '__main__':
     domainFile = sys.argv[1]
     problemFile = sys.argv[2]
     context = sys.argv[3]
+
+    #Some Parsing
+    domain_name, problem_name, init_States, goal_States, number_of_actions, number_of_predicates = classical_parser.get_details(domainFile,problemFile)
 
 
     #correctnessCntx = float(getVarFromFile(context,"correctness"))

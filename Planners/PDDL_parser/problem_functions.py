@@ -6,6 +6,7 @@ def find_parens(s):
     pstack = []
     flag = 0
     for i, c in enumerate(s):
+        #print("i is " + str(i) + " c is " + str(c))
 
         if flag == 1 and len(pstack) == 0:
             return toret
@@ -16,6 +17,8 @@ def find_parens(s):
         elif c == ')':
             toret[pstack.pop()] = i
 
+    #print("To ret is: " +  str(toret))
+    #print("To ret 0 is: " +  str(toret[0]))
     return toret
 
 def get_problem_name(file):
@@ -30,7 +33,7 @@ def get_problem_name(file):
             if '(problem'.upper() in line:
                 ind = line.index('(problem'.upper())
                 problem_name =  line[ind:-1].strip('(problem'.upper())[:-1]
-        
+
         for line in f:
             if '(:domain' in line:
                 ind = line.index('(:domain')
@@ -54,7 +57,7 @@ def get_objects(file):
         instances_list = [item for item in file_data.split(' ') if item]
 
         if instances_list.count('-')>0:
-            objects =  True 
+            objects =  True
         else:
             objects =  False
 
@@ -109,7 +112,7 @@ def get_initialState(file):
 
         index_dict = find_parens( file_data )
         ind_list = sorted(list(index_dict.keys()))[1:]
-        
+
 
         if "and" in file_data[ind_list[0]:ind_list[0]+4]:
             ind_list = ind_list[1:]
@@ -118,7 +121,10 @@ def get_initialState(file):
         previoud_ind = -1
         for ind in ind_list:
             if ind > previoud_ind:
-                states.append( file_data[ ind: index_dict[ind]+1] )
+                to_add = file_data[ ind: index_dict[ind]+1]
+                to_add = to_add.replace("(","")
+                to_add = to_add.replace(")","")
+                states.append(to_add)
                 previoud_ind = index_dict[ind]
 
         return states
@@ -130,7 +136,11 @@ def get_goalState(file):
         start_index = file_data.index('(:goal')
         closing_idx = find_parens( file_data[start_index:] )[0]
 
+
+
         file_data = file_data[ start_index : start_index + closing_idx + 1]
+        #print("File data is: " + str(file_data))
+
 
         index_dict = find_parens( file_data )
         ind_list = sorted(list(index_dict.keys()))[1:]
@@ -142,9 +152,11 @@ def get_goalState(file):
         previoud_ind = -1
         for ind in ind_list:
             if ind > previoud_ind:
-                states.append( file_data[ ind: index_dict[ind]+1] )
+                to_add = file_data[ ind: index_dict[ind]+1]
+                to_add = to_add.replace("(","")
+                to_add = to_add.replace(")","")
+                states.append(to_add)
                 previoud_ind = index_dict[ind]
 
+
         return states
-
-
