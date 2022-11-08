@@ -18,44 +18,20 @@ def read_domain(path):
                 elif lines[j].startswith('  (:action'):
                     break
         else:
-            pass
-
+            continue
+    
     new_dict = dict()
     for i in dict_act.keys():
-        if dict_act[i][0] not in new_dict.keys():
-            new_dict[dict_act[i][0]] = dict()
-            new_dict[dict_act[i][0]][i] = dict_act[i][1]
+        if str(dict_act[i][0]) not in new_dict.keys():
+            new_dict[str(dict_act[i][0])] = dict()
+            new_dict[str(dict_act[i][0])][i] = dict_act[i][1]
         else:
-            new_dict[dict_act[i][0]][i] = dict_act[i][1]
-        #print(i, dict_act[i])
-
-    list_unq = list()
-    for i in new_dict:
-        for j in new_dict[i]:
-            for k in new_dict[i][j]:
-                if k not in list_unq:
-                    list_unq.append(k)
-                else:
-                    pass
-
-    list_unq = [i.split(" ?")[0] for i in list_unq]
-
-    final_dict = dict()
-    for i in list_unq:
-        final_dict[i] = dict()
-        for j in new_dict:
-            for k in new_dict[j]:
-                if i in [m.split(" ?")[0] for m in new_dict[j][k]]:
-                    if j not in final_dict[i].keys():
-                        final_dict[i][j] = list()
-                        final_dict[i][j].append(k)
-                    else:
-                        final_dict[i][j].append(k)
-
-    return final_dict
+            new_dict[str(dict_act[i][0])][i] = dict_act[i][1]
+    
+    return new_dict
+    
 
 
-#takes input plan text "action1, action2" -- string not list
 def read_plan(plan_text):
     plan = plan_text.split(", ")
     plans = list()
@@ -66,18 +42,46 @@ def read_plan(plan_text):
         else:
             temp = plan[j].split(" ")
             plans.append([len(temp)-2] + [" ".join(temp[:2])] + temp[2:])
-
+    
     new_plan = list()
     for i in plans:
         if "not" in " ".join([str(j) for j in i]):
             new_plan.append((str(i[0])," ".join(i[1:3])," ".join(i[1:])))
         else:
             new_plan.append((str(i[0])," ".join(i[1:2])," ".join(i[1:])))
-
+    new_plan = [i for i in new_plan if len(i[1])>0 and len(i[2])>0]
     return new_plan
 
+def read_init(path):
+    file1 = open(path, 'r')
+    lines = file1.readlines()
+    init_cond = list()
+    for i in range(len(lines)):
+        if lines[i].startswith('(:init'):
+            for j in range(i+1, len(lines)):
+                if lines[j].startswith('(:goal'):
+                    break
+                if lines[j].startswith('(') and lines[j].count("and")==0:
+                    temp = lines[j].replace("(","").replace(")","").replace("\n", "")
+                    if temp.count("not")==0:
+                        temp = temp.split(" ")
+                        init_cond.append([len(temp)-1] + temp)
+                    else:
+                        temp = temp.split(" ")
+                        init_cond.append([len(temp)-2] + [" ".join(temp[:2])] + temp[2:])
+        else:
+            continue
+    
+    new_init = list()
+    for i in init_cond:
+        if "not" in " ".join([str(j) for j in i]):
+            new_init.append((str(i[0])," ".join(i[1:3])," ".join(i[1:])))
+        else:
+            new_init.append((str(i[0])," ".join(i[1:2])," ".join(i[1:])))
+        
+    return [i[2] for i in new_init]
 
-def read_goal(path): #path is problem_file
+def read_goal(path):
     file1 = open(path, 'r')
     lines = file1.readlines()
     goal = list()
@@ -95,37 +99,67 @@ def read_goal(path): #path is problem_file
                 elif lines[j].startswith(' '):
                     break
         else:
-            pass
-
+            continue
+    
     new_goal = list()
     for i in goal:
         if "not" in " ".join([str(j) for j in i]):
             new_goal.append((str(i[0])," ".join(i[1:3])," ".join(i[1:])))
         else:
             new_goal.append((str(i[0])," ".join(i[1:2])," ".join(i[1:])))
-
+    
     return new_goal
 
-#returns a value b/w 0 and 1 for subgoal completion, where 1 is all sub-goals being satisfied.
-def subgoal_completeness(goal, plan, domain): #goal, plan generate, domainFile
+def check_not(final_state, temp):
+    new_state = list()
+    for i in final_state:
+        if i.count("not")>0:
+            if i.replace("not ","") in temp:
+                continue
+            else:
+                new_state.append(i)
+        else:
+            if "not "+i in temp:
+                continue
+            else:
+                new_state.append(i)
+    return new_state
+
+def subgoal_completeness(goal, plan, domain, init_cond):
+    final_state = init_cond.copy()
+    for i in plan:
+        if i[0]=='2':
+            temp = domain[i[0]][i[1]]
+            x = i[2].split(" ")[1]
+            y = i[2].split(" ")[2]
+            temp = [j.replace("?x",x).replace("?y",y) for j in temp]
+            if len(final_state)!=0:
+                final_state = check_not(final_state, temp)
+                #final_state = check(final_state, temp)
+            for j in temp:
+                final_state.append(j)
+        else:
+            temp = domain[i[0]][i[1]]
+            x = i[2].split(" ")[1]
+            temp = [j.replace("?x",x) for j in temp]
+            if len(final_state)!=0:
+                final_state = check_not(final_state, temp)
+                #final_state = check(final_state, temp)
+            for j in temp:
+                final_state.append(j)
     count = 0
     for i in goal:
-        temp = domain[i[1]][int(i[0])]
-        for j in temp:
-            search = i[2].replace(i[1],j)
-            for k in plan:
-                #print(search,k[2])
-                if search==k[2]:
-                    count += 1
-                    break
-                else:
-                    pass
-
+        if i[2] in final_state:
+            count += 1
+        else:
+            continue
+    
     return count/len(goal)
 
 
-def get_correctness(domain_path,plan_text,instance_path):
-    domain = read_domain(domain_path)
+def get_correctness(domain_path, plan_text, instance_path):
+    domain  = read_domain(domain_path)
     plan = read_plan(plan_text)
     goal = read_goal(instance_path)
-    return subgoal_completeness(goal, plan, domain)
+    init_cond = read_init(instance_path)
+    return subgoal_completeness(goal, plan, domain, init_cond)
