@@ -163,7 +163,7 @@ def executeS1():
             #returned_list has records of this form <path_to_sol, similarity_score, problem_name>
             sol = ""
             confidence = 0
-            returned_list = caseBased_s1_distance.doCaseMatch(cases, plannerS1, domain_name, init_States, goal_States, similarity_threshold)
+            returned_list = caseBased_s1_distance.doCaseMatch(cases, (plannerS1-1), domain_name, init_States, goal_States, similarity_threshold)
             if returned_list:
                 first_act = True
                 for act in returned_list[0][1]:
@@ -242,9 +242,14 @@ def solveWithS1():
 
 def validateSolution(solution):
     stringSolution = ""
+    count = 1
     for elem in solution:
-        stringSolution += ", "
         stringSolution += elem
+        if count < len(solution):
+            stringSolution += ", "
+            count +=1
+
+
     #print("Execution Line is:  sh ./Planners/EFP/scripts/validate_solution.sh " + instanceNameEFP + " " + stringSolution)
     #Classical
     return SubgoalCompleteness.get_correctness(domainFile,stringSolution,problemFile)
@@ -472,8 +477,12 @@ if __name__ == '__main__':
 
 
     #correctnessCntx = float(getVarFromFile(context,"correctness"))
-    reduced_risk_adversion = 0.4
+    reduced_risk_adversion = 0.1
     correctnessCntx = threshold3 - reduced_risk_adversion
+
+    #@TODO: REMOVE IS FOR DEBUG
+    #correctnessCntx = 0.1
+
     timeLimitCntx = float(getVarFromFile(context,"timelimit"))
 
     #@TODO: Redefine for classical -- Get infor from parsing (??)
@@ -487,7 +496,7 @@ if __name__ == '__main__':
 
     ######### S1 metacognitive part
     # AUTOMATICALLY CALL S1
-    plannerS1 = plannerS1_Dist1
+    plannerS1 = plannerS1_Plansformer
     timeS1 = time.time()
     solutionS1, confidenceS1 = solveWithS1()
     timeS1 = time.time() - timeS1
@@ -529,6 +538,7 @@ if __name__ == '__main__':
         else:
             if (len(solutionS1) > 0):
                 correctnessS1 = validateSolution(solutionS1)
+                #print("Correctness is: " + str(correctnessS1))
                 if (correctnessS1 >= correctnessCntx):
                     if((1-(estimatedCostS2 * (1-threshold3))) > (correctnessS1*(1-M))):
                         if (not solveWithS2(remainingTime,plannerS2)):
