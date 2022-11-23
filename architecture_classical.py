@@ -508,7 +508,7 @@ if __name__ == '__main__':
 
     ######### S1 metacognitive part
     # AUTOMATICALLY CALL S1
-    plannerS1 = plannerS1_Dist1
+    plannerS1 = plannerS1_Plansformer
     timeS1 = time.time()
     solutionS1, confidenceS1 = solveWithS1()
     timeS1 = time.time() - timeS1
