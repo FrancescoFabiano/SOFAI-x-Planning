@@ -3,6 +3,7 @@ def read_domain(path):
     lines = file1.readlines()
     dict_act = dict()
     for i in range(len(lines)):
+
         if lines[i].startswith('  (:action'):
             act = lines[i].split(' ')[3].replace("\n", "")
             dict_act[act] = [0,[]]
@@ -19,7 +20,7 @@ def read_domain(path):
                     break
         else:
             continue
-    
+
     new_dict = dict()
     for i in dict_act.keys():
         if str(dict_act[i][0]) not in new_dict.keys():
@@ -27,9 +28,10 @@ def read_domain(path):
             new_dict[str(dict_act[i][0])][i] = dict_act[i][1]
         else:
             new_dict[str(dict_act[i][0])][i] = dict_act[i][1]
-    
+
+    #print("Domain is: " + str(new_dict))
     return new_dict
-    
+
 
 
 def read_plan(plan_text):
@@ -42,7 +44,7 @@ def read_plan(plan_text):
         else:
             temp = plan[j].split(" ")
             plans.append([len(temp)-2] + [" ".join(temp[:2])] + temp[2:])
-    
+
     new_plan = list()
     for i in plans:
         if "not" in " ".join([str(j) for j in i]):
@@ -71,14 +73,14 @@ def read_init(path):
                         init_cond.append([len(temp)-2] + [" ".join(temp[:2])] + temp[2:])
         else:
             continue
-    
+
     new_init = list()
     for i in init_cond:
         if "not" in " ".join([str(j) for j in i]):
             new_init.append((str(i[0])," ".join(i[1:3])," ".join(i[1:])))
         else:
             new_init.append((str(i[0])," ".join(i[1:2])," ".join(i[1:])))
-        
+
     return [i[2] for i in new_init]
 
 def read_goal(path):
@@ -100,14 +102,14 @@ def read_goal(path):
                     break
         else:
             continue
-    
+
     new_goal = list()
     for i in goal:
         if "not" in " ".join([str(j) for j in i]):
             new_goal.append((str(i[0])," ".join(i[1:3])," ".join(i[1:])))
         else:
             new_goal.append((str(i[0])," ".join(i[1:2])," ".join(i[1:])))
-    
+
     return new_goal
 
 def check_not(final_state, temp):
@@ -139,6 +141,7 @@ def subgoal_completeness(goal, plan, domain, init_cond):
             for j in temp:
                 final_state.append(j)
         else:
+            #print("Domain: " + str(domain))
             temp = domain[i[0]][i[1]]
             x = i[2].split(" ")[1]
             temp = [j.replace("?x",x) for j in temp]
@@ -153,7 +156,7 @@ def subgoal_completeness(goal, plan, domain, init_cond):
             count += 1
         else:
             continue
-    
+
     return count/len(goal)
 
 

@@ -12,6 +12,8 @@ device = 'cuda' if cuda.is_available() else 'cpu'
 import torch
 import torch.nn.functional as F
 import re
+import traceback
+import logging
 
 #imports
 from transformers import RobertaTokenizer, T5ForConditionalGeneration
@@ -83,15 +85,21 @@ def convert_input_to_string(domain_name,instance_name):
     return problem
 
 def solve(domain, problem):
+
     #path to plansformer model files
     model_path = "Planners/PlansformerS1/model_files"
 
+    try:
     #using plansformer's tokenizer and model weights
-    tokenizer = RobertaTokenizer.from_pretrained(model_path, local_files_only = True)
-    model = T5ForConditionalGeneration.from_pretrained(model_path, local_files_only = True)
-    model = model.to(device)
-    #input problem/task
-    problem = convert_input_to_string(domain,problem)
+        tokenizer = RobertaTokenizer.from_pretrained(model_path, local_files_only = True)
+        model = T5ForConditionalGeneration.from_pretrained(model_path, local_files_only = True)
+        model = model.to(device)
+        #input problem/task
+        problem = convert_input_to_string(domain,problem)
+    except Exception as e:
+        logging.error(traceback.format_exc())
+    # Logs the error appropriately.
+
 
     #tokenizing the input and passing it to the model
     input_ids = tokenizer.encode(problem, return_tensors='pt').to(device, dtype = torch.long)

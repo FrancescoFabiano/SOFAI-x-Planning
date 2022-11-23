@@ -56265,6 +56265,814 @@
                 "pick-up b3",
                 "stack b3 b2"
             ]
+        },
+        "1501": {
+            "domain_name": "blocksworld",
+            "problem_name": "problem_4_1",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0038735,
+            "total_time": 8.73775339126587,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4"
+            ],
+            "plan": [
+                "unstack b2 b4",
+                "put-down b2",
+                "unstack b4 b1",
+                "put-down b4",
+                "pick-up b2",
+                "stack b2 b4",
+                "unstack b1 b3",
+                "stack b1 b2"
+            ]
+        },
+        "1502": {
+            "domain_name": "blocksworld",
+            "problem_name": "problem_4_1",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0042174,
+            "total_time": 7.921452283859253,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4"
+            ],
+            "plan": [
+                "unstack b2 b4",
+                "put-down b2",
+                "unstack b4 b1",
+                "put-down b4",
+                "pick-up b2",
+                "stack b2 b4",
+                "unstack b1 b3",
+                "stack b1 b2"
+            ]
+        },
+        "1503": {
+            "domain_name": "blocksworld",
+            "problem_name": "problem_4_1",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0045522,
+            "total_time": 7.901423215866089,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4"
+            ],
+            "plan": [
+                "unstack b2 b4",
+                "put-down b2",
+                "unstack b4 b1",
+                "put-down b4",
+                "pick-up b2",
+                "stack b2 b4",
+                "unstack b1 b3",
+                "stack b1 b2"
+            ]
+        },
+        "1504": {
+            "domain_name": "blocksworld",
+            "problem_name": "problem_4_1",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0038086,
+            "total_time": 8.243414878845215,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4"
+            ],
+            "plan": [
+                "unstack b2 b4",
+                "put-down b2",
+                "unstack b4 b1",
+                "put-down b4",
+                "pick-up b2",
+                "stack b2 b4",
+                "unstack b1 b3",
+                "stack b1 b2"
+            ]
+        },
+        "1505": {
+            "domain_name": "blocksworld",
+            "problem_name": "problem_4_1",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0043221,
+            "total_time": 7.900032997131348,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4"
+            ],
+            "plan": [
+                "unstack b2 b4",
+                "put-down b2",
+                "unstack b4 b1",
+                "put-down b4",
+                "pick-up b2",
+                "stack b2 b4",
+                "unstack b1 b3",
+                "stack b1 b2"
+            ]
+        },
+        "1506": {
+            "domain_name": "blocksworld",
+            "problem_name": "problem_4_1",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.003841,
+            "total_time": 8.110644817352295,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4"
+            ],
+            "plan": [
+                "unstack b2 b4",
+                "put-down b2",
+                "unstack b4 b1",
+                "put-down b4",
+                "pick-up b2",
+                "stack b2 b4",
+                "unstack b1 b3",
+                "stack b1 b2"
+            ]
+        },
+        "1507": {
+            "domain_name": "blocksworld",
+            "problem_name": "problem_4_1",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0044572,
+            "total_time": 8.195367574691772,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4"
+            ],
+            "plan": [
+                "unstack b2 b4",
+                "put-down b2",
+                "unstack b4 b1",
+                "put-down b4",
+                "pick-up b2",
+                "stack b2 b4",
+                "unstack b1 b3",
+                "stack b1 b2"
+            ]
+        },
+        "1508": {
+            "domain_name": "blocksworld",
+            "problem_name": "problem_4_1",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0023268,
+            "total_time": 6.937322378158569,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4"
+            ],
+            "plan": [
+                "unstack b2 b4",
+                "put-down b2",
+                "unstack b4 b1",
+                "put-down b4",
+                "pick-up b2",
+                "stack b2 b4",
+                "unstack b1 b3",
+                "stack b1 b2"
+            ]
+        },
+        "1509": {
+            "domain_name": "blocksworld",
+            "problem_name": "problem_4_1",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0039338,
+            "total_time": 8.255739450454712,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4"
+            ],
+            "plan": [
+                "unstack b2 b4",
+                "put-down b2",
+                "unstack b4 b1",
+                "put-down b4",
+                "pick-up b2",
+                "stack b2 b4",
+                "unstack b1 b3",
+                "stack b1 b2"
+            ]
+        },
+        "1510": {
+            "domain_name": "blocksworld",
+            "problem_name": "problem_4_1",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0037123,
+            "total_time": 7.901238918304443,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4"
+            ],
+            "plan": [
+                "unstack b2 b4",
+                "put-down b2",
+                "unstack b4 b1",
+                "put-down b4",
+                "pick-up b2",
+                "stack b2 b4",
+                "unstack b1 b3",
+                "stack b1 b2"
+            ]
+        },
+        "1511": {
+            "domain_name": "blocksworld",
+            "problem_name": "problem_4_1",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0023076,
+            "total_time": 7.590571403503418,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4"
+            ],
+            "plan": [
+                "unstack b2 b4",
+                "put-down b2",
+                "unstack b4 b1",
+                "put-down b4",
+                "pick-up b2",
+                "stack b2 b4",
+                "unstack b1 b3",
+                "stack b1 b2"
+            ]
+        },
+        "1512": {
+            "domain_name": "blocksworld",
+            "problem_name": "problem_4_1",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0022357,
+            "total_time": 7.936768293380737,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4"
+            ],
+            "plan": [
+                "unstack b2 b4",
+                "put-down b2",
+                "unstack b4 b1",
+                "put-down b4",
+                "pick-up b2",
+                "stack b2 b4",
+                "unstack b1 b3",
+                "stack b1 b2"
+            ]
+        },
+        "1513": {
+            "domain_name": "blocksworld",
+            "problem_name": "problem_4_1",
+            "difficulty": 512,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0059329,
+            "total_time": 7.915581941604614,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4"
+            ],
+            "plan": [
+                "unstack b2 b4",
+                "put-down b2",
+                "unstack b4 b1",
+                "put-down b4",
+                "pick-up b2",
+                "stack b2 b4",
+                "unstack b1 b3",
+                "stack b1 b2"
+            ]
+        },
+        "1514": {
+            "domain_name": "blocksworld",
+            "problem_name": "problem_4_1",
+            "difficulty": 512,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.046767473220825195,
+            "total_time": 0.2167973518371582,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1"
+            ],
+            "goal": [
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4"
+            ],
+            "plan": [
+                "unstack b2 b4",
+                "put-down b2",
+                "unstack b4 b1",
+                "put-down b4",
+                "pick-up b2",
+                "stack b2 b4",
+                "unstack b1 b3",
+                "stack b1 b2"
+            ]
+        },
+        "1515": {
+            "domain_name": "blocksworld",
+            "problem_name": "problem_4_10",
+            "difficulty": 640,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.044786930084228516,
+            "total_time": 0.19564032554626465,
+            "init": [
+                "handempty",
+                "on b1 b3",
+                "on b2 b4",
+                "clear b2",
+                "ontable b3",
+                "on b4 b1"
+            ],
+            "goal": [
+                "ontable b1",
+                "ontable b2",
+                "on b3 b2",
+                "clear b3",
+                "on b4 b1",
+                "clear b4"
+            ],
+            "plan": [
+                "unstack b2 b4",
+                "put-down b2",
+                "unstack b4 b1",
+                "stack b4 b2",
+                "unstack b1 b3",
+                "put-down b1",
+                "unstack b4 b2",
+                "stack b4 b1",
+                "pick-up b3",
+                "stack b3 b2"
+            ]
+        },
+        "1516": {
+            "domain_name": "blocksworld",
+            "problem_name": "problem_4_100",
+            "difficulty": 512,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.04779815673828125,
+            "total_time": 0.22095656394958496,
+            "init": [
+                "handempty",
+                "on b1 b2",
+                "clear b1",
+                "on b2 b4",
+                "ontable b3",
+                "clear b3",
+                "ontable b4"
+            ],
+            "goal": [
+                "on b1 b4",
+                "clear b1",
+                "ontable b2",
+                "on b3 b2",
+                "on b4 b3"
+            ],
+            "plan": [
+                "unstack b1 b2",
+                "put-down b1",
+                "unstack b2 b4",
+                "put-down b2",
+                "pick-up b3",
+                "stack b3 b2",
+                "pick-up b4",
+                "stack b4 b3",
+                "pick-up b1",
+                "stack b1 b4"
+            ]
+        },
+        "1517": {
+            "domain_name": "blocksworld",
+            "problem_name": "problem_4_1000",
+            "difficulty": 384,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0481874942779541,
+            "total_time": 0.20748496055603027,
+            "init": [
+                "handempty",
+                "ontable b1",
+                "on b2 b1",
+                "clear b2",
+                "ontable b3",
+                "on b4 b3",
+                "clear b4"
+            ],
+            "goal": [
+                "ontable b1",
+                "clear b1",
+                "on b2 b3",
+                "clear b2",
+                "ontable b3",
+                "ontable b4",
+                "clear b4"
+            ],
+            "plan": [
+                "unstack b4 b3",
+                "put-down b4",
+                "unstack b2 b1",
+                "stack b2 b3"
+            ]
+        },
+        "1518": {
+            "domain_name": "blocksworld",
+            "problem_name": "problem_4_1001",
+            "difficulty": 512,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.050568580627441406,
+            "total_time": 0.22165608406066895,
+            "init": [
+                "handempty",
+                "ontable b1",
+                "on b2 b1",
+                "clear b2",
+                "ontable b3",
+                "on b4 b3",
+                "clear b4"
+            ],
+            "goal": [
+                "on b1 b2",
+                "ontable b2",
+                "ontable b3",
+                "clear b3",
+                "on b4 b1",
+                "clear b4"
+            ],
+            "plan": [
+                "unstack b2 b1",
+                "put-down b2",
+                "pick-up b1",
+                "stack b1 b2",
+                "unstack b4 b3",
+                "stack b4 b1"
+            ]
+        },
+        "1519": {
+            "domain_name": "blocksworld",
+            "problem_name": "problem_4_1002",
+            "difficulty": 384,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0492243766784668,
+            "total_time": 0.20888662338256836,
+            "init": [
+                "handempty",
+                "ontable b1",
+                "on b2 b1",
+                "clear b2",
+                "ontable b3",
+                "on b4 b3",
+                "clear b4"
+            ],
+            "goal": [
+                "ontable b1",
+                "ontable b2",
+                "clear b2",
+                "ontable b3",
+                "clear b3",
+                "on b4 b1",
+                "clear b4"
+            ],
+            "plan": [
+                "unstack b2 b1",
+                "put-down b2",
+                "unstack b4 b3",
+                "stack b4 b1"
+            ]
+        },
+        "1520": {
+            "domain_name": "blocksworld",
+            "problem_name": "problem_4_1003",
+            "difficulty": 384,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.05181717872619629,
+            "total_time": 0.23428583145141602,
+            "init": [
+                "handempty",
+                "ontable b1",
+                "on b2 b1",
+                "clear b2",
+                "ontable b3",
+                "on b4 b3",
+                "clear b4"
+            ],
+            "goal": [
+                "ontable b1",
+                "on b2 b1",
+                "on b3 b4",
+                "clear b3",
+                "on b4 b2"
+            ],
+            "plan": [
+                "unstack b4 b3",
+                "stack b4 b2",
+                "pick-up b3",
+                "stack b3 b4"
+            ]
+        },
+        "1521": {
+            "domain_name": "blocksworld",
+            "problem_name": "problem_4_1004",
+            "difficulty": 640,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.04583477973937988,
+            "total_time": 0.20473241806030273,
+            "init": [
+                "handempty",
+                "ontable b1",
+                "on b2 b1",
+                "clear b2",
+                "ontable b3",
+                "on b4 b3",
+                "clear b4"
+            ],
+            "goal": [
+                "on b1 b4",
+                "clear b1",
+                "ontable b2",
+                "clear b2",
+                "ontable b3",
+                "clear b3",
+                "ontable b4"
+            ],
+            "plan": [
+                "unstack b4 b3",
+                "put-down b4",
+                "unstack b2 b1",
+                "put-down b2",
+                "pick-up b1",
+                "stack b1 b4"
+            ]
+        },
+        "1522": {
+            "domain_name": "blocksworld",
+            "problem_name": "problem_4_1005",
+            "difficulty": 640,
+            "system": 1,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.05069851875305176,
+            "total_time": 0.23894071578979492,
+            "init": [
+                "handempty",
+                "ontable b1",
+                "on b2 b1",
+                "clear b2",
+                "ontable b3",
+                "on b4 b3",
+                "clear b4"
+            ],
+            "goal": [
+                "on b1 b4",
+                "clear b1",
+                "ontable b2",
+                "ontable b3",
+                "clear b3",
+                "on b4 b2"
+            ],
+            "plan": [
+                "unstack b2 b1",
+                "put-down b2",
+                "unstack b4 b3",
+                "stack b4 b2",
+                "pick-up b1",
+                "stack b1 b4"
+            ]
         }
     }
 }

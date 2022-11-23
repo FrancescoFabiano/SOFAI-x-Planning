@@ -212,9 +212,13 @@ def executeS1():
                     sol = sol + ", " + act
 
         elif (plannerS1 == plannerS1_Plansformer):
+            print("I'm Here!!")
             tens_confidence, plan = plansformer_s1.solve(domainFile,problemFile)
+            print("I'm Here 2!!", flush=True)
             str_confidence= re.sub(r'tensor\((.+)\)', r'\1', str(tens_confidence))
+            print("I'm Here 3!!", flush=True)
             confidence = float(str_confidence)
+            print("I'm Here 4!!", flush=True)
             sol = ""
             first_act = True
             for act in plan:
@@ -223,6 +227,8 @@ def executeS1():
                     first_act = False
                 else:
                     sol = sol + ", " + act
+
+
         else:
             raise Exception("The requested System 1 has not been implemented yet.")
     #    solString = s1_planner.s1Solver(domain_name,problem_name,json_path)
@@ -241,6 +247,11 @@ def solveWithS1():
     return solutionS1, confidence
 
 def validateSolution(solution):
+
+    #print("solution is: "+ solution)
+    if solution == "noSolution":
+        return 0
+
     stringSolution = ""
     count = 1
     for elem in solution:
@@ -253,6 +264,7 @@ def validateSolution(solution):
     #print("Execution Line is:  sh ./Planners/EFP/scripts/validate_solution.sh " + instanceNameEFP + " " + stringSolution)
     #Classical
     return SubgoalCompleteness.get_correctness(domainFile,stringSolution,problemFile)
+
 
 def estimateDifficulty():
     #For now difficulty evaluation that does not consider goal or initial state (Maybe include planning grpah lenght?)
@@ -496,7 +508,7 @@ if __name__ == '__main__':
 
     ######### S1 metacognitive part
     # AUTOMATICALLY CALL S1
-    plannerS1 = plannerS1_Plansformer
+    plannerS1 = plannerS1_Dist1
     timeS1 = time.time()
     solutionS1, confidenceS1 = solveWithS1()
     timeS1 = time.time() - timeS1
