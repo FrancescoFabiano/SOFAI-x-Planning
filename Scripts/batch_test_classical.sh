@@ -3,9 +3,17 @@
 #	where:
 #			"coininthebox" is the name of the folder containing the domain and the instaces to be solved
 INPATH="$1" # Name of the domain
+SYSONE="$2"
+FILEMem="Memory/fresh_classical.json"
 mkdir -p tmp/SOL/
 mkdir -p Output/SOL/
 
+if test -f "$FILEMem"; then
+  cp -f $FILEMem "Memory/cases_classical.json"
+else
+  touch "Memory/cases_classical.json"
+  echo -e "{\n\"size_limit\": 1000,\n\"cases\":{\n}\n}" > "Memory/cases_classical.json"
+fi
 
 echo -e "\nExecution of architecture in all the instances in Input/"$INPATH"/instances\n"
 for context in $(find "Input/contexts"/ -type f); do
@@ -23,7 +31,7 @@ for context in $(find "Input/contexts"/ -type f); do
 
       for instance in $(find "Input/"$INPATH"/instances"/ -type f); do
         echo -e "    Solving the instance \"$(basename ${instance%%.*})\" with context \"$(basename ${context%%.*})\" and thresholds \"$(basename ${threshold%%.*})\"";
-        python3 architecture_classical.py "$domain" "$instance" "$context" "$threshold" >> tmp/SOL/$SOLNAMETMP;
+        python3 architecture_classical.py "$domain" "$instance" "$context" "$threshold"  "$2" >> tmp/SOL/$SOLNAMETMP;
         #  echo -e "" >> tmp/SOL/"sol.out";
       done
 

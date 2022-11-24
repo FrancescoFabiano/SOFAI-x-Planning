@@ -31,6 +31,7 @@ plannerS1_Dist2 = 2
 plannerS1_Random = 3
 plannerS1_Combined = 4
 plannerS1_Plansformer = 5
+plannerS1_JacPlans = 6
 
 plannerS2_1 = 1
 plannerS2_2 = 2
@@ -212,13 +213,9 @@ def executeS1():
                     sol = sol + ", " + act
 
         elif (plannerS1 == plannerS1_Plansformer):
-            print("I'm Here!!")
             tens_confidence, plan = plansformer_s1.solve(domainFile,problemFile)
-            print("I'm Here 2!!", flush=True)
             str_confidence= re.sub(r'tensor\((.+)\)', r'\1', str(tens_confidence))
-            print("I'm Here 3!!", flush=True)
             confidence = float(str_confidence)
-            print("I'm Here 4!!", flush=True)
             sol = ""
             first_act = True
             for act in plan:
@@ -227,6 +224,46 @@ def executeS1():
                     first_act = False
                 else:
                     sol = sol + ", " + act
+
+        elif(plannerS1 == plannerS1_JacPlans):
+            #init_States,goal = getStates.States(problemFile) #reading initial and goal states from problem file
+
+            #returned_list has records of this form <path_to_sol, similarity_score, problem_name>
+            sol = ""
+            confidenceCB = 0
+            confidence = 0
+            returned_list = caseBased_s1_distance.doCaseMatch(cases, 1, domain_name, init_States, goal_States, similarity_threshold)
+
+            if returned_list:
+                first_act = True
+                solCB = ""
+            for act in returned_list[0][1]:
+                if first_act:
+                    solCB = act
+                    first_act = False
+                else:
+                    solCB = solCB + ", " + act
+            confidenceCB = returned_list[0][0]
+
+            tens_confidence, plan = plansformer_s1.solve(domainFile,problemFile)
+            str_confidence= re.sub(r'tensor\((.+)\)', r'\1', str(tens_confidence))
+            confidencePL = float(str_confidence)
+            solPL = ""
+            first_act = True
+            for act in plan:
+                if first_act:
+                    solPL = act
+                    first_act = False
+                else:
+                    solPL = solPL + ", " + act
+
+            if(confidenceCB > confidencePL):
+                confidence = confidenceCB
+                sol = solCB
+            else:
+                confidence = confidencePL
+                sol = solPL
+
 
 
         else:
@@ -473,16 +510,23 @@ def selectPlannerS2():
 if __name__ == '__main__':
 
 
-    if (len(sys.argv) > 4):
-        readThreshold(sys.argv[4])
-
-
     timeSTART = time.time()
     createFolders()
 
     domainFile = sys.argv[1]
     problemFile = sys.argv[2]
     context = sys.argv[3]
+    readThreshold(sys.argv[4])
+    plannerS1 = int(sys.argv[5])
+    print("Planner S1 is: " + str(plannerS1))
+
+
+    #plannerS1_Dist1 = 1
+    #plannerS1_Dist2 = 2
+    #plannerS1_Random = 3
+    #plannerS1_Combined = 4
+    #plannerS1_Plansformer = 5
+    #plannerS1_JacPlans = 6
 
     #Some Parsing
     domain_name, problem_name, init_States, goal_States, number_of_actions, number_of_predicates = classical_parser.get_details(domainFile,problemFile)
@@ -493,11 +537,10 @@ if __name__ == '__main__':
     correctnessCntx = threshold3 - reduced_risk_adversion
 
     #@TODO: REMOVE IS FOR DEBUG
-    #correctnessCntx = 0.1
+    correctnessCntx = 0.5
 
     timeLimitCntx = float(getVarFromFile(context,"timelimit"))
 
-    #@TODO: Redefine for classical -- Get infor from parsing (??)
     difficulty = estimateDifficulty()
 
     #Test
@@ -507,13 +550,20 @@ if __name__ == '__main__':
 
 
     ######### S1 metacognitive part
+
+    #Sys2 Baseline
+    if (plannerS1 == 0):
+        plannerS2 = selectPlannerS2()
+        solveWithS2(timeLimitCntx,plannerS2)
+        print("Problem </pro>" + problem_name + "</> could not be solved by System </sys>Metacognitive</>.")
+        sys.exit(0)
+
+
     # AUTOMATICALLY CALL S1
-    plannerS1 = plannerS1_Plansformer
     timeS1 = time.time()
     solutionS1, confidenceS1 = solveWithS1()
     timeS1 = time.time() - timeS1
     M = 1
-
 
 
     # IF NUMBER OF CASES IN JSON FILE (that match the domain) IS > THRESHOLD1 THEN CONTINUE WITH TO S1
@@ -531,7 +581,6 @@ if __name__ == '__main__':
 
     # ######### S2 metacognitive part
     # # Employ the S2 metacognitive structure
-
     plannerS2 = selectPlannerS2()
     estimatedTimeS2 = estimateTimeCons(plannerS2, difficulty)
     estimatedCostS2 = sys.maxsize
