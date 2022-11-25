@@ -10,6 +10,8 @@ import sys
 import pprint
 import time
 import random
+import traceback
+import logging
 
 
 from Planners.CaseBasedS1 import caseBased_s1_solver
@@ -220,7 +222,10 @@ def executeS1():
                     sol = sol + ", " + act
 
         elif (plannerS1 == plannerS1_Plansformer):
-            tens_confidence, plan = plansformer_s1.solve(domainFile,problemFile)
+            try:
+                tens_confidence, plan = plansformer_s1.solve(domainFile,problemFile)
+            except Exception as e:
+                 logging.error(traceback.format_exc())
             str_confidence= re.sub(r'tensor\((.+)\)', r'\1', str(tens_confidence))
             confidence = float(str_confidence)
             sol = ""
@@ -231,6 +236,7 @@ def executeS1():
                     first_act = False
                 else:
                     sol = sol + ", " + act
+
 
         elif(plannerS1 == plannerS1_JacPlans):
             #init_States,goal = getStates.States(problemFile) #reading initial and goal states from problem file

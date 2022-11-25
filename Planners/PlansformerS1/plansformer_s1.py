@@ -210,4 +210,6 @@ def solve(domain, problem):
         probs = probs[:1]
     gen_probs = torch.gather(probs, 2, gen_sequences[:, :, None]).squeeze(-1)
 
+    print("Internal Here")
+
     return torch.mean(gen_probs), predicted_plan
