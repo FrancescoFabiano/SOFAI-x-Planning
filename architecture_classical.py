@@ -95,6 +95,13 @@ def getVarFromFile(filename,varname):
     raise Exception('Missing file named '+ filename)
 
 def readThreshold(thresholdFile):
+
+    global threshold1
+    global threshold2
+    global threshold3
+    global threshold4
+    global epsilonS1
+
     threshold1 = float(getVarFromFile(thresholdFile,"threshold1"))
     threshold2 = float(getVarFromFile(thresholdFile,"threshold2"))
     threshold3 = float(getVarFromFile(thresholdFile,"threshold3"))
@@ -518,7 +525,6 @@ if __name__ == '__main__':
     context = sys.argv[3]
     readThreshold(sys.argv[4])
     plannerS1 = int(sys.argv[5])
-    print("Planner S1 is: " + str(plannerS1))
 
 
     #plannerS1_Dist1 = 1
