@@ -630,7 +630,8 @@ class EPDDL_Parser:
             if (ini_count != len(belief_ini)-1):
                 out.write(';\n')
                 ini_count+=1
-        out.write(';\n')
+        if (len(belief_ini) > 0):
+            out.write(';\n')
         out.write('\n')
         out.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n\n')
 
@@ -647,7 +648,7 @@ class EPDDL_Parser:
             out.write(goal_fs + ');\n')
 
         out.write('\n')
-        out.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n')
+    #    out.write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n')
         out.close()
         return file_name+".tmp"
 
@@ -718,7 +719,7 @@ class EPDDL_Parser:
             #+ str([list(i) for i in action.positive_preconditions]) +  str([list(i) for i in action.negative_preconditions]))
             self.subprint_precondition_EFP(action, 1, out)
             self.subprint_precondition_EFP(action, 0, out)
-            out.write(';\n')
+        out.write(';\n')
 
     def reorder_bf_list(self, list):
         ret = []
