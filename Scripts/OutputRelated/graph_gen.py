@@ -96,13 +96,25 @@ if __name__ == '__main__':
     merged_name = path + "/tmp/merged.csv"
     sorted_name = path + "/tmp/sorted_merged.csv"
 
+    plotting_val = "Time"
+
+
     with open(merged_name, 'w') as f:
         with open(modfilenames[0]) as file1, open(modfilenames[1]) as file2, open(modfilenames[2]) as file3,  open(modfilenames[3]) as file4, open(modfilenames[4]) as file5:
-            print("Problem-JACCARD,Time-JACCARD,Correctness-JACCARD,Sys-JACCARD,",end="",file=f)
-            print("Problem-SOFAI_LEV,Time-SOFAI_LEV,Correctness-SOFAI_LEV,Sys-SOFAI_LEV,",end="",file=f)
-            print("Problem-SOFAI_MIX,Time-SOFAI_MIX,Correctness-SOFAI_MIX,Sys-SOFAI_MIX,",end="",file=f)
-            print("Problem-SOFAI_RNG,Time-SOFAI_RNG,Correctness-SOFAI_RNG,Sys-SOFAI_RNG,",end="",file=f)
-            print("Problem-EFP 2.0,Time-EFP 2.0,Correctness-EFP 2.0,Sys-EFP 2.0",end="\n",file=f)
+
+            if plotting_val == "Time":
+                print("Problem-JACCARD,SOFAIxJACCARD,Correctness-JACCARD,Sys-JACCARD,",end="",file=f)
+                print("Problem-SOFAI_LEV,SOFAI_LEV,Correctness-SOFAI_LEV,Sys-SOFAI_LEV,",end="",file=f)
+                print("Problem-SOFAI_MIX,SOFAI_MIX,Correctness-SOFAI_MIX,Sys-SOFAI_MIX,",end="",file=f)
+                print("Problem-SOFAI_RNG,SOFAI_RNG,Correctness-SOFAI_RNG,Sys-SOFAI_RNG,",end="",file=f)
+                print("Problem-EFP 2.0,EFP 2.0,Correctness-EFP 2.0,Sys-EFP 2.0",end="\n",file=f)
+            else:
+                print("Problem-JACCARD,Time-JACCARD,JACCARD,Sys-JACCARD,",end="",file=f)
+                print("Problem-SOFAI_LEV,Time-SOFAI_LEV,SOFAI_LEV,Sys-SOFAI_LEV,",end="",file=f)
+                print("Problem-SOFAI_MIX,Time-SOFAI_MIX,SOFAI_MIX,Sys-SOFAI_MIX,",end="",file=f)
+                print("Problem-SOFAI_RNG,Time-SOFAI_RNG,SOFAI_RNG,Sys-SOFAI_RNG,",end="",file=f)
+                print("Problem-EFP 2.0,Time-EFP 2.0,EFP 2.0,Sys-EFP 2.0",end="\n",file=f)
+
             for line1, line2, line3, line4,line5 in zip(file1, file2, file3, file4, file5):
                 line1 = line1.strip()
                 line2 = line2.strip()
@@ -117,17 +129,16 @@ if __name__ == '__main__':
     plt.rcParams["figure.figsize"] = [14.00, 8.00]
     plt.rcParams["figure.autolayout"] = True
     # Make a list of columns
-    plotting_val = "Correctness"
-    mydata = [plotting_val+'-JACCARD',plotting_val+'-SOFAI_LEV',plotting_val+'-SOFAI_MIX', plotting_val+'-SOFAI_RNG', plotting_val+'-EFP 2.0']
+    #mydata = [plotting_val+'-JACCARD',plotting_val+'-SOFAI_LEV',plotting_val+'-SOFAI_MIX', plotting_val+'-SOFAI_RNG', plotting_val+'-EFP 2.0']
     #mydata = [plotting_val+'-JACCARD',plotting_val+'-EFP 2.0']#,plotting_val+'-EFP 2.0']
-    mydata = [plotting_val+'-JACCARD',plotting_val+'-EFP 2.0']
+    mydata = ['SOFAIxJACCARD','EFP 2.0']
 
     columns = mydata
 
 
 
     styles = ['o', 'x', 'h' , '^', 'D']
-    sort_order = mydata
+    sort_order = ['EFP 2.0','SOFAIxJACCARD']
     #sort_order = [plotting_val+'-SOFAI_LEV', plotting_val+'-JACCARD', plotting_val+'-EFP 2.0']
     #sort_order = [plotting_val+'-EFP 2.0', plotting_val+'-SOFAI']
 
@@ -137,22 +148,29 @@ if __name__ == '__main__':
 
     df.sort_values(sort_order, ascending=True,inplace=True,na_position='first')
     df.to_csv(sorted_name)
-
     df = pd.read_csv(sorted_name, usecols=columns)
 
+    if plotting_val == "Time":
+        df[columns] = df[columns] / 1000
 
     # Plot the lines
     df.plot(y=columns, style=styles, figsize=(12,4))
     #plt.title(plotting_val + " comparsion between Fast and Slow Arch. and EFP 2.0", weight='bold')
     # label the x and y axes
     plt.xlabel('Instances', weight='bold', size='large')
-    #plt.ylabel(plotting_val + (" (ms)"), weight='bold', size='large')
-    plt.ylabel(plotting_val, weight='bold', size='large')
+    plt.xticks([0, 30, 60, 90, 120, 150, 180, 210, 240])
+    plt.yticks([0, 10, 20, 30, 40, 50, 60, 70, 80, 90])
+
+    if plotting_val == "Time":
+        plt.ylabel(plotting_val + (" (s)"), weight='bold', size='large')
+    else:
+        plt.ylabel(plotting_val, weight='bold', size='large')
 
     #plt.xlim(1, 240)
     #plt.ylim(1, 900000)
 
     #plt.yscale('log')
+    plt.legend(prop={'size': 18})
     plt.savefig(plotting_val+".png")
 
 
