@@ -22,11 +22,11 @@ from Planners.PDDL_parser import SubgoalCompleteness
 
 
 # Constants
-systemALL = -1;
+systemALL = -1
 systemONE = 1
 systemTWO = 2
 
-plannerALL = -1;
+plannerALL = -1
 
 plannerS1_Dist1 = 1
 plannerS1_Dist2 = 2
