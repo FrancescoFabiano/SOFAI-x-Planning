@@ -29,7 +29,7 @@ def read_domain(path):
         else:
             new_dict[str(dict_act[i][0])][i] = dict_act[i][1]
 
-    #print("Domain is: " + str(new_dict))
+    print("Domain is: " + str(new_dict))
     return new_dict
 
 
@@ -141,7 +141,7 @@ def subgoal_completeness(goal, plan, domain, init_cond):
             for j in temp:
                 final_state.append(j)
         else:
-            #print("Domain: " + str(domain))
+            print("Domain: " + str(domain))
             temp = domain[i[0]][i[1]]
             x = i[2].split(" ")[1]
             temp = [j.replace("?x",x) for j in temp]
@@ -161,7 +161,9 @@ def subgoal_completeness(goal, plan, domain, init_cond):
 
 
 def get_correctness(domain_path, plan_text, instance_path):
-    domain  = read_domain(domain_path)
+    #domain  = read_domain(domain_path)
+    domain  = read_domain("Input/NewPlansformer/driverlog/domain/domain.pddl")
+    print(f"Domain is: {domain_path} and read domain is: {str(domain)}")
     plan = read_plan(plan_text)
     goal = read_goal(instance_path)
     init_cond = read_init(instance_path)

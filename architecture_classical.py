@@ -295,7 +295,7 @@ def executeS1():
 
             str_confidence= re.sub(r'tensor\(([\d \.]+),(.+)\)', r'\1', str(tens_confidence))
 
-            print(f"tens confidence is {str(str_confidence)}")
+            #print(f"tens confidence is {str(str_confidence)}")
 
 
             confidence = float(str_confidence)
@@ -381,6 +381,7 @@ def validateSolution(solution):
 
     #print("Execution Line is:  sh ./Planners/EFP/scripts/validate_solution.sh " + instanceNameEFP + " " + stringSolution)
     #Classical
+    print(f"Domain file is {domainFile}")
     return SubgoalCompleteness.get_correctness(domainFile,stringSolution,problemFile)
 
 def estimateDifficulty():
@@ -519,7 +520,7 @@ def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solu
                     instances_count += 1
 
 
-    print("The solution of </pro>" + problem_name + "</> is </sol>" + str(solution) + "</> with correctness </cor>" + str(correctness) + "</> and has been found in </tim>" + str(elapsedTime) + "s</> by System </sys>" + str(system) + "</>", end = '')
+    print("The solution of </dmn>" + domain_name + "</> </pro>" + problem_name + "</> is </sol>" + str(solution) + "</> with correctness </cor>" + str(correctness) + "</> and has been found in </tim>" + str(elapsedTime) + "s</> by System </sys>" + str(system) + "</>", end = '')
     if (system != systemONE):
         print(" using planner </pla>" + str(planner) +"</>.")
     else:
@@ -664,6 +665,8 @@ if __name__ == '__main__':
         newPlans_mode = sys.argv[6]
         continual_train_size = 200#sys.argv[7]
 
+
+    #print(f"\n\nI'm here with the following {str(sys.argv)}\n\n")
 
     #plannerS1_Dist1 = 1
     #plannerS1_Dist2 = 2
