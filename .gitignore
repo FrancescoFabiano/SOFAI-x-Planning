@@ -136,10 +136,17 @@ Output/
 Input/coinintheboxgen/instances/*
 Input/blocksworld/instances/*
 Input/blocksworld/OLDinstances/*
+Scripts/OutputRelated/SOL_graph/*
 tmp/
 *.tmp
 .problem-cache/
+
 Planners/PlansformerS1/model_files/
 Planners/PlansformerS1/.ipynb_checkpoints
 Planners/PlansformerS1/__pycache__
+
+Planners/New_PlansformerS1/model_files/
+Planners/New_PlansformerS1/.ipynb_checkpoints
+Planners/New_PlansformerS1/__pycache__
+
 *.sas

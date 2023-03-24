@@ -9,6 +9,7 @@ from pathlib import Path
 import sys
 import pprint
 import time
+from time import gmtime, strftime
 import random
 import traceback
 import logging
@@ -17,6 +18,10 @@ import logging
 from Planners.CaseBasedS1 import caseBased_s1_solver
 from Planners.CaseBasedS1 import caseBased_s1_distance
 from Planners.PlansformerS1 import plansformer_s1
+from Planners.New_PlansformerS1 import mode0 as newPlansformer_s1
+from Planners.New_PlansformerS1 import mode2 as continual_training
+from Planners.New_PlansformerS1 import mode1 as scracth_training
+
 from Planners.PDDL_parser import classical_parser
 from Planners.PDDL_parser import SubgoalCompleteness
 
@@ -34,6 +39,14 @@ plannerS1_Random = 3
 plannerS1_Combined = 4
 plannerS1_Plansformer = 5
 plannerS1_JacPlans = 6
+plannerS1_NewPlans = 7
+
+
+newPlans_pretrained = 1
+newPlans_continual = 2
+newPlans_scratch = 3
+newPlans_mode = -1
+instances_count = 0
 
 plannerS2_1 = 1
 plannerS2_2 = 2
@@ -44,7 +57,7 @@ scripts_folder = "Scripts/"
 dbFolder = "Memory/"
 #db_file = "memory.db"
 jsonFilename = "cases_classical.json"
-
+continual_train_file = "continual_exp.csv"
 
 # Thresholds
 threshold1 = 20 #This threshold represents the minimun number of plan (existence) that needs to be generated from S2 (in the same domain) before accepting S1 solution
@@ -184,9 +197,7 @@ def executeS1():
                         sol = sol + ", " + act
                 confidence = returned_list[0][0]
 
-
-
-        elif(plannerS1 == plannerS1_Combined):
+        elif (plannerS1 == plannerS1_Combined):
             #init_States,goal = getStates.States(problemFile) #reading initial and goal states from problem file
 
             #returned_list has records of this form <path_to_sol, similarity_score, problem_name>
@@ -237,6 +248,50 @@ def executeS1():
                 else:
                     sol = sol + ", " + act
 
+        elif (plannerS1 == plannerS1_NewPlans):
+            
+            global instances_count
+
+            
+            if not os.path.exists(dbFolder + continual_train_file):
+                with open(dbFolder + continual_train_file, 'w') as f:
+                    f.write(",DomainProblem,Plan,ProblemPath")
+                instances_count = 0
+            elif instances_count == 0:
+                instances_count = sum(1 for line in open('myfile.txt')) -1 #-1 for title
+
+            #Training
+            if (newPlans_mode != newPlans_pretrained):
+                training = False
+                if (instances_count == continual_train_size): #We reached the appropriate number of new instances to train
+                    training = True
+                elif newPlans_mode == newPlans_scratch and firstTraining:
+                    training = True
+                    firstTraining = False
+                
+                if training:
+                    if (newPlans_mode == newPlans_continual): #continual learning on pretrained model
+                        continual_training.existing_plansformer_continual(dbFolder + continual_train_file,continual_train_size)
+                    elif (newPlans_mode == newPlans_scratch): #continual learning on pretrained model
+                        scracth_training.scratch_plansformer_continual(dbFolder + continual_train_file,continual_train_size)
+                    os.rename(dbFolder + continual_train_file, dbFolder + strftime("%Y-%m-%d_%H-%M-%S", gmtime()) + "_done_" + continual_train_file)
+
+
+            #Solving
+            try:
+                tens_confidence, plan = newPlansformer_s1.solve(domainFile,problemFile)
+            except Exception as e:
+                 logging.error(traceback.format_exc())
+            str_confidence= re.sub(r'tensor\((.+)\)', r'\1', str(tens_confidence))
+            confidence = float(str_confidence)
+            sol = ""
+            first_act = True
+            for act in plan:
+                if first_act:
+                    sol = act
+                    first_act = False
+                else:
+                    sol = sol + ", " + act
 
         elif(plannerS1 == plannerS1_JacPlans):
             #init_States,goal = getStates.States(problemFile) #reading initial and goal states from problem file
@@ -277,8 +332,6 @@ def executeS1():
                 confidence = confidencePL
                 sol = solPL
 
-
-
         else:
             raise Exception("The requested System 1 has not been implemented yet.")
     #    solString = s1_planner.s1Solver(domain_name,problem_name,json_path)
@@ -287,9 +340,9 @@ def executeS1():
         out = open(output_folderPl1 + resFile, "w")
         out.write("Solution = " + sol)
         out.close()
-        return confidence, resFile;
+        return confidence, resFile
     except IOError:
-        return 0, "";
+        return 0, ""
 
 def solveWithS1():
     confidence, resFile = executeS1()
@@ -314,7 +367,6 @@ def validateSolution(solution):
     #print("Execution Line is:  sh ./Planners/EFP/scripts/validate_solution.sh " + instanceNameEFP + " " + stringSolution)
     #Classical
     return SubgoalCompleteness.get_correctness(domainFile,stringSolution,problemFile)
-
 
 def estimateDifficulty():
     #For now difficulty evaluation that does not consider goal or initial state (Maybe include planning grpah lenght?)
@@ -356,7 +408,6 @@ def estimateTimeCons(planner,difficulty):
     else:
         noMatchConsumption = 5
         return noMatchConsumption
-
 
 def solveWithS2NoPlan(timeLimit):
     solveWithS2(timeLimit, selectPlannerS2())
@@ -438,12 +489,31 @@ def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solu
     with open(json_path,"w") as out:
         out.write(json_object)
 
+    if system != systemONE: #We only take sys2 solution
+        if plannerS1 == plannerS1_NewPlans:
+            if newPlans_mode != newPlans_pretrained:
+                global instances_count
+                with open(dbFolder + continual_train_file, 'w+') as cont_file:
+
+                    solutionCleaned = ""
+                    for act in solution[:-1]:
+                        solutionCleaned += act + ", "
+                    solutionCleaned += solution[-1]
+
+                    cont_file.write(f'"{instances_count}","{classical_parser.get_plansformer_description(domainFile,problemFile)}","{solutionCleaned}","{problemFile}"')
+                    instances_count += 1
+
 
     print("The solution of </pro>" + problem_name + "</> is </sol>" + str(solution) + "</> with correctness </cor>" + str(correctness) + "</> and has been found in </tim>" + str(elapsedTime) + "s</> by System </sys>" + str(system) + "</>", end = '')
     if (system != systemONE):
         print(" using planner </pla>" + str(planner) +"</>.")
     else:
-        print(" using mode </mod>" + str(plannerS1) +"</>.")
+        print(" using mode </mod>" + str(plannerS1) +"</>")
+        if plannerS1 == plannerS1_NewPlans:
+            print(" and submodality </sub>" + str(newPlans_mode) +"</> with training size of </tra>" + str(continual_train_size) + "</>.")
+        else:
+            print(".")
+
     sys.exit(0)
 
 #----NEW
@@ -531,6 +601,9 @@ if __name__ == '__main__':
     context = sys.argv[3]
     readThreshold(sys.argv[4])
     plannerS1 = int(sys.argv[5])
+    if (plannerS1 == plannerS1_NewPlans):
+        newPlans_mode = sys.argv[6]
+        continual_train_size = sys.argv[7]
 
 
     #plannerS1_Dist1 = 1
@@ -539,10 +612,11 @@ if __name__ == '__main__':
     #plannerS1_Combined = 4
     #plannerS1_Plansformer = 5
     #plannerS1_JacPlans = 6
+    #plannerS1_NewPlans = 7
+
 
     #Some Parsing
     domain_name, problem_name, init_States, goal_States, number_of_actions, number_of_predicates = classical_parser.get_details(domainFile,problemFile)
-
 
     #correctnessCntx = float(getVarFromFile(context,"correctness"))
     reduced_risk_adversion = 0.1

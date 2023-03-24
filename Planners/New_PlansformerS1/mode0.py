@@ -10,14 +10,14 @@ device = 'cuda' if cuda.is_available() else 'cpu'
 import torch
 import torch.nn.functional as F
 import re
-import prompt_gen as pg
+import Planners.New_PlansformerS1.prompt_gen as pg
 
 #imports
 from transformers import RobertaTokenizer, T5ForConditionalGeneration
 
 def solve(domain, problem):
     #path to plansformer model files
-    model_path = "Planners/PlansformerS1/pre_model_files"
+    model_path = "Planners/New_PlansformerS1/pre_model_files"
 
     #using plansformer's tokenizer and model weights
     tokenizer = RobertaTokenizer.from_pretrained(model_path, local_files_only = True)

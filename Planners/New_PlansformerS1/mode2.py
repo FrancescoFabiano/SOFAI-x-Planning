@@ -164,7 +164,7 @@ def CodeT5Trainer(dataframe, source_text, target_text, model_params, output_dir=
   #model selection choices
 
   if len(os.listdir("scratch_model_files")) > 0: # if the folder is not empty
-    model_path = "Planners/PlansformerS1/scratch_model_files"
+    model_path = "Planners/New_PlansformerS1/scratch_model_files"
     tokenizer = RobertaTokenizer.from_pretrained(model_path, local_files_only=True)
     model = T5ForConditionalGeneration.from_pretrained(model_path, local_files_only=True)
   else: # if the folder is empty

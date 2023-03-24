@@ -160,7 +160,7 @@ def CodeT5Trainer(dataframe, source_text, target_text, model_params, output_dir=
   torch.backends.cudnn.deterministic = True
   
   #model selection based on user choice
-  model_path = "Planners/PlansformerS1/pre_model_files"
+  model_path = "Planners/New_PlansformerS1/pre_model_files"
   tokenizer = RobertaTokenizer.from_pretrained(model_path, local_files_only = True)
   model = T5ForConditionalGeneration.from_pretrained(model_path, local_files_only = True)
 
