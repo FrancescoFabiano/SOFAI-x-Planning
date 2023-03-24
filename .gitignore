@@ -149,4 +149,9 @@ Planners/New_PlansformerS1/model_files/
 Planners/New_PlansformerS1/.ipynb_checkpoints
 Planners/New_PlansformerS1/__pycache__
 
+Planners/New_PlansformerS1/mode0_model_files/
+Planners/New_PlansformerS1/mode1_model_files/
+Planners/New_PlansformerS1/mode2_model_files/
+
+
 *.sas

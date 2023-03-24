@@ -17,7 +17,7 @@ from transformers import RobertaTokenizer, T5ForConditionalGeneration
 
 def solve(domain, problem):
     #path to plansformer model files
-    model_path = "Planners/New_PlansformerS1/pre_model_files"
+    model_path = "Planners/New_PlansformerS1/mode0_model_files"
 
     #using plansformer's tokenizer and model weights
     tokenizer = RobertaTokenizer.from_pretrained(model_path, local_files_only = True)

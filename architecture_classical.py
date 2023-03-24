@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 # Four spaces as indentation [no tabs]
+
+# Example of exwcution: python architecture_classical.py Input/blocksworld/domain/domain.pddl Input/blocksworld/instances/problem_04_300.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl 7 1 10
+
 import os
 import json
 import subprocess
@@ -47,6 +50,9 @@ newPlans_continual = 2
 newPlans_scratch = 3
 newPlans_mode = -1
 instances_count = 0
+firstTraining = True
+final_training_time = 0.0
+
 
 plannerS2_1 = 1
 plannerS2_2 = 2
@@ -57,6 +63,7 @@ scripts_folder = "Scripts/"
 dbFolder = "Memory/"
 #db_file = "memory.db"
 jsonFilename = "cases_classical.json"
+jsonDiscardedFilename = "discarded_solution.json"
 continual_train_file = "continual_exp.csv"
 
 # Thresholds
@@ -237,7 +244,7 @@ def executeS1():
                 tens_confidence, plan = plansformer_s1.solve(domainFile,problemFile)
             except Exception as e:
                  logging.error(traceback.format_exc())
-            str_confidence= re.sub(r'tensor\((.+)\)', r'\1', str(tens_confidence))
+            str_confidence= re.sub(r'tensor\(([\d \.]+),(.+)\)', r'\1', str(tens_confidence))
             confidence = float(str_confidence)
             sol = ""
             first_act = True
@@ -258,11 +265,11 @@ def executeS1():
                     f.write(",DomainProblem,Plan,ProblemPath")
                 instances_count = 0
             elif instances_count == 0:
-                instances_count = sum(1 for line in open('myfile.txt')) -1 #-1 for title
+                instances_count = sum(1 for line in open(dbFolder + continual_train_file)) -1 #-1 for title
 
             #Training
+            training = False
             if (newPlans_mode != newPlans_pretrained):
-                training = False
                 if (instances_count == continual_train_size): #We reached the appropriate number of new instances to train
                     training = True
                 elif newPlans_mode == newPlans_scratch and firstTraining:
@@ -270,11 +277,14 @@ def executeS1():
                     firstTraining = False
                 
                 if training:
+                    start_training_time = time.time()
                     if (newPlans_mode == newPlans_continual): #continual learning on pretrained model
                         continual_training.existing_plansformer_continual(dbFolder + continual_train_file,continual_train_size)
                     elif (newPlans_mode == newPlans_scratch): #continual learning on pretrained model
                         scracth_training.scratch_plansformer_continual(dbFolder + continual_train_file,continual_train_size)
                     os.rename(dbFolder + continual_train_file, dbFolder + strftime("%Y-%m-%d_%H-%M-%S", gmtime()) + "_done_" + continual_train_file)
+                    global final_training_time
+                    final_training_time = time.time() - start_training_time
 
 
             #Solving
@@ -282,7 +292,12 @@ def executeS1():
                 tens_confidence, plan = newPlansformer_s1.solve(domainFile,problemFile)
             except Exception as e:
                  logging.error(traceback.format_exc())
-            str_confidence= re.sub(r'tensor\((.+)\)', r'\1', str(tens_confidence))
+
+            str_confidence= re.sub(r'tensor\(([\d \.]+),(.+)\)', r'\1', str(tens_confidence))
+
+            print(f"tens confidence is {str(str_confidence)}")
+
+
             confidence = float(str_confidence)
             sol = ""
             first_act = True
@@ -314,7 +329,7 @@ def executeS1():
             confidenceCB = returned_list[0][0]
 
             tens_confidence, plan = plansformer_s1.solve(domainFile,problemFile)
-            str_confidence= re.sub(r'tensor\((.+)\)', r'\1', str(tens_confidence))
+            str_confidence= re.sub(r'tensor\(([\d \.]+),(.+)\)', r'\1', str(tens_confidence))
             confidencePL = float(str_confidence)
             solPL = ""
             first_act = True
@@ -475,7 +490,7 @@ def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solu
     data['cases'][str(index)]['confidence'] = confidence
     data['cases'][str(index)]['correctness'] = correctness
     data['cases'][str(index)]['solving_time'] = elapsedTime
-    data['cases'][str(index)]['total_time'] = time.time()-timeSTART
+    data['cases'][str(index)]['total_time'] = time.time()-timeSTART - final_training_time
 
     #init,goal = getStates.States(problemFile) #reading initial and goal states from problem file
 
@@ -508,13 +523,57 @@ def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solu
     if (system != systemONE):
         print(" using planner </pla>" + str(planner) +"</>.")
     else:
-        print(" using mode </mod>" + str(plannerS1) +"</>")
+        print(" using mode </mod>" + str(plannerS1) +"</> ", end = '')
         if plannerS1 == plannerS1_NewPlans:
-            print(" and submodality </sub>" + str(newPlans_mode) +"</> with training size of </tra>" + str(continual_train_size) + "</>.")
+            print(" and submodality </sub>" + str(newPlans_mode) +"</> with training size of </tra>" + str(continual_train_size) + "</> and continual training time of </trt> " + str(final_training_time) + "</>.")
         else:
             print(".")
 
     sys.exit(0)
+
+
+
+def saveDiscardedS1Solution(newPlans_mode,confidenceS1,correctnessS1, timeS1, solutionS1):
+    json_path = dbFolder+jsonDiscardedFilename
+
+    if not os.path.exists(json_path):
+        open(json_path, 'w').close()
+
+    memory_file = open(json_path)
+
+    data = json.load(memory_file)
+
+    if ('cases' not in data.keys()) or (len(data['cases']) == 0):
+        index = 0
+    else:
+        index = max( [int(k) for k in data['cases'].keys()] )
+
+    index += 1
+
+    #jsonformat established here
+
+    data['cases'][str(index)] = {}
+    data['cases'][str(index)]['domain_name'] = domain_name
+    data['cases'][str(index)]['problem_name'] = problem_name
+    data['cases'][str(index)]['difficulty'] = difficulty
+    data['cases'][str(index)]['system'] = "System1"
+    data['cases'][str(index)]['planner'] = "New Plansformer"
+    data['cases'][str(index)]['mode'] = newPlans_mode
+    data['cases'][str(index)]['confidence'] = confidenceS1
+    data['cases'][str(index)]['correctness'] = correctnessS1
+    data['cases'][str(index)]['solving_time'] = timeS1
+
+    #init,goal = getStates.States(problemFile) #reading initial and goal states from problem file
+
+    data['cases'][str(index)]['init'] = init_States
+    data['cases'][str(index)]['goal'] = goal_States
+    data['cases'][str(index)]['plan'] = solutionS1
+
+    json_object = json.dumps(data,indent=4)
+
+    # writing dictionary data into json file
+    with open(json_path,"w") as out:
+        out.write(json_object)
 
 #----NEW
 
@@ -603,7 +662,7 @@ if __name__ == '__main__':
     plannerS1 = int(sys.argv[5])
     if (plannerS1 == plannerS1_NewPlans):
         newPlans_mode = sys.argv[6]
-        continual_train_size = sys.argv[7]
+        continual_train_size = 200#sys.argv[7]
 
 
     #plannerS1_Dist1 = 1
@@ -630,8 +689,9 @@ if __name__ == '__main__':
     difficulty = estimateDifficulty()
 
     #Test
-    #plannerS2 = selectPlannerS2()
-    #solveWithS2(1000000,plannerS2)
+    #timeS1 = time.time()
+    #solutionS1, confidenceS1 = solveWithS1()
+    #tryS1(plannerS1, solutionS1, confidenceS1, timeS1)
     #sys.exit(0)
 
 
@@ -693,6 +753,8 @@ if __name__ == '__main__':
                     else:
                         memorizeSolution(systemONE, plannerS1, confidenceS1, timeS1, correctnessS1, solutionS1)
                 else:
+                    if plannerS1 == plannerS1_NewPlans:
+                        saveDiscardedS1Solution(newPlans_mode, confidenceS1, correctnessS1, timeS1, solutionS1)
                     solveWithS2(remainingTime,plannerS2)
             else:
                 solveWithS2(remainingTime,plannerS2)
