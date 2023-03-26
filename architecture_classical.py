@@ -22,8 +22,8 @@ from Planners.CaseBasedS1 import caseBased_s1_solver
 from Planners.CaseBasedS1 import caseBased_s1_distance
 from Planners.PlansformerS1 import plansformer_s1
 from Planners.New_PlansformerS1 import mode0 as newPlansformer_s1
-from Planners.New_PlansformerS1 import mode2 as continual_training
-from Planners.New_PlansformerS1 import mode1 as scracth_training
+from Planners.New_PlansformerS1 import mode1 as continual_training
+from Planners.New_PlansformerS1 import mode2 as scracth_training
 
 from Planners.PDDL_parser import classical_parser
 from Planners.PDDL_parser import SubgoalCompleteness
@@ -45,12 +45,12 @@ plannerS1_JacPlans = 6
 plannerS1_NewPlans = 7
 
 
-newPlans_pretrained = 1
-newPlans_continual = 2
-newPlans_scratch = 3
+newPlans_pretrained = int(1)
+newPlans_continual = int(2)
+newPlans_scratch = int(3)
 newPlans_mode = -1
 instances_count = 0
-firstTraining = True
+#firstTraining = True
 final_training_time = 0.0
 
 
@@ -63,7 +63,7 @@ scripts_folder = "Scripts/"
 dbFolder = "Memory/"
 #db_file = "memory.db"
 jsonFilename = "cases_classical.json"
-jsonDiscardedFilename = "discarded_solution.json"
+jsonAllSolFilename = "allS1_solutions.json"
 continual_train_file = "continual_exp.csv"
 
 # Thresholds
@@ -176,6 +176,11 @@ def readTimeFromFile(filename):
     #raise Exception('Missing plan in '+ filename)
     return "TO"
 
+def tensor_clean(to_clean):
+    ret = re.sub(r'tensor\(([\d \.]+),(.+)\)', r'\1', str(to_clean))
+    ret = re.sub(r'tensor\((.+)\)', r'\1', str(ret))
+    return ret
+
 def executeS1():
 
     #New S1###################
@@ -244,8 +249,8 @@ def executeS1():
                 tens_confidence, plan = plansformer_s1.solve(domainFile,problemFile)
             except Exception as e:
                  logging.error(traceback.format_exc())
-            str_confidence= re.sub(r'tensor\(([\d \.]+),(.+)\)', r'\1', str(tens_confidence))
-            confidence = float(str_confidence)
+            #To make it work with different output -- likely depending on the libs versions
+            confidence = float(tensor_clean(tens_confidence))
             sol = ""
             first_act = True
             for act in plan:
@@ -259,22 +264,23 @@ def executeS1():
             
             global instances_count
 
-            
-            if not os.path.exists(dbFolder + continual_train_file):
-                with open(dbFolder + continual_train_file, 'w') as f:
-                    f.write(",DomainProblem,Plan,ProblemPath")
-                instances_count = 0
-            elif instances_count == 0:
-                instances_count = sum(1 for line in open(dbFolder + continual_train_file)) -1 #-1 for title
+            if (newPlans_mode != newPlans_pretrained):
+                if not os.path.exists(dbFolder + continual_train_file):
+                    with open(dbFolder + continual_train_file, 'w+') as f:
+                        f.write(",DomainProblem,Plan,ProblemPath\n")
+                    instances_count = 0
+                elif instances_count == 0:
+                    instances_count = sum(1 for line in open(dbFolder + continual_train_file)) -1 #-1 for title
 
             #Training
             training = False
             if (newPlans_mode != newPlans_pretrained):
-                if (instances_count == continual_train_size): #We reached the appropriate number of new instances to train
+                if (instances_count >= continual_train_size): #We reached the appropriate number of new instances to train
                     training = True
-                elif newPlans_mode == newPlans_scratch and firstTraining:
-                    training = True
-                    firstTraining = False
+                #    print(f"\n\nDEBUG:I'm in here with instance count = {instances_count} and training_size = {continual_train_size}")
+                #elif newPlans_mode == newPlans_scratch and firstTraining:
+                #    training = True
+                #    firstTraining = False
                 
                 if training:
                     start_training_time = time.time()
@@ -289,16 +295,14 @@ def executeS1():
 
             #Solving
             try:
-                tens_confidence, plan = newPlansformer_s1.solve(domainFile,problemFile)
+                tens_confidence, plan = newPlansformer_s1.solve(domainFile,problemFile,(newPlans_mode-1))
             except Exception as e:
                  logging.error(traceback.format_exc())
-
-            str_confidence= re.sub(r'tensor\(([\d \.]+),(.+)\)', r'\1', str(tens_confidence))
 
             #print(f"tens confidence is {str(str_confidence)}")
 
 
-            confidence = float(str_confidence)
+            confidence = float(tensor_clean(tens_confidence))
             sol = ""
             first_act = True
             for act in plan:
@@ -329,8 +333,7 @@ def executeS1():
             confidenceCB = returned_list[0][0]
 
             tens_confidence, plan = plansformer_s1.solve(domainFile,problemFile)
-            str_confidence= re.sub(r'tensor\(([\d \.]+),(.+)\)', r'\1', str(tens_confidence))
-            confidencePL = float(str_confidence)
+            confidencePL = float(tensor_clean(tens_confidence))
             solPL = ""
             first_act = True
             for act in plan:
@@ -381,7 +384,7 @@ def validateSolution(solution):
 
     #print("Execution Line is:  sh ./Planners/EFP/scripts/validate_solution.sh " + instanceNameEFP + " " + stringSolution)
     #Classical
-    print(f"Domain file is {domainFile}")
+    #print(f"Domain file is {domainFile}")
     return SubgoalCompleteness.get_correctness(domainFile,stringSolution,problemFile)
 
 def estimateDifficulty():
@@ -467,7 +470,8 @@ def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solu
     json_path = dbFolder+jsonFilename
 
     if not os.path.exists(json_path):
-        open(json_path, 'w').close()
+        with open(json_path, 'w') as jFile:
+            jFile.write("{\n\"size_limit\": 1000,\n\"cases\":{\n}\n}")
 
     memory_file = open(json_path)
 
@@ -491,7 +495,8 @@ def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solu
     data['cases'][str(index)]['confidence'] = confidence
     data['cases'][str(index)]['correctness'] = correctness
     data['cases'][str(index)]['solving_time'] = elapsedTime
-    data['cases'][str(index)]['total_time'] = time.time()-timeSTART - final_training_time
+    data['cases'][str(index)]['solving_time'] = final_training_time
+    data['cases'][str(index)]['total_time'] = time.time()-timeSTART
 
     #init,goal = getStates.States(problemFile) #reading initial and goal states from problem file
 
@@ -509,24 +514,28 @@ def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solu
         if plannerS1 == plannerS1_NewPlans:
             if newPlans_mode != newPlans_pretrained:
                 global instances_count
-                with open(dbFolder + continual_train_file, 'w+') as cont_file:
+                
+                with open(dbFolder + continual_train_file, 'a') as cont_file:
 
                     solutionCleaned = ""
                     for act in solution[:-1]:
                         solutionCleaned += act + ", "
                     solutionCleaned += solution[-1]
 
-                    cont_file.write(f'"{instances_count}","{classical_parser.get_plansformer_description(domainFile,problemFile)}","{solutionCleaned}","{problemFile}"')
+                    cont_file.write(f'{instances_count},"{classical_parser.get_plansformer_description(domainFile,problemFile)}","{solutionCleaned}","{problemFile}"\n')
                     instances_count += 1
+                    
 
 
-    print("The solution of </dmn>" + domain_name + "</> </pro>" + problem_name + "</> is </sol>" + str(solution) + "</> with correctness </cor>" + str(correctness) + "</> and has been found in </tim>" + str(elapsedTime) + "s</> by System </sys>" + str(system) + "</>", end = '')
+    print("The solution of </dmn>" + domain_name + "</> </pro>" + problem_name + "</> is </sol>" + str(solution) +
+          "</> with correctness </cor>" + str(correctness) + "</> and has been found in </tim>" + str(elapsedTime) 
+          + "s</> by System </sys>" + str(system) + "</>" + " and continual training time of </trt>" + str(final_training_time) + "</>", end = '')
     if (system != systemONE):
         print(" using planner </pla>" + str(planner) +"</>.")
     else:
-        print(" using mode </mod>" + str(plannerS1) +"</> ", end = '')
+        print(" using mode </mod>" + str(plannerS1) +"</>", end = '')
         if plannerS1 == plannerS1_NewPlans:
-            print(" and submodality </sub>" + str(newPlans_mode) +"</> with training size of </tra>" + str(continual_train_size) + "</> and continual training time of </trt> " + str(final_training_time) + "</>.")
+            print(" and submodality </sub>" + str(newPlans_mode) +"</> with training size of </tra>" + str(continual_train_size) +"</>.")
         else:
             print(".")
 
@@ -534,11 +543,12 @@ def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solu
 
 
 
-def saveDiscardedS1Solution(newPlans_mode,confidenceS1,correctnessS1, timeS1, solutionS1):
-    json_path = dbFolder+jsonDiscardedFilename
+def saveAllS1Solution(newPlans_mode,confidenceS1,correctnessS1, timeS1, solutionS1):
+    json_path = dbFolder+jsonAllSolFilename
 
     if not os.path.exists(json_path):
-        open(json_path, 'w').close()
+        with open(json_path, 'w') as jFile:
+            jFile.write("{\n\"cases\":{\n}\n}")
 
     memory_file = open(json_path)
 
@@ -651,8 +661,6 @@ def selectPlannerS2():
 # Main
 #-----------------------------------------------
 if __name__ == '__main__':
-
-
     timeSTART = time.time()
     createFolders()
 
@@ -662,8 +670,9 @@ if __name__ == '__main__':
     readThreshold(sys.argv[4])
     plannerS1 = int(sys.argv[5])
     if (plannerS1 == plannerS1_NewPlans):
-        newPlans_mode = sys.argv[6]
-        continual_train_size = 200#sys.argv[7]
+       
+        newPlans_mode = int(sys.argv[6])
+        continual_train_size = 20 #sys.argv[7]
 
 
     #print(f"\n\nI'm here with the following {str(sys.argv)}\n\n")
@@ -685,7 +694,10 @@ if __name__ == '__main__':
     correctnessCntx = threshold3 - reduced_risk_adversion
 
     #@TODO: REMOVE IS FOR DEBUG
-    correctnessCntx = 0.5
+    correctnessCntx = 1.0
+    threshold1 = 0
+    threshold4 = 0
+    #Plansformer does not need experience -- because already has it. If from scratch need to adjust
 
     timeLimitCntx = float(getVarFromFile(context,"timelimit"))
 
@@ -711,9 +723,17 @@ if __name__ == '__main__':
     # AUTOMATICALLY CALL S1
     timeS1 = time.time()
     solutionS1, confidenceS1 = solveWithS1()
-    timeS1 = time.time() - timeS1
-    M = 1
+    timeS1 = time.time() - timeS1 - final_training_time
 
+
+    #Weird time management to store S1 solution for evaluation pourpouses
+    timeToRemove = time.time()
+    if (plannerS1 == plannerS1_NewPlans):
+        saveAllS1Solution(newPlans_mode,confidenceS1,validateSolution(solutionS1), timeS1, solutionS1)
+    timeToRemove = time.time() - timeToRemove
+    timeSTART += timeToRemove
+
+    M = 1
 
     # IF NUMBER OF CASES IN JSON FILE (that match the domain) IS > THRESHOLD1 THEN CONTINUE WITH TO S1
     if (countSolvedInstances(systemALL,plannerALL) > threshold1):
@@ -756,8 +776,6 @@ if __name__ == '__main__':
                     else:
                         memorizeSolution(systemONE, plannerS1, confidenceS1, timeS1, correctnessS1, solutionS1)
                 else:
-                    if plannerS1 == plannerS1_NewPlans:
-                        saveDiscardedS1Solution(newPlans_mode, confidenceS1, correctnessS1, timeS1, solutionS1)
                     solveWithS2(remainingTime,plannerS2)
             else:
                 solveWithS2(remainingTime,plannerS2)

@@ -4,7 +4,7 @@
 #!pip install transformers
 
 # Setting up the device for GPU usage
-import pwd
+#import pwd
 from torch import cuda
 device = 'cuda' if cuda.is_available() else 'cpu'
 

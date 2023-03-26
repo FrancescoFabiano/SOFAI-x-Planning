@@ -149,7 +149,7 @@ def validate(epoch, tokenizer, model, device, loader):
           actuals.extend(target)
   return predictions, actuals
 
-def CodeT5Trainer(dataframe, source_text, target_text, model_params, output_dir="./scratch_model_files/" ):
+def CodeT5Trainer(dataframe, source_text, target_text, model_params, output_dir="Planners/New_PlansformerS1/mode2_model_files/" ):
   
   """
   CodeT5 trainer
@@ -163,7 +163,7 @@ def CodeT5Trainer(dataframe, source_text, target_text, model_params, output_dir=
   
   #model selection choices
 
-  if len(os.listdir("scratch_model_files")) > 0: # if the folder is not empty
+  if len(os.listdir("Planners/New_PlansformerS1/mode2_model_files")) > 0: # if the folder is not empty
     model_path = "Planners/New_PlansformerS1/mode2_model_files"
     tokenizer = RobertaTokenizer.from_pretrained(model_path, local_files_only=True)
     model = T5ForConditionalGeneration.from_pretrained(model_path, local_files_only=True)
@@ -200,6 +200,8 @@ def CodeT5Trainer(dataframe, source_text, target_text, model_params, output_dir=
       }
 
 
+
+
   # Creation of Dataloaders for testing and validation. This will be used down for training and validation stage for the model.
   training_loader = DataLoader(training_set, **train_params)
   val_loader = DataLoader(val_set, **val_params)
@@ -229,7 +231,7 @@ model_params={
     "SEED": 44                     # set seed for reproducibility 
 }
 
-def existing_plansformer_continual(memory_path, memory_size):
+def scratch_plansformer_continual(memory_path, memory_size):
     """_summary_
 
     Args:
@@ -237,5 +239,7 @@ def existing_plansformer_continual(memory_path, memory_size):
         memory_size (_int_): how many instances present in the csv file should be used for training.
     """
     df = pd.read_csv(memory_path)
-    CodeT5Trainer(dataframe=df[:memory_size], source_text="DomainProblem", target_text="Plan", model_params=model_params, output_dir="./")
+    CodeT5Trainer(dataframe=df[:memory_size], source_text="DomainProblem", target_text="Plan", model_params=model_params, output_dir="Planners/New_PlansformerS1/mode2_model_files/")
+    print(f"\n\nDEBUG{df[:memory_size]}")
+
 

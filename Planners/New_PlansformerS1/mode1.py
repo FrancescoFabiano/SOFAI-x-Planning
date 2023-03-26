@@ -105,7 +105,7 @@ def train(epoch, tokenizer, model, device, loader, optimizer):
 
     if _%10==0:
       training_logger.add_row(str(epoch), str(_), str(loss))
-      console.print(training_logger)
+      #console.print(training_logger)
 
     optimizer.zero_grad()
     loss.backward()
@@ -147,7 +147,7 @@ def validate(epoch, tokenizer, model, device, loader):
           actuals.extend(target)
   return predictions, actuals
 
-def CodeT5Trainer(dataframe, source_text, target_text, model_params, output_dir="./pre_model_files/" ):
+def CodeT5Trainer(dataframe, source_text, target_text, model_params, output_dir="Planners/New_PlansformerS1/mode1_model_files/" ):
   
   """
   CodeT5 trainer
@@ -204,7 +204,7 @@ def CodeT5Trainer(dataframe, source_text, target_text, model_params, output_dir=
   for epoch in range(model_params["TRAIN_EPOCHS"]):
       train(epoch, tokenizer, model, device, training_loader, optimizer)
       
-  console.log(f"[Saving Model]...\n")
+  #console.log(f"[Saving Model]...\n")
   #Saving the model after training
   path = os.path.join(output_dir, "./")
   model.save_pretrained(path)
@@ -223,13 +223,15 @@ model_params={
     "SEED": 44                     # set seed for reproducibility 
 }
 
-def scratch_plansformer_continual(memory_path, memory_size):
+def existing_plansformer_continual(memory_path, memory_size):
     """_summary_
 
     Args:
         memory_path (_string_): path to the csv file used for continual training. e.g."./memory.csv"
         memory_size (_int_): how many instances present in the csv file should be used for training.
     """
+
+
     df = pd.read_csv(memory_path)
-    CodeT5Trainer(dataframe=df[:memory_size], source_text="DomainProblem", target_text="Plan", model_params=model_params, output_dir="./")
+    CodeT5Trainer(dataframe=df[:memory_size], source_text="DomainProblem", target_text="Plan", model_params=model_params, output_dir="Planners/New_PlansformerS1/mode1_model_files/")
 

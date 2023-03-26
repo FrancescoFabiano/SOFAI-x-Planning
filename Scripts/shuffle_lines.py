@@ -8,4 +8,6 @@ if __name__ == '__main__':
 
     lines = open(filename).readlines()
     random.shuffle(lines)
-    open(filename, 'w').writelines(lines)
+    with open(filename, 'w') as rngFile:
+        rngFile.writelines(lines)
+        #rngFile.write("\n")

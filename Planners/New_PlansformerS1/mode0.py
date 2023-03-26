@@ -2,7 +2,7 @@
 Mode 0 is for using Plansformer fine-tuned model on 4 domains - bw, gr, hn, dl directly
 for inference on a problem set without any continual training.
 '''
-import pwd
+#import pwd
 from torch import cuda
 device = 'cuda' if cuda.is_available() else 'cpu'
 
@@ -15,9 +15,9 @@ import Planners.New_PlansformerS1.prompt_gen as pg
 #imports
 from transformers import RobertaTokenizer, T5ForConditionalGeneration
 
-def solve(domain, problem):
+def solve(domain, problem, mode):
     #path to plansformer model files
-    model_path = "Planners/New_PlansformerS1/mode0_model_files"
+    model_path = "Planners/New_PlansformerS1/mode"+ str(mode) +"_model_files"
 
     #using plansformer's tokenizer and model weights
     tokenizer = RobertaTokenizer.from_pretrained(model_path, local_files_only = True)
