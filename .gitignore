@@ -137,7 +137,7 @@ Input/coinintheboxgen/instances/*
 Input/blocksworld/instances/*
 Input/blocksworld/OLDinstances/*
 Scripts/OutputRelated/SOL_graph/*
-Input/NewPlansformer_complete/*
+Input/NewPlansformer_80test/*
 
 tmp/
 *.tmp

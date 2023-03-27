@@ -3589,6 +3589,112 @@
                 "move robot2 room2 room4",
                 "drop robot2 ball3 room4 rgripper2"
             ]
+        },
+        "76": {
+            "domain_name": "driverlog",
+            "problem_name": "problem_2_3_4_458",
+            "difficulty": 1152,
+            "system": "System1",
+            "planner": "New Plansformer",
+            "mode": 1,
+            "confidence": 0.9944,
+            "correctness": 1.0,
+            "solving_time": 12.85289192199707,
+            "init": [
+                "at driver1 s3",
+                "at driver2 s4",
+                "at truck1 s3",
+                "empty truck1",
+                "at truck2 s4",
+                "empty truck2",
+                "at truck3 s4",
+                "empty truck3",
+                "link s1 s2",
+                "link s2 s1",
+                "link s1 s4",
+                "link s4 s1",
+                "link s2 s3",
+                "link s3 s2",
+                "link s3 s1",
+                "link s1 s3",
+                "link s4 s3",
+                "link s3 s4",
+                "at package1 s3",
+                "at package2 s3",
+                "at package3 s1",
+                "at package4 s4"
+            ],
+            "goal": [
+                "at package1 s1",
+                "at package2 s1",
+                "at package3 s1",
+                "at package4 s2"
+            ],
+            "plan": [
+                "board-truck driver2 truck2 s4",
+                "load-truck package4 truck2 s4",
+                "drive-truck truck2 s4 s3 driver2",
+                "load-truck package2 truck2 s3",
+                "load-truck package1 truck2 s3",
+                "drive-truck truck2 s3 s1 driver2",
+                "unload-truck package2 truck2 s1",
+                "unload-truck package1 truck2 s1",
+                "drive-truck truck2 s1 s2 driver2",
+                "unload-truck package4 truck2 s2"
+            ]
+        },
+        "77": {
+            "domain_name": "driverlog",
+            "problem_name": "problem_2_3_4_458",
+            "difficulty": 1152,
+            "system": "System1",
+            "planner": "New Plansformer",
+            "mode": 1,
+            "confidence": 0.9944,
+            "correctness": 1.0,
+            "solving_time": 11.447585582733154,
+            "init": [
+                "at driver1 s3",
+                "at driver2 s4",
+                "at truck1 s3",
+                "empty truck1",
+                "at truck2 s4",
+                "empty truck2",
+                "at truck3 s4",
+                "empty truck3",
+                "link s1 s2",
+                "link s2 s1",
+                "link s1 s4",
+                "link s4 s1",
+                "link s2 s3",
+                "link s3 s2",
+                "link s3 s1",
+                "link s1 s3",
+                "link s4 s3",
+                "link s3 s4",
+                "at package1 s3",
+                "at package2 s3",
+                "at package3 s1",
+                "at package4 s4"
+            ],
+            "goal": [
+                "at package1 s1",
+                "at package2 s1",
+                "at package3 s1",
+                "at package4 s2"
+            ],
+            "plan": [
+                "board-truck driver2 truck2 s4",
+                "load-truck package4 truck2 s4",
+                "drive-truck truck2 s4 s3 driver2",
+                "load-truck package2 truck2 s3",
+                "load-truck package1 truck2 s3",
+                "drive-truck truck2 s3 s1 driver2",
+                "unload-truck package2 truck2 s1",
+                "unload-truck package1 truck2 s1",
+                "drive-truck truck2 s1 s2 driver2",
+                "unload-truck package4 truck2 s2"
+            ]
         }
     }
 }

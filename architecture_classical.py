@@ -36,6 +36,7 @@ systemTWO = 2
 
 plannerALL = -1
 
+onlySystem2 = 0
 plannerS1_Dist1 = 1
 plannerS1_Dist2 = 2
 plannerS1_Random = 3
@@ -495,7 +496,7 @@ def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solu
     data['cases'][str(index)]['confidence'] = confidence
     data['cases'][str(index)]['correctness'] = correctness
     data['cases'][str(index)]['solving_time'] = elapsedTime
-    data['cases'][str(index)]['solving_time'] = final_training_time
+    data['cases'][str(index)]['training_time'] = final_training_time
     data['cases'][str(index)]['total_time'] = time.time()-timeSTART
 
     #init,goal = getStates.States(problemFile) #reading initial and goal states from problem file
@@ -670,9 +671,8 @@ if __name__ == '__main__':
     readThreshold(sys.argv[4])
     plannerS1 = int(sys.argv[5])
     if (plannerS1 == plannerS1_NewPlans):
-       
         newPlans_mode = int(sys.argv[6])
-        continual_train_size = 20 #sys.argv[7]
+        continual_train_size = 201 # -- to avoid starting training on the last instance sys.argv[7]
 
 
     #print(f"\n\nI'm here with the following {str(sys.argv)}\n\n")
@@ -713,7 +713,7 @@ if __name__ == '__main__':
     ######### S1 metacognitive part
 
     #Sys2 Baseline
-    if (plannerS1 == 0):
+    if (plannerS1 == onlySystem2):
         plannerS2 = selectPlannerS2()
         solveWithS2(timeLimitCntx,plannerS2)
         print("Problem </pro>" + problem_name + "</> could not be solved by System </sys>Metacognitive</>.")
@@ -726,12 +726,15 @@ if __name__ == '__main__':
     timeS1 = time.time() - timeS1 - final_training_time
 
 
+    #print(f"Timestart is {timeSTART}")
     #Weird time management to store S1 solution for evaluation pourpouses
     timeToRemove = time.time()
     if (plannerS1 == plannerS1_NewPlans):
         saveAllS1Solution(newPlans_mode,confidenceS1,validateSolution(solutionS1), timeS1, solutionS1)
     timeToRemove = time.time() - timeToRemove
     timeSTART += timeToRemove
+
+    #print(f"Time to remove is {timeToRemove} and timestart is {timeSTART}")
 
     M = 1
 
