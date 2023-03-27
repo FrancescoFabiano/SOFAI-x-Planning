@@ -189,35 +189,36 @@ def subgoal_completeness(goal, plan, domain, init_cond):
     final_state = init_cond.copy()
     # print(init_cond)
     for i in plan:
-        temp = domain[i[0]][i[1]]
-        parameter = list()
-        for j in range(int(i[0])):
-            parameter.append(i[2].split(" ")[j+1])
-        changes  = temp[0]
-        temp = temp[1]
-        # print(changes)
-        # print(parameter)
-        # print(temp)
-        # raise KeyboardInterrupt
-        if len(changes)==0:
-            print("No changes required")
+        if i[0] not in list(domain.keys()):
+            return 0
+        elif i[1] not in list(domain[i[0]].keys()):
+            return 0
         else:
-            update_temp = list()
-            for sub_text in temp:
-                tmp_txt = sub_text + " "
-                for m,n in zip(changes, parameter):
-                    # print(tmp_txt)
-                    # if tmp_txt.count(m+" "):
-                    tmp_txt = tmp_txt.replace(m+" ",n+" ")
-                    # else:
-                        # tmp_txt = tmp_txt.replace(m,n)
-                update_temp.append(tmp_txt.strip())
-            temp = update_temp
-        # print(update_temp)
-        if len(final_state)!=0:
-            final_state = check_not(final_state, temp)
-        for g in temp:
-            final_state.append(g)
+            temp = domain[i[0]][i[1]]
+            parameter = list()
+            for j in range(int(i[0])):
+                parameter.append(i[2].split(" ")[j+1])
+            changes  = temp[0]
+            temp = temp[1]
+            if len(changes)==0:
+                print("No changes required")
+            else:
+                update_temp = list()
+                for sub_text in temp:
+                    tmp_txt = sub_text + " "
+                    for m,n in zip(changes, parameter):
+                        # print(tmp_txt)
+                        # if tmp_txt.count(m+" "):
+                        tmp_txt = tmp_txt.replace(m+" ",n+" ")
+                        # else:
+                            # tmp_txt = tmp_txt.replace(m,n)
+                    update_temp.append(tmp_txt.strip())
+                temp = update_temp
+            # print(update_temp)
+            if len(final_state)!=0:
+                final_state = check_not(final_state, temp)
+            for g in temp:
+                final_state.append(g)
     count = 0
     for i in goal:
         if i[2] in final_state:
