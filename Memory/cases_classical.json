@@ -1,0 +1,68 @@
+{
+    "cases": {
+        "1": {
+            "domain_name": "blocksworld",
+            "problem_name": "problem_10_33",
+            "difficulty": 1664,
+            "system": 2,
+            "planner": 1,
+            "confidence": 1.0,
+            "correctness": 1.0,
+            "solving_time": 0.0054203,
+            "training_time": 0.0,
+            "total_time": 16.79614281654358,
+            "init": [
+                "handempty",
+                "on b1 b7",
+                "ontable b2",
+                "on b3 b5",
+                "on b4 b2",
+                "on b5 b4",
+                "on b6 b1",
+                "ontable b7",
+                "on b8 b10",
+                "clear b8",
+                "on b9 b3",
+                "clear b9",
+                "on b10 b6"
+            ],
+            "goal": [
+                "on b1 b10",
+                "clear b1",
+                "ontable b2",
+                "clear b2",
+                "ontable b3",
+                "on b4 b7",
+                "clear b4",
+                "on b5 b3",
+                "ontable b6",
+                "clear b6",
+                "on b7 b5",
+                "ontable b8",
+                "ontable b9",
+                "clear b9",
+                "on b10 b8"
+            ],
+            "plan": [
+                "unstack b8 b10",
+                "put-down b8",
+                "unstack b10 b6",
+                "stack b10 b8",
+                "unstack b6 b1",
+                "put-down b6",
+                "unstack b1 b7",
+                "stack b1 b10",
+                "unstack b9 b3",
+                "put-down b9",
+                "unstack b3 b5",
+                "put-down b3",
+                "unstack b5 b4",
+                "stack b5 b3",
+                "pick-up b7",
+                "stack b7 b5",
+                "unstack b4 b2",
+                "stack b4 b7"
+            ]
+        }
+    }
+}

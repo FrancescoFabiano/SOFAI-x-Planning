@@ -250,6 +250,8 @@ def executeS1():
                 tens_confidence, plan = plansformer_s1.solve(domainFile,problemFile)
             except Exception as e:
                  logging.error(traceback.format_exc())
+                 raise Exception("Plansformer encountered some errors.")
+
             #To make it work with different output -- likely depending on the libs versions
             confidence = float(tensor_clean(tens_confidence))
             sol = ""
@@ -299,6 +301,7 @@ def executeS1():
                 tens_confidence, plan = newPlansformer_s1.solve(domainFile,problemFile,(newPlans_mode-1))
             except Exception as e:
                  logging.error(traceback.format_exc())
+                 raise Exception("NewPlansformer encountered some errors.")
 
             #print(f"tens confidence is {str(str_confidence)}")
 
@@ -360,7 +363,7 @@ def executeS1():
         out.write("Solution = " + sol)
         out.close()
         return confidence, resFile
-    except IOError:
+    except Exception:
         return 0, ""
 
 def solveWithS1():
