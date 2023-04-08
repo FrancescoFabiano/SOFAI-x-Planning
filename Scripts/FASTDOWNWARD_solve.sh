@@ -46,6 +46,9 @@ else
 
 fi;
 
-
-rm res.tmp;
-rm $TMPPLANFILE
+if [ -f 'res.tmp' ] ; then
+    rm res.tmp
+fi;
+if [ -f $TMPPLANFILE ] ; then
+    rm $TMPPLANFILE
+fi;
