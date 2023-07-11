@@ -24,7 +24,15 @@ for arg in "${@}"; do
         for threshold in $(find "Input/thresholds"/ -type f); do
             for domain in $(find "$INPATH/domain"/ -type f); do
                 for instance in $(find "$INPATH/instances"/ -type f); do
-                    echo $domain $instance $context $threshold >> $FILELISTNAME;
+                    if [[ $context == *.epddl ]] then
+                        if [[ $threshold == *.epddl ]] then
+                            if [[ $domain == *.pddl ]] then
+                                if [[ $instance == *.pddl ]] then
+                                    echo $domain $instance $context $threshold >> $FILELISTNAME;
+                                fi
+                            fi
+                        fi
+                    fi
                 done
             done
         done

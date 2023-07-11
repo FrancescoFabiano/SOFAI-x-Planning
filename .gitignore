@@ -138,6 +138,9 @@ Input/blocksworld/instances/*
 Input/blocksworld/OLDinstances/*
 Scripts/OutputRelated/SOL_graph/*
 Input/NewPlansformer_80test/*
+Input/Test20/*
+Memory/*
+Input/
 
 tmp/
 *.tmp
