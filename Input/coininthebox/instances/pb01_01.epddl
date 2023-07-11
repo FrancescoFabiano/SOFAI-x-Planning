@@ -1,0 +1,8 @@
+(define (problem pb1_1)
+  (:domain coininthebox)
+  (:agents a b c)
+  (:depth 2)
+  (:dynck false)
+  (:init (in_room_empty a) (in_room_empty b) (in_room_empty c) (tail) (has_key a) (looking a) ([a b c](has_key a)) ([a b c](not (has_key b))) ([a b c](not (has_key c))) ([a b c](not (opened))) ([a b c](looking a)) ([a b c](not (looking b))) ([a b c](not (looking c))) ([a b c](in_room_empty a)) ([a b c](in_room_empty b)) ([a b c](in_room_empty c)) ([a b c](not (in_room_box a))) ([a b c](not (in_room_box b))) ([a b c](not (in_room_box c))))
+  (:goal ([a](opened)))
+)

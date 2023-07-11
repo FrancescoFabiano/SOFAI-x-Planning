@@ -136,14 +136,13 @@ Output/
 Input/coinintheboxgen/instances/*
 Input/blocksworld/instances/*
 Input/blocksworld/OLDinstances/*
-Scripts/OutputRelated/SOL_graph/*
 Input/NewPlansformer_80test/*
 Input/Test20/*
 Memory/*
-Input/
-
+Input/TEST_domains/
 tmp/
 *.tmp
+*/tmp/
 .problem-cache/
 
 Planners/PlansformerS1/model_files/
