@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # Four spaces as indentation [no tabs]
 
-# Example of exwcution: python architecture_classical.py Input/blocksworld/domain/domain.pddl Input/blocksworld/instances/problem_04_300.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl 7 1 10
+# Example of execution: python sofai_cl_pl.py Input/blocksworld/domain/domain.pddl Input/blocksworld/instances/problem_04_300.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl 7 1 10
 
 import os
 import json
@@ -531,7 +531,7 @@ def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solu
 
     print("The solution of </dmn>" + domain_name + "</> </pro>" + problem_name + "</> is </sol>" + str(solution) +
           "</> with correctness </cor>" + str(correctness) + "</> and has been found in </tim>" + str(elapsedTime) 
-          + "s</> and total time </tti> + "str(totalTIME)" +s</> by System </sys>" + str(system) + "</>" + " and continual training time of </trt>" + str(final_training_time) + "</>", end = '')
+          + "s</> and total time </tti> " +str(totalTIME) +" s</> by System </sys>" + str(system) + "</>" + " and continual training time of </trt>" + str(final_training_time) + "</>", end = '')
     if (system != systemONE):
         print(" using planner </pla>" + str(planner) +"</>.")
     else:
@@ -696,7 +696,8 @@ if __name__ == '__main__':
     plannerS1 = int(sys.argv[5])                    #<type_of_S1>
     if (plannerS1 == plannerS1_NewPlans):           
         newPlans_mode = int(sys.argv[6])            #<planformer_mode>
-        continual_train_size = int(sys.argv[7])     #<training_size>
+        if (newPlans_mode == newPlans_scratch or newPlans_mode == newPlans_continual):
+            continual_train_size = int(sys.argv[7])     #<training_size>
 
     # print(f"\n\nI'm here with the following {str(sys.argv)}\n\n")
 
