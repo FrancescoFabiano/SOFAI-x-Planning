@@ -57,34 +57,34 @@ This part of the process is completely addressed by <https://github.com/Francesc
 Let us member that before executing the overall architecture each part must be prepared. Please follow the instructions to prepare the environment (found in the respective repos)
 
 The architecture should be called following the following scheme:
-* "python3 sofai_cl_pl.py <domain_file> <instance_file> <context_file> <threshold_file> <type_of_S1> (<planformer_mode>) (<training_size>)"
+- ``python3 sofai_cl_pl.py <domain_file> <instance_file> <context_file> <threshold_file> <type_of_S1> (<planformer_mode>) (<training_size>)``
 where <type_of_S1>:
-- 0 to indicate that the architecture should just use System 2 (for comparison purposes)
-- 1 to indicate the case-based solver with the concept of Levenshtein Distance
-- 2 to indicate the case-based solver with the concept of Jaccard Distance
-- 3 to indicate the case-based solver that selects randomly the solution (for comparison purposes)
-- 4 to indicate the case-based solver that selects a the best solution among Levenshtein and Jaccard (based on the reward) 
-- 5 to indicate the Plansformer (v1.0) solver
-- 6 to indicate the combination of the Jaccard and the Plansformer (v1.0) solvers
-- 7 to indicate the Plansformer (v2.0) solver: in this case we can further select among <planformer_mode>
-	- 1 to use pretrained Plansformer (v2.0) withOUT continual learning
-	- 2 to use pretrained Plansformer (v2.0) WITH continual learning
-	- 3 to use Plansformer (v2.0) WITH continual learning and without initial experience
-		- If 2 or 3 are selected it is necessary to provide also the <training_size>
+	- 0 to indicate that the architecture should just use System 2 (for comparison purposes)
+	- 1 to indicate the case-based solver with the concept of Levenshtein Distance
+	- 2 to indicate the case-based solver with the concept of Jaccard Distance
+	- 3 to indicate the case-based solver that selects randomly the solution (for comparison purposes)
+	- 4 to indicate the case-based solver that selects a the best solution among Levenshtein and Jaccard (based on the reward) 
+	- 5 to indicate the Plansformer (v1.0) solver
+	- 6 to indicate the combination of the Jaccard and the Plansformer (v1.0) solvers
+	- 7 to indicate the Plansformer (v2.0) solver: in this case we can further select among <planformer_mode>
+		- 1 to use pretrained Plansformer (v2.0) withOUT continual learning
+		- 2 to use pretrained Plansformer (v2.0) WITH continual learning
+		- 3 to use Plansformer (v2.0) WITH continual learning and without initial experience
+			- If 2 or 3 are selected it is necessary to provide also the <training_size>
 
 Examples of execution are as follows: (from the main folder)
-* "python sofai_cl_pl.py Input/blocksworld/domain/domain.pddl Input/blocksworld/instances/problem_04_300.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl 4"
-* "python sofai_cl_pl.py Input/blocksworld/domain/domain.pddl Input/blocksworld/instances/problem_04_300.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl 7 1"
-* "python sofai_cl_pl.py Input/blocksworld/domain/domain.pddl Input/blocksworld/instances/problem_04_300.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl 7 2 201"
+- ``python sofai_cl_pl.py Input/blocksworld/domain/domain.pddl Input/blocksworld/instances/problem_04_300.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl 4``
+- ``python sofai_cl_pl.py Input/blocksworld/domain/domain.pddl Input/blocksworld/instances/problem_04_300.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl 7 1``
+- ``python sofai_cl_pl.py Input/blocksworld/domain/domain.pddl Input/blocksworld/instances/problem_04_300.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl 7 2 201``
 
 Where:
-	- Input/blocksworld/domain/domain.pddl represents the domain file
-	- Input/blocksworld/instances/problem_04_300.pddl represents the problem file
-	- Input/contexts/contextEx.epddl represents the context file
-	- Input/thresholds/thresholdEx.epddl represents the thresholds file
-	- 4/7/7 represent the type of System1
-	- 1/2 represent the modality of Plansformer (v2.0)
-	- 201 represents the training size
+- *Input/blocksworld/domain/domain.pddl* represents the domain file
+- *Input/blocksworld/instances/problem_04_300.pddl* represents the problem file
+- *Input/contexts/contextEx.epddl* represents the context file
+- *Input/thresholds/thresholdEx.epddl* represents the thresholds file
+- *4*/*7*/*7* represent the type of System1
+- *1*/*2* represent the modality of Plansformer (v2.0)
+- *201* represents the training size
 
 ## Repository Management
 
