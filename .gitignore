@@ -133,11 +133,6 @@ dmypy.json
 
 # MyFolders
 Output/
-Input/coinintheboxgen/instances/*
-Input/blocksworld/instances/*
-Input/blocksworld/OLDinstances/*
-Input/NewPlansformer_80test/*
-Input/Test20/*
 Memory/*
 Input/TEST_domains/
 tmp/
