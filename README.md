@@ -56,7 +56,7 @@ This part of the process is completely addressed by <https://github.com/Francesc
 ### Example of Execution
 Let us member that before executing the overall architecture each part must be prepared. Please follow the instructions to prepare the environment (found in the respective repos)
 An example of execution is as follows: (from the main folder)
-* "python architecture.py Input/coininthebox/coininthebox.epddl Input/coininthebox/pb2.epddl Input/context/contextEx.epddl"
+* "python sofai_cl_pl.py Input/coininthebox/coininthebox.epddl Input/coininthebox/pb2.epddl Input/context/contextEx.epddl"
 
 Where:
 	- Input/coininthebox/coininthebox.epddl represents the domain file

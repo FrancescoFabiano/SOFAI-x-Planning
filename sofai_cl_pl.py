@@ -29,7 +29,7 @@ from Planners.PDDL_parser import classical_parser
 from Planners.PDDL_parser import SubgoalCompleteness
 
 
-# Constants
+# Constants -- Variables Enumeration
 systemALL = -1
 systemONE = 1
 systemTWO = 2
@@ -46,9 +46,9 @@ plannerS1_JacPlans = 6
 plannerS1_NewPlans = 7
 
 
-newPlans_pretrained = int(1)
-newPlans_continual = int(2)
-newPlans_scratch = int(3)
+newPlans_pretrained = 1
+newPlans_continual = 2
+newPlans_scratch = 3
 newPlans_mode = -1
 instances_count = 0
 #firstTraining = True
@@ -68,10 +68,10 @@ jsonAllSolFilename = "allS1_solutions.json"
 continual_train_file = "continual_exp.csv"
 
 # Thresholds
-threshold1 = 20 #This threshold represents the minimun number of plan (existence) that needs to be generated from S2 (in the same domain) before accepting S1 solution
-threshold2 = 0.8 #The value which current_reward/average_revard must surpass to eploy S1 -- FOR NOW NOT EMPLOYED
-threshold3 = 0.9 #This value represents the risk-adversion of the system -- The higher it is the more incline to use S2 the system is
-threshold4 = 20 #This is the threshold that is used to set 'M' = 1 when S1 hasn't enough experience,
+threshold1 = 20     #This threshold represents the minimun number of plan (existence) that needs to be generated from System-2 (in the same domain) before accepting System-1 solution
+threshold2 = 0.8    #The value which current_reward/average_revard must surpass to eploy System-1 -- FOR NOW NOT USED
+threshold3 = 0.9    #This value represents the risk-adversion of the system -- The higher it is the more incline to use System-2 the system is
+threshold4 = 20     #This is the threshold that is used to set 'M' = 1 when System-1 hasn't enough experience,
 epsilonS1 = 0.1
 
 maxExperience = 1000
@@ -103,7 +103,6 @@ def createFolders():
     Path(dbFolder).mkdir(parents=True,exist_ok=True)
     Path(output_folder).mkdir(parents=True,exist_ok=True)
     Path(output_folderPl1).mkdir(parents=True,exist_ok=True)
-
 
 def getVarFromFile(filename,varname):
     with open(filename) as myfile:
@@ -184,7 +183,7 @@ def tensor_clean(to_clean):
 
 def executeS1():
 
-    #New S1###################
+    #New System-1###################
     similarity_threshold = 0.2 # If < than this is not returned
     json_path = dbFolder+jsonFilename
     try:
@@ -432,10 +431,10 @@ def estimateTimeCons(planner,difficulty):
         noMatchConsumption = 5
         return noMatchConsumption
 
-def solveWithS2NoPlan(timeLimit):
-    solveWithS2(timeLimit, selectPlannerS2())
+def solveWithS2NoPlan(timeLimit, timeSTART):
+    return solveWithS2(timeLimit, selectPlannerS2(), timeSTART)
 
-def solveWithS2(timeLimit, planner):
+def solveWithS2(timeLimit, planner, timeSTART):
 
     #print("Problem </pro>" + problem_name + "</> solved by System </sys>" + str(systemTWO) + "</> using planner </pla>" + str(planner) +"</>.")
     #sys.exit(0)
@@ -462,14 +461,13 @@ def solveWithS2(timeLimit, planner):
 
     if(time == "TO" or solutionS2 == "noSolution"):
         #return False, timeLimit, None
-        print("Problem </pro>" + problem_name + "</> could not be solved by System </sys>" + str(systemTWO) + "</> using planner </pla>" + str(planner) +"</>.")
+        #print("Problem </pro>" + problem_name + "</> could not be solved by System </sys>" + str(systemTWO) + "</> using planner </pla>" + str(planner) +"</>.")
         return False
     else:
-        memorizeSolution(systemTWO, planner, 1.0, float(time), 1.0, solutionS2)
+        memorizeSolution(systemTWO, planner, 1.0, float(time), 1.0, solutionS2, timeSTART)
         #return True, float(time), solutionS2
 
-def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solution):
-
+def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solution, timeSTART):
 
     json_path = dbFolder+jsonFilename
 
@@ -533,7 +531,7 @@ def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solu
 
     print("The solution of </dmn>" + domain_name + "</> </pro>" + problem_name + "</> is </sol>" + str(solution) +
           "</> with correctness </cor>" + str(correctness) + "</> and has been found in </tim>" + str(elapsedTime) 
-          + "s</> by System </sys>" + str(system) + "</>" + " and continual training time of </trt>" + str(final_training_time) + "</>", end = '')
+          + "s</> and total time </tti> + "str(totalTIME)" +s</> by System </sys>" + str(system) + "</>" + " and continual training time of </trt>" + str(final_training_time) + "</>", end = '')
     if (system != systemONE):
         print(" using planner </pla>" + str(planner) +"</>.")
     else:
@@ -544,8 +542,6 @@ def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solu
             print(".")
 
     sys.exit(0)
-
-
 
 def saveAllS1Solution(newPlans_mode,confidenceS1,correctnessS1, timeS1, solutionS1):
     json_path = dbFolder+jsonAllSolFilename
@@ -589,8 +585,6 @@ def saveAllS1Solution(newPlans_mode,confidenceS1,correctnessS1, timeS1, solution
     # writing dictionary data into json file
     with open(json_path,"w") as out:
         out.write(json_object)
-
-#----NEW
 
 def countSolvedInstances(system,planner):
     dbFilename = dbFolder + jsonFilename
@@ -650,61 +644,83 @@ def getAvgCorrS1(system,planner,slidingWindow):
     else:
         return 0
 
-def tryS1(plannerS1, solutionS1, confidenceS1, timeS1):
+def tryS1(plannerS1, solutionS1, confidenceS1, timeS1, timeSTART, timeLimit):
     correctnessS1 = validateSolution(solutionS1)
     if (correctnessS1 >= correctnessCntx):
-        memorizeSolution(systemONE, plannerS1, confidenceS1, timeS1, correctnessS1, solutionS1)
+        memorizeSolution(systemONE, plannerS1, confidenceS1, timeS1, correctnessS1, solutionS1, timeSTART)
     else:
-        solveWithS2NoPlan(timeLimitCntx)
+        solveWithS2NoPlan(timeLimit - (time.time() - timeSTART), timeSTART)
+    
+    return correctnessS1
 
 def selectPlannerS2():
     planner = plannerS2_1 #By default we use plannerS2_1 -- we use label to indicate the planners
 
     return planner
+
+def endComputation(problem_name,timeSTART):
+    print("Problem </pro>" + problem_name + "</> could not be solved and timed-out in </tio>" + (time.time() - timeSTART) + "s</>.")
+    sys.exit(0)
+
 #-----------------------------------------------
 # Main
 #-----------------------------------------------
 if __name__ == '__main__':
+
+    ''' TIMER DECLARATION & ENVIRONMENT PREPARATION '''
     timeSTART = time.time()
     createFolders()
 
-    domainFile = sys.argv[1]
-    problemFile = sys.argv[2]
-    context = sys.argv[3]
-    readThreshold(sys.argv[4])
-    plannerS1 = int(sys.argv[5])
-    if (plannerS1 == plannerS1_NewPlans):
-        newPlans_mode = int(sys.argv[6])
-        continual_train_size = 201 # -- to avoid starting training on the last instance sys.argv[7]
+    ''' ARGUMENT PARSING
+    The architecture should be called following the following scheme:
+        python3 sofai_cl_pl.py <domain_file> <instance_file> <context_file> <threshold_file> <type_of_S1> (<planformer_mode>) (<training_size>)
+    where <type_of_S1>:
+        - 0 to indicate that the architecture should just use System 2 (for comparison purposes)
+        - 1 to indicate the case-based solver with the concept of Levenshtein Distance
+        - 2 to indicate the case-based solver with the concept of Jaccard Distance
+        - 3 to indicate the case-based solver that selects randomly the solution (for comparison purposes)
+        - 4 to indicate the case-based solver that selects a the best solution among Levenshtein and Jaccard (based on the reward) 
+        - 5 to indicate the Plansformer (v1.0) solver
+        - 6 to indicate the combination of the Jaccard and the Plansformer (v1.0) solvers
+        - 7 to indicate the Plansformer (v2.0) solver: in this case we can further select among <planformer_mode>
+            + 1 to use pretrained Plansformer (v2.0) withOUT continual learning
+            + 2 to use pretrained Plansformer (v2.0) WITH continual learning
+            + 3 to use Plansformer (v2.0) WITH continual learning and without initial experience
+                . If 2 or 3 are selected it is necessary to provide also the <training_size>
+    '''
+    
+    domainFile = sys.argv[1]                        #<domain_file>
+    problemFile = sys.argv[2]                       #<instance_file>
+    context = sys.argv[3]                           #<context_file>
+    readThreshold(sys.argv[4])                      #<threshold_file>
+    plannerS1 = int(sys.argv[5])                    #<type_of_S1>
+    if (plannerS1 == plannerS1_NewPlans):           
+        newPlans_mode = int(sys.argv[6])            #<planformer_mode>
+        continual_train_size = int(sys.argv[7])     #<training_size>
+
+    # print(f"\n\nI'm here with the following {str(sys.argv)}\n\n")
 
 
-    #print(f"\n\nI'm here with the following {str(sys.argv)}\n\n")
-
-    #plannerS1_Dist1 = 1
-    #plannerS1_Dist2 = 2
-    #plannerS1_Random = 3
-    #plannerS1_Combined = 4
-    #plannerS1_Plansformer = 5
-    #plannerS1_JacPlans = 6
-    #plannerS1_NewPlans = 7
-
-
-    #Some Parsing
+    '''PARSING (.pddl based)'''
+    ### Domain and Instance parsing (problem)
     domain_name, problem_name, init_States, goal_States, number_of_actions, number_of_predicates = classical_parser.get_details(domainFile,problemFile)
-
-    #correctnessCntx = float(getVarFromFile(context,"correctness"))
-    reduced_risk_adversion = 0.1
-    correctnessCntx = threshold3 - reduced_risk_adversion
-
-    #@TODO: REMOVE IS FOR DEBUG
-    correctnessCntx = 1.0
-    threshold1 = 0
-    threshold4 = 0
-    #Plansformer does not need experience -- because already has it. If from scratch need to adjust
-
-    timeLimitCntx = float(getVarFromFile(context,"timelimit"))
-
     difficulty = estimateDifficulty()
+
+    ### Enviromental variables parsing
+    timeLimitCntx = float(getVarFromFile(context,"timelimit"))
+    correctnessCntx = float(getVarFromFile(context,"correctness"))
+   
+   
+    ''' EXPERIENCE MANAGEMENT
+    - If we are using a pre-trained model we should account for that and set threshold1 to be = threshold1 - experience in the model
+    - If we are using a pre-trained model we should account for that and set threshold4 accordingly
+
+    @TODO: For simplicity we set thresholds 1 and 4 to be 0 when using pre-trained Plansformer for the moment
+    '''
+   
+    if (plannerS1 == plannerS1_Plansformer or plannerS1 == plannerS1_NewPlans):
+        threshold1 = 0
+        threshold4 = 0
 
     #Test
     #timeS1 = time.time()
@@ -712,78 +728,100 @@ if __name__ == '__main__':
     #tryS1(plannerS1, solutionS1, confidenceS1, timeS1)
     #sys.exit(0)
 
-
-    ######### S1 metacognitive part
-
-    #Sys2 Baseline
+    ''' PERFORMANCE BASELINE GENERATION
+    This is just to allow to generate the only System-2 Baseline
+    '''
     if (plannerS1 == onlySystem2):
         plannerS2 = selectPlannerS2()
-        solveWithS2(timeLimitCntx,plannerS2)
-        print("Problem </pro>" + problem_name + "</> could not be solved by System </sys>Metacognitive</>.")
-        sys.exit(0)
+        solveWithS2(timeLimitCntx,plannerS2,timeSTART)
+        endComputation(problem_name,timeSTART)
 
 
-    # AUTOMATICALLY CALL S1
+    ''' SYSTEM-1 METACOGNITIVE MODULE'''
+   
+    ### The ''automatic'' call to System-1
     timeS1 = time.time()
     solutionS1, confidenceS1 = solveWithS1()
     timeS1 = time.time() - timeS1 - final_training_time
 
-
-    #print(f"Timestart is {timeSTART}")
-    #Weird time management to store S1 solution for evaluation pourpouses
+    ### Time management
+    ## Storing System-1 solutions (done for future evaluation pourpouses) takes time that has to be removed from the overall running time
     timeToRemove = time.time()
     if (plannerS1 == plannerS1_NewPlans):
         saveAllS1Solution(newPlans_mode,confidenceS1,validateSolution(solutionS1), timeS1, solutionS1)
     timeToRemove = time.time() - timeToRemove
     timeSTART += timeToRemove
-
     #print(f"Time to remove is {timeToRemove} and timestart is {timeSTART}")
 
+    ### First Metacognition process
+    ## We first check if System-2 has generated at least an experience of n > threshold1 entries to allow System-1 to continue
     M = 1
-
-    # IF NUMBER OF CASES IN JSON FILE (that match the domain) IS > THRESHOLD1 THEN CONTINUE WITH TO S1
+    testedS1 = False
     if (countSolvedInstances(systemALL,plannerALL) > threshold1):
+        ## We then check if System-1 has generated at least m > threshold4 plans to evaluate its performance and check if it make sense to verify it
         if (countSolvedInstances(systemONE,plannerALL) > threshold4):
             M = 1-getAvgCorrS1(systemONE,plannerALL,threshold4)
         else:
             M = 0
 
-        M = 0
-
         if (confidenceS1 * (1-M) > threshold3):
-            tryS1(plannerS1, solutionS1, confidenceS1, timeS1)
+            correctnessS1 = tryS1(plannerS1, solutionS1, confidenceS1, timeS1, timeSTART, timeLimitCntx)
+            testedS1 = True
 
 
-    # ######### S2 metacognitive part
-    # # Employ the S2 metacognitive structure
+    ## @TODO Maybe we just always verify the plan?
+
+
+    ''' SYSTEM-2 METACOGNITIVE MODULE'''
+
+    ### We select the System-2 (this is done by looking at the result of System-1 for now and not at the instance)
+    # @TODO MAybe add a neural-net that select the best System-2 planner given a problem
     plannerS2 = selectPlannerS2()
+
+    ## Once the planner is selected we calculate its usage "cost" by looking at previous example of similar difficulty
+    # @TODO Maybe a neural module also for the above mentione task
     estimatedTimeS2 = estimateTimeCons(plannerS2, difficulty)
     estimatedCostS2 = sys.maxsize
 
+    ## We check if the estimated time is enough to solve the problem
     remainingTime = timeLimitCntx - (time.time() - timeSTART)
     if(remainingTime - estimatedTimeS2 > 0):
         estimatedCostS2 = estimatedTimeS2 / remainingTime
 
-    if (estimatedCostS2 > 1):
-        tryS1(plannerS1, solutionS1, confidenceS1, timeS1)
+    ## If we think that there is not enough time to employ System-2, we check System-1 solution even if it has low confidence value
+    if (estimatedCostS2 > 1 and (not testedS1)):
+        correctnessS1 = tryS1(plannerS1, solutionS1, confidenceS1, timeS1, timeSTART, timeLimitCntx)
+        testedS1 = True
+
+    ### Trying to employ System-2
+    ## If System-1 had low confidence (or failed) we try to employ System-2
+    # if System-1 failed we try using System-2 even if we think that we do not have ebough time
     else:
+        ## This first block of code randomly (with probability of epsilon) employs System-1 to give it more chance 
         probabilityS1 = (1-threshold3)*epsilonS1
-        #random() genrates a number between 0 and 1
-        if (probabilityS1 > random.random()):
-            tryS1(plannerS1, solutionS1, confidenceS1, timeS1)
+        if (probabilityS1 > random.random() and (not testedS1)):
+            correctnessS1 = tryS1(plannerS1, solutionS1, confidenceS1, timeS1, timeSTART, timeLimitCntx)
+
+        ## Instead, with 1-epsilon, we use the ''standard'' metacognitive path
         else:
             if (len(solutionS1) > 0):
-                correctnessS1 = validateSolution(solutionS1)
-                #print("Correctness is: " + str(correctnessS1))
+                ## Instead, with 1-epsilon, we use the ''standard'' metacognitive path
+                # @TODO Here we calcuate the correctness once again, check the part where we refrain to calculate it
+                if(not testedS1):
+                    correctnessS1 = validateSolution(solutionS1)
+
+                ## Here we check if we can improve on the System-1 results
                 if (correctnessS1 >= correctnessCntx):
                     if((1-(estimatedCostS2 * (1-threshold3))) > (correctnessS1*(1-M))):
-                        if (not solveWithS2(remainingTime,plannerS2)):
-                            memorizeSolution(systemONE, plannerS1, confidenceS1, timeS1, correctnessS1, solutionS1)
+                        if (not solveWithS2(remainingTime,plannerS2,timeSTART)):
+                            memorizeSolution(systemONE, plannerS1, confidenceS1, timeS1, correctnessS1, solutionS1, timeSTART)
                     else:
-                        memorizeSolution(systemONE, plannerS1, confidenceS1, timeS1, correctnessS1, solutionS1)
-                else:
-                    solveWithS2(remainingTime,plannerS2)
-            else:
-                solveWithS2(remainingTime,plannerS2)
+                        memorizeSolution(systemONE, plannerS1, confidenceS1, timeS1, correctnessS1, solutionS1, timeSTART)
 
-    print("Problem </pro>" + problem_name + "</> could not be solved by System </sys>Metacognitive</>.")
+    ### Finally we run System-2 only if the available time is within reasonable distance w.r.t. the time we think that the System-2 is goin to take 
+    ## We arbitrary set the extra time to be 50%
+    flexibility_perc = 50
+    if (remainingTime >= (estimatedTimeS2 - (float(estimatedTimeS2)/100.0 * float(flexibility_perc)))):
+        solveWithS2(remainingTime,plannerS2,timeSTART)
+
+    endComputation(problem_name,timeSTART)
