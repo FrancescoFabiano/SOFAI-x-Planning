@@ -1,7 +1,6 @@
 #!/usr/bin/env python
-# Four spaces as indentation [no tabs]
 
-# Example of execution: python sofai_cl_pl.py Input/blocksworld/domain/domain.pddl Input/blocksworld/instances/problem_04_300.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl 7 1 10
+# Example of execution: python sofai_cl_pl.py Input/blocksworld/domain/domain.pddl Input/blocksworld/instances/problem_04_300.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl 7 2 201
 
 import os
 import json
@@ -29,35 +28,51 @@ from Planners.PDDL_parser import classical_parser
 from Planners.PDDL_parser import SubgoalCompleteness
 
 
-# Constants -- Variables Enumeration
-systemALL = -1
-systemONE = 1
-systemTWO = 2
+''' Constants -- Variables Enumeration '''
+### Type of Systems
+systemALL = -1              # Constant that represents both System-1 and System-2
+systemONE = 1               # Constant that represents only System-1
+systemTWO = 2               # Constant that represents only System-2
 
-plannerALL = -1
+### Type of Planners
+plannerALL = -1             # Constant that represents all the possible Planners (both in System-1 and System-2)
 
-onlySystem2 = 0
-plannerS1_Dist1 = 1
-plannerS1_Dist2 = 2
-plannerS1_Random = 3
-plannerS1_Combined = 4
-plannerS1_Plansformer = 5
-plannerS1_JacPlans = 6
-plannerS1_NewPlans = 7
+## Type of System-1 Planners
+onlySystem2 = 0             # Constant that represents NO System-1 Planner (evaluation porpuses)
+plannerS1_Dist1 = 1         # Constant that represents the case-based planner with Levenshtein Distance
+plannerS1_Dist2 = 2         # Constant that represents the case-based planner with Jaccard Distance
+plannerS1_Random = 3        # Constant that represents the case-based planner with random selection (evaluation porpuses)
+plannerS1_Combined = 4      # Constant that represents the case-based planner that selects the best solution among Levenshtein and Jaccard (based on the reward) 
+plannerS1_Plansformer = 5   # Constant that represents the Plansformer (v1.0) solver
+plannerS1_JacPlans = 6      # Constant that represents the combination of the Jaccard and the Plansformer (v1.0) solvers
+plannerS1_NewPlans = 7      # Constant that represents the Plansformer (v2.0) solver
 
+# Variation of Plansformer v2.0
+newPlans_mode = -1          # Constant to indicate any configuration of Plansformer (v2.0)
+newPlans_pretrained = 1     # Constant to indicate that Plansformer (v2.0) will be pretrained and withOUT continual learning
+newPlans_continual = 2      # Constant to indicate that Plansformer (v2.0) will be pretrained and WITH continual learning
+newPlans_scratch = 3        # Constant to indicate that Plansformer (v2.0) will have NO initial experience and WITH continual learning
 
-newPlans_pretrained = 1
-newPlans_continual = 2
-newPlans_scratch = 3
-newPlans_mode = -1
-instances_count = 0
-#firstTraining = True
+# Parametera for Plansformer v2.0 continual learning
+instances_count = 0         
 final_training_time = 0.0
+#firstTraining = True
 
+## Type of System-2 Planners
 
-plannerS2_1 = 1
-plannerS2_2 = 2
+plannerS2_FD = 1            # Constant to indicate the System-2 solver "FAST DOWNWARD"
+plannerS2_LPG = 2           # Constant to indicate the System-2 solver "LPG" -- Mainly for replanning porpuses
 
+### Thresholds
+threshold1 = 20     #This threshold represents the minimun number of plan (existence) that needs to be generated from System-2 (in the same domain) before accepting System-1 solution
+threshold2 = 0.8    #The value which current_reward/average_revard must surpass to eploy System-1 -- FOR NOW NOT USED
+threshold3 = 0.9    #This value represents the risk-adversion of the system -- The higher it is the more incline to use System-2 the system is
+threshold4 = 20     #This is the threshold that is used to set 'M' = 1 when System-1 hasn't enough experience,
+epsilonS1 = 0.1
+
+maxExperience = 1000
+
+### Path and Environmental Variables
 output_folder = "Output/"
 output_folderPl1 = output_folder + "Pl1/"
 scripts_folder = "Scripts/"
@@ -67,16 +82,8 @@ jsonFilename = "cases_classical.json"
 jsonAllSolFilename = "allS1_solutions.json"
 continual_train_file = "continual_exp.csv"
 
-# Thresholds
-threshold1 = 20     #This threshold represents the minimun number of plan (existence) that needs to be generated from System-2 (in the same domain) before accepting System-1 solution
-threshold2 = 0.8    #The value which current_reward/average_revard must surpass to eploy System-1 -- FOR NOW NOT USED
-threshold3 = 0.9    #This value represents the risk-adversion of the system -- The higher it is the more incline to use System-2 the system is
-threshold4 = 20     #This is the threshold that is used to set 'M' = 1 when System-1 hasn't enough experience,
-epsilonS1 = 0.1
 
-maxExperience = 1000
-
-# Global variables seen by all the functions
+### Parsing related Variables
 domainFile = ""
 problemFile = ""
 
@@ -91,7 +98,6 @@ confidenceS1 = 0
 totalTIME = time.time()
 difficulty = 0
 
-# Parsing Variables
 domain_name = ""
 problem_name = ""
 init_States = ""
@@ -99,11 +105,13 @@ goal_States = ""
 number_of_actions = 0
 number_of_predicates = 0
 
+'''Function that sets up the environment by creating some necessary folders'''
 def createFolders():
     Path(dbFolder).mkdir(parents=True,exist_ok=True)
     Path(output_folder).mkdir(parents=True,exist_ok=True)
     Path(output_folderPl1).mkdir(parents=True,exist_ok=True)
 
+'''Function that parses some basic values from utilities files (i.e., threshold and contex)'''
 def getVarFromFile(filename,varname):
     with open(filename) as myfile:
         for line in myfile:
@@ -116,8 +124,8 @@ def getVarFromFile(filename,varname):
         raise Exception('Missing variable named '+ varname)
     raise Exception('Missing file named '+ filename)
 
+'''Function that parses the Threshold file'''
 def readThreshold(thresholdFile):
-
     global threshold1
     global threshold2
     global threshold3
@@ -130,7 +138,9 @@ def readThreshold(thresholdFile):
     threshold4 = float(getVarFromFile(thresholdFile,"threshold4"))
     epsilonS1  = float(getVarFromFile(thresholdFile,"epsilonS1"))
 
-#Every Solver stores the solution on a tmp file
+'''Function that parses the tmp file that stores the solution from any solving process
+We assume that every solver (System-1 or System-2) generates this temporary file with the solution
+'''
 def readSolutionFromFile(filename):
     try:
         with open(filename) as myfile:
@@ -157,6 +167,9 @@ def readSolutionFromFile(filename):
     except IOError:
         return "noSolution"
 
+'''Function that parses the tmp file that stores the time from any solving process
+We assume that every solver (System-1 or System-2) generates this temporary file with the solving time
+'''
 def readTimeFromFile(filename):
     with open(filename) as myfile:
         for line in myfile:
@@ -169,32 +182,32 @@ def readTimeFromFile(filename):
                     ret = ret.replace('\n','')
                     ret = ret.replace('s','')
 
-
                     myfile.close()
                     return ret
 
     #raise Exception('Missing plan in '+ filename)
     return "TO"
 
+'''Function that cleans the solution generated by Plansformer to retrieve the actual info (i.e., the solution and the confidence)'''
 def tensor_clean(to_clean):
     ret = re.sub(r'tensor\(([\d \.]+),(.+)\)', r'\1', str(to_clean))
     ret = re.sub(r'tensor\((.+)\)', r'\1', str(ret))
     return ret
 
+'''Function that executes the selected System-1 and evaluates its results (in term of confidence)'''
 def executeS1():
-
-    #New System-1###################
-    similarity_threshold = 0.2 # If < than this is not returned
+    similarity_threshold = 0.2 # Value used to prune the comparisons in the case-based solvers. Only past problems with similarity >= than this are considered when looking for possible solutions
     json_path = dbFolder+jsonFilename
     try:
         with open(json_path) as f:
-            experience = json.load(f)
+            experience = json.load(f) # Loading the experience
 
         cases = experience["cases"]
+        #@TODO: Manage the file if does not exist (look also at the scripts)
+
+        ### Secific System-1 handling
 
         if (plannerS1 == plannerS1_Dist1 or plannerS1 == plannerS1_Dist2):
-            #init,goal = getStates.States(problemFile) #reading initial and goal states from problem file
-
             #returned_list has records of this form <path_to_sol, similarity_score, problem_name>
             sol = ""
             confidence = 0
@@ -210,8 +223,6 @@ def executeS1():
                 confidence = returned_list[0][0]
 
         elif (plannerS1 == plannerS1_Combined):
-            #init_States,goal = getStates.States(problemFile) #reading initial and goal states from problem file
-
             #returned_list has records of this form <path_to_sol, similarity_score, problem_name>
             sol = ""
             confidence = 0
@@ -440,7 +451,7 @@ def solveWithS2(timeLimit, planner, timeSTART):
     #sys.exit(0)
 
 
-    if planner == plannerS2_1:
+    if planner == plannerS2_FD:
 
         head_tail = os.path.split(domainFile)
         domainFileNoPath = head_tail[1]
@@ -654,7 +665,7 @@ def tryS1(plannerS1, solutionS1, confidenceS1, timeS1, timeSTART, timeLimit):
     return correctnessS1
 
 def selectPlannerS2():
-    planner = plannerS2_1 #By default we use plannerS2_1 -- we use label to indicate the planners
+    planner = plannerS2_FD #By default we use plannerS2_FD -- we use label to indicate the planners
 
     return planner
 
@@ -679,7 +690,7 @@ if __name__ == '__main__':
         - 1 to indicate the case-based solver with the concept of Levenshtein Distance
         - 2 to indicate the case-based solver with the concept of Jaccard Distance
         - 3 to indicate the case-based solver that selects randomly the solution (for comparison purposes)
-        - 4 to indicate the case-based solver that selects a the best solution among Levenshtein and Jaccard (based on the reward) 
+        - 4 to indicate the case-based solver that selects the best solution among Levenshtein and Jaccard (based on the reward) 
         - 5 to indicate the Plansformer (v1.0) solver
         - 6 to indicate the combination of the Jaccard and the Plansformer (v1.0) solvers
         - 7 to indicate the Plansformer (v2.0) solver: in this case we can further select among <planformer_mode>

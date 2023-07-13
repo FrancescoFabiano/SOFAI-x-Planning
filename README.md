@@ -47,6 +47,9 @@ This part of the process is completely addressed by Planners/CaseBasedS1 and  <h
 #### FastDownward -- System 2 for Classical Planning
 This part of the process is completely addressed by <https://www.fast-downward.org/ObtainingAndRunningFastDownward>.
 
+#### LPG -- System 2 for Classical Planning
+This part of the process is completely addressed by <https://lpg.unibs.it/lpg/>.
+
 #### PDKB -- System 2 for Epistemic Planning
 This part of the process is completely addressed by <https://github.com/QuMuLab/pdkb-planning>.
 
