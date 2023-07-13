@@ -60,7 +60,7 @@ This part of the process is completely addressed by <https://github.com/Francesc
 Let us member that before executing the overall architecture each part must be prepared. Please follow the instructions to prepare the environment (found in the respective repos)
 
 The architecture should be called following the following scheme:
-- ``python3 sofai_cl_pl.py <domain_file> <instance_file> <context_file> <threshold_file> <type_of_S1> (<planformer_mode>) (<training_size>)``
+- ``python3 sofai_cl_pl.py <domain_file> <instance_file> <context_file> <threshold_file> <type_of_S1> (<planformerV2.0_mode>) (<training_size>)``
 where <type_of_S1>:
 	- 0 to indicate that the architecture should just use System 2 (for comparison purposes)
 	- 1 to indicate the case-based solver with the concept of Levenshtein Distance

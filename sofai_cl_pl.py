@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 # Example of execution: python sofai_cl_pl.py Input/blocksworld/domain/domain.pddl Input/blocksworld/instances/problem_04_300.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl 7 2 201
+# Example of profiling: python -m cProfile -o profiling.prof sofai_cl_pl.py Input/blocksworld/domain/domain.pddl Input/blocksworld/instances/problem_04_300.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl 0
+
 
 import os
 import json
@@ -81,6 +83,7 @@ dbFolder = "Memory/"
 jsonFilename = "cases_classical.json"
 jsonAllSolFilename = "allS1_solutions.json"
 continual_train_file = "continual_exp.csv"
+experience_file = dbFolder+jsonFilename
 
 
 ### Parsing related Variables
@@ -95,7 +98,6 @@ problemPath = ""
 context = ""
 solutionS1 = []
 confidenceS1 = 0
-totalTIME = time.time()
 difficulty = 0
 
 domain_name = ""
@@ -105,11 +107,20 @@ goal_States = ""
 number_of_actions = 0
 number_of_predicates = 0
 
+global timerParsing
+
 '''Function that sets up the environment by creating some necessary folders'''
 def createFolders():
-    Path(dbFolder).mkdir(parents=True,exist_ok=True)
     Path(output_folder).mkdir(parents=True,exist_ok=True)
     Path(output_folderPl1).mkdir(parents=True,exist_ok=True)
+    ### Creating the memory file if it doesn't exist
+    
+    Path(dbFolder).mkdir(parents=True,exist_ok=True)
+    if not os.path.isfile(experience_file):
+        f = open(experience_file, "w")
+        f.write("{\n\"size_limit\": 1000,\n\"cases\":{\n}\n}")
+        f.close
+
 
 '''Function that parses some basic values from utilities files (i.e., threshold and contex)'''
 def getVarFromFile(filename,varname):
@@ -197,16 +208,17 @@ def tensor_clean(to_clean):
 '''Function that executes the selected System-1 and evaluates its results (in term of confidence)'''
 def executeS1():
     similarity_threshold = 0.2 # Value used to prune the comparisons in the case-based solvers. Only past problems with similarity >= than this are considered when looking for possible solutions
-    json_path = dbFolder+jsonFilename
     try:
-        with open(json_path) as f:
+        
+        ### Loading the experience accumulated
+        with open(experience_file) as f:
             experience = json.load(f) # Loading the experience
 
         cases = experience["cases"]
-        #@TODO: Manage the file if does not exist (look also at the scripts)
 
         ### Secific System-1 handling
 
+        ## Levenshtein and Jaccard case-based (disjunctive)
         if (plannerS1 == plannerS1_Dist1 or plannerS1 == plannerS1_Dist2):
             #returned_list has records of this form <path_to_sol, similarity_score, problem_name>
             sol = ""
@@ -222,6 +234,7 @@ def executeS1():
                         sol = sol + ", " + act
                 confidence = returned_list[0][0]
 
+        ## Levenshtein and Jaccard case-based (togheter)
         elif (plannerS1 == plannerS1_Combined):
             #returned_list has records of this form <path_to_sol, similarity_score, problem_name>
             sol = ""
@@ -244,6 +257,7 @@ def executeS1():
                         sol = sol + ", " + act
                 confidence = returned_list[0][0]
 
+        ## Random case-based
         elif (plannerS1 == plannerS1_Random):
             sol = ""
             confidence, plan = caseBased_s1_solver.randomSolve(cases)
@@ -255,6 +269,7 @@ def executeS1():
                 else:
                     sol = sol + ", " + act
 
+        ## Plansformer v1.0
         elif (plannerS1 == plannerS1_Plansformer):
             try:
                 tens_confidence, plan = plansformer_s1.solve(domainFile,problemFile)
@@ -273,6 +288,7 @@ def executeS1():
                 else:
                     sol = sol + ", " + act
 
+        ## Plansformer v2.0
         elif (plannerS1 == plannerS1_NewPlans):
             
             global instances_count
@@ -326,6 +342,7 @@ def executeS1():
                 else:
                     sol = sol + ", " + act
 
+        ## Plansformer v1.0 and Jaccard case-based (toghether)
         elif(plannerS1 == plannerS1_JacPlans):
             #init_States,goal = getStates.States(problemFile) #reading initial and goal states from problem file
 
@@ -366,7 +383,7 @@ def executeS1():
 
         else:
             raise Exception("The requested System 1 has not been implemented yet.")
-    #    solString = s1_planner.s1Solver(domain_name,problem_name,json_path)
+    #    solString = s1_planner.s1Solver(domain_name,problem_name,experience_file)
     #    solString = solString.replace(";", ",")
         resFile = os.path.splitext(domainFileNoPath)[0]+os.path.splitext(problemFileNoPath)[0]+"S1.tmp"
         out = open(output_folderPl1 + resFile, "w")
@@ -376,11 +393,13 @@ def executeS1():
     except Exception:
         return 0, ""
 
+'''Utility function that calls subroutines to sovle the problme with System-1'''
 def solveWithS1():
     confidence, resFile = executeS1()
     solutionS1 = readSolutionFromFile(output_folderPl1 + resFile)
     return solutionS1, confidence
 
+'''Procedure that, given a solution, returns the value of that solution correctness (for now is the ratio between solved goals and total goals)'''
 def validateSolution(solution):
 
     #print("solution is: "+ solution)
@@ -401,8 +420,9 @@ def validateSolution(solution):
     #print(f"Domain file is {domainFile}")
     return SubgoalCompleteness.get_correctness(domainFile,stringSolution,problemFile)
 
+'''Procedure that calculates the difficulty of a problem by looking at its pddl encoding'''
 def estimateDifficulty():
-    #For now difficulty evaluation that does not consider goal or initial state (Maybe include planning grpah lenght?)
+    #For now difficulty evaluation that does not consider goal or initial state (Maybe include planning graph lenght?)
 
     #domain_name, problem_name, init_States, goal_States, number_of_actions, number_of_predicates = classical_parser.get_details(domainFile,problemFile)
     intersection = [value for value in goal_States if value in init_States]
@@ -413,6 +433,7 @@ def estimateDifficulty():
 
     return (diff_fluents*number_of_actions*pow(2, number_of_predicates))
 
+'''Procedure that retrieves from the experience the average solving times for a given problem difficulty'''
 def estimateTimeCons(planner,difficulty):
     dbFilename = dbFolder + jsonFilename
     range = 100
@@ -442,9 +463,7 @@ def estimateTimeCons(planner,difficulty):
         noMatchConsumption = 5
         return noMatchConsumption
 
-def solveWithS2NoPlan(timeLimit, timeSTART):
-    return solveWithS2(timeLimit, selectPlannerS2(), timeSTART)
-
+'''Procedure that tris to solve the problem with System 2 within the time limit'''
 def solveWithS2(timeLimit, planner, timeSTART):
 
     #print("Problem </pro>" + problem_name + "</> solved by System </sys>" + str(systemTWO) + "</> using planner </pla>" + str(planner) +"</>.")
@@ -478,15 +497,22 @@ def solveWithS2(timeLimit, planner, timeSTART):
         memorizeSolution(systemTWO, planner, 1.0, float(time), 1.0, solutionS2, timeSTART)
         #return True, float(time), solutionS2
 
+'''Function that selects the best System 2 approach for the situation'''
+def selectPlannerS2():
+    planner = plannerS2_FD #By default we use plannerS2_FD -- we use label to indicate the planners
+
+    return planner
+
+'''Utility fucntion that calls "solveWithS2" with the deafult System 2'''
+def solveWithS2DefaultPlanner(timeLimit, timeSTART):
+    return solveWithS2(timeLimit, selectPlannerS2(), timeSTART)
+
+'''Function that stores (both for evaluation and in the experience) the solution when found, and also terminates the code execution'''
 def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solution, timeSTART):
 
-    json_path = dbFolder+jsonFilename
+    memory_file = open(experience_file)
+    totalTIME = time.time()-timeSTART
 
-    if not os.path.exists(json_path):
-        with open(json_path, 'w') as jFile:
-            jFile.write("{\n\"size_limit\": 1000,\n\"cases\":{\n}\n}")
-
-    memory_file = open(json_path)
 
     data = json.load(memory_file)
 
@@ -509,7 +535,7 @@ def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solu
     data['cases'][str(index)]['correctness'] = correctness
     data['cases'][str(index)]['solving_time'] = elapsedTime
     data['cases'][str(index)]['training_time'] = final_training_time
-    data['cases'][str(index)]['total_time'] = time.time()-timeSTART
+    data['cases'][str(index)]['total_time'] = totalTIME
 
     #init,goal = getStates.States(problemFile) #reading initial and goal states from problem file
 
@@ -520,7 +546,7 @@ def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solu
     json_object = json.dumps(data,indent=4)
 
     # writing dictionary data into json file
-    with open(json_path,"w") as out:
+    with open(experience_file,"w") as out:
         out.write(json_object)
 
     if system != systemONE: #We only take sys2 solution
@@ -542,18 +568,19 @@ def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solu
 
     print("The solution of </dmn>" + domain_name + "</> </pro>" + problem_name + "</> is </sol>" + str(solution) +
           "</> with correctness </cor>" + str(correctness) + "</> and has been found in </tim>" + str(elapsedTime) 
-          + "s</> and total time </tti> " +str(totalTIME) +" s</> by System </sys>" + str(system) + "</>" + " and continual training time of </trt>" + str(final_training_time) + "</>", end = '')
+          + "s</> and total time </tti> " +str(totalTIME) +"s</> by System </sys>" + str(system) + "</>" + " and continual training time of </trt>" + str(final_training_time) + "s</>", end = '')
     if (system != systemONE):
-        print(" using planner </pla>" + str(planner) +"</>.")
+        print(" using planner </pla>" + str(planner) +"</>", end = '')
     else:
         print(" using mode </mod>" + str(plannerS1) +"</>", end = '')
         if plannerS1 == plannerS1_NewPlans:
-            print(" and submodality </sub>" + str(newPlans_mode) +"</> with training size of </tra>" + str(continual_train_size) +"</>.")
-        else:
-            print(".")
+            print(" and submodality </sub>" + str(newPlans_mode) +"</> with training size of </tra>" + str(continual_train_size) +"</>", end = '')
+
+    print(" -- Parsing was done in </par>" + str(timerParsing) + "s</>")
 
     sys.exit(0)
 
+'''Function that stores the solutions proposed by System 1, even if are not adopted, for evaluation porpuses'''
 def saveAllS1Solution(newPlans_mode,confidenceS1,correctnessS1, timeS1, solutionS1):
     json_path = dbFolder+jsonAllSolFilename
 
@@ -597,6 +624,7 @@ def saveAllS1Solution(newPlans_mode,confidenceS1,correctnessS1, timeS1, solution
     with open(json_path,"w") as out:
         out.write(json_object)
 
+'''Utility function that counts how many solutions have been solved by System 1 in the experience'''
 def countSolvedInstances(system,planner):
     dbFilename = dbFolder + jsonFilename
     matchCount = 0
@@ -624,6 +652,7 @@ def countSolvedInstances(system,planner):
     except IOError:
         return 0
 
+'''Utility function that return the correctness (average) of System 1 in the last 'sliding window' instances'''
 def getAvgCorrS1(system,planner,slidingWindow):
     dbFilename = dbFolder + jsonFilename
     matchCount = 0
@@ -655,36 +684,32 @@ def getAvgCorrS1(system,planner,slidingWindow):
     else:
         return 0
 
+'''Function that tries to employ System 1 and, if fails, employs System 2'''
 def tryS1(plannerS1, solutionS1, confidenceS1, timeS1, timeSTART, timeLimit):
     correctnessS1 = validateSolution(solutionS1)
     if (correctnessS1 >= correctnessCntx):
         memorizeSolution(systemONE, plannerS1, confidenceS1, timeS1, correctnessS1, solutionS1, timeSTART)
     else:
-        solveWithS2NoPlan(timeLimit - (time.time() - timeSTART), timeSTART)
+        solveWithS2DefaultPlanner(timeLimit - (time.time() - timeSTART), timeSTART)
     
     return correctnessS1
 
-def selectPlannerS2():
-    planner = plannerS2_FD #By default we use plannerS2_FD -- we use label to indicate the planners
-
-    return planner
-
+'''Utility function that ends the computation'''
 def endComputation(problem_name,timeSTART):
     print("Problem </pro>" + problem_name + "</> could not be solved and timed-out in </tio>" + (time.time() - timeSTART) + "s</>.")
     sys.exit(0)
 
 #-----------------------------------------------
-# Main
+# MAIN
 #-----------------------------------------------
 if __name__ == '__main__':
 
-    ''' TIMER DECLARATION & ENVIRONMENT PREPARATION '''
-    timeSTART = time.time()
-    createFolders()
+    timerParsing = time.time()
+
 
     ''' ARGUMENT PARSING
     The architecture should be called following the following scheme:
-        python3 sofai_cl_pl.py <domain_file> <instance_file> <context_file> <threshold_file> <type_of_S1> (<planformer_mode>) (<training_size>)
+        python3 sofai_cl_pl.py <domain_file> <instance_file> <context_file> <threshold_file> <type_of_S1> (<planformerV2.0_mode>) (<training_size>)
     where <type_of_S1>:
         - 0 to indicate that the architecture should just use System 2 (for comparison purposes)
         - 1 to indicate the case-based solver with the concept of Levenshtein Distance
@@ -712,15 +737,25 @@ if __name__ == '__main__':
 
     # print(f"\n\nI'm here with the following {str(sys.argv)}\n\n")
 
+    timerParsing = time.time() - timerParsing
 
     '''PARSING (.pddl based)'''
     ### Domain and Instance parsing (problem)
     domain_name, problem_name, init_States, goal_States, number_of_actions, number_of_predicates = classical_parser.get_details(domainFile,problemFile)
-    difficulty = estimateDifficulty()
-
+    
     ### Enviromental variables parsing
     timeLimitCntx = float(getVarFromFile(context,"timelimit"))
     correctnessCntx = float(getVarFromFile(context,"correctness"))
+
+
+    ''' TIMER DECLARATION & ENVIRONMENT PREPARATION '''
+    createFolders()
+    timeSTART = time.time()
+
+    ### Difficulty estimation
+    difficulty = estimateDifficulty()
+
+   
    
    
     ''' EXPERIENCE MANAGEMENT
