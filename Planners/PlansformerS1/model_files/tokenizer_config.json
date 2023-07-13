@@ -1,0 +1,64 @@
+{
+  "add_prefix_space": false,
+  "bos_token": {
+    "__type": "AddedToken",
+    "content": "<s>",
+    "lstrip": false,
+    "normalized": true,
+    "rstrip": false,
+    "single_word": false
+  },
+  "cls_token": {
+    "__type": "AddedToken",
+    "content": "<s>",
+    "lstrip": false,
+    "normalized": true,
+    "rstrip": false,
+    "single_word": false
+  },
+  "eos_token": {
+    "__type": "AddedToken",
+    "content": "</s>",
+    "lstrip": false,
+    "normalized": true,
+    "rstrip": false,
+    "single_word": false
+  },
+  "errors": "replace",
+  "mask_token": {
+    "__type": "AddedToken",
+    "content": "<mask>",
+    "lstrip": true,
+    "normalized": true,
+    "rstrip": false,
+    "single_word": false
+  },
+  "model_max_length": 512,
+  "name_or_path": "Salesforce/codet5-base",
+  "pad_token": {
+    "__type": "AddedToken",
+    "content": "<pad>",
+    "lstrip": false,
+    "normalized": true,
+    "rstrip": false,
+    "single_word": false
+  },
+  "sep_token": {
+    "__type": "AddedToken",
+    "content": "</s>",
+    "lstrip": false,
+    "normalized": true,
+    "rstrip": false,
+    "single_word": false
+  },
+  "special_tokens_map_file": "/root/.cache/huggingface/transformers/5941df5e4315c5ab63b7b2ac791fb0bf0f209744a055c06b43b5274849137cdd.b9905d0575bde443a20834122b6e2d48e853b2e36444ce98ddeb43c38097eb3f",
+  "tokenizer_class": "RobertaTokenizer",
+  "unk_token": {
+    "__type": "AddedToken",
+    "content": "<unk>",
+    "lstrip": false,
+    "normalized": true,
+    "rstrip": false,
+    "single_word": false
+  }
+}

@@ -140,7 +140,7 @@ tmp/
 */tmp/
 .problem-cache/
 
-Planners/PlansformerS1/model_files/
+Planners/PlansformerS1/model_files/.*bin
 Planners/PlansformerS1/.ipynb_checkpoints
 Planners/PlansformerS1/__pycache__
 
