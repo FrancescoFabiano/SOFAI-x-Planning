@@ -160,4 +160,5 @@ Planners/New_PlansformerS1/mode2_model_files/*.bin
 *.sas
 *.prof
 *.vscode/
-
+tmp_lpg.sol
+tmp_lpg.SOL

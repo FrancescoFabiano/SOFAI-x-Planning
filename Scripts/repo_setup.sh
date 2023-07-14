@@ -34,9 +34,9 @@ sleep 5  # Waits 5 seconds.
 
 echo -e "\n\n\nPreparing Plansformer v2.0\n"
 cd Planners/New_PlansformerS1/mode0_model_files
-##Plansformer 2.0 -- MODE 0 File
-#gdown "https://drive.google.com/uc?id=1960ZL8-iYBvV3zwYqF1zL8CMhT8ugFPq"
-#sleep 5  # Waits 5 seconds.
+#Plansformer 2.0 -- MODE 0 File
+gdown "https://drive.google.com/uc?id=1960ZL8-iYBvV3zwYqF1zL8CMhT8ugFPq"
+sleep 5  # Waits 5 seconds.
 
 cd ../mode1_model_files
 #Plansformer 2.0 -- MODE 1 File
