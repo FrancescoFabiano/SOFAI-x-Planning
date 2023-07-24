@@ -244,3 +244,11 @@ performed).
 
 This option can be used in STRIPS domains to define the plan quality 
 metric as number of (Graphplan) time steps.
+
+  -input_plan
+
+Here is the last version of LPG for plan adaptation (file lpg).
+You need to use option  -input_plan <SOL> where  <SOL>  is a PDDL plan (same format you use to have the plan validated by VAL).
+
+
+./Planners/LPG-td-1.4/lpg -o Input/blocksworld/domain/domain.pddl -f Input/blocksworld/instances/problem_04_300.pddl -speed -input_plan Input/blocksworld/instances/plan_problem_04_300.pddl_1.SOL

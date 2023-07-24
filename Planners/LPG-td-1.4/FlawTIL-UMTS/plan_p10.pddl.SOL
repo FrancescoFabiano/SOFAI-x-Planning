@@ -1,30 +1,3 @@
-
-; Version LPG-td-1.4
-; Seed 54734439
-; Command line: ./lpg-td -o FlawTIL-UMTS/domain.pddl -f FlawTIL-UMTS/p10.pddl -speed 
-; Problem FlawTIL-UMTS
-; Time 0.03
-; Search time 0.03
-; Parsing time 0.00
-; Mutex time 0.00
-; MakeSpan 1539.00
-
-
-0.0003:   (TRM A2 M1 L2) [70.0000]
-0.0005:   (TRM A1 M1 L1) [76.0000]
-70.0007:   (CT A2 M1 L2) [45.0000]
-76.0010:   (CT A1 M1 L1) [48.0000]
-115.0012:   (AM A2 M1 L2) [0.0000]
-115.0015:   (AEEM A2 M1 L2 AE) [60.0000]
-124.0018:   (AM A1 M1 L1) [0.0000]
-124.0020:   (AEEM A1 M1 L1 AE) [66.0000]
-175.0023:   (RRC A2 M1 L2 AE) [175.0000]
-190.0025:   (RRC A1 M1 L1 AE) [202.0000]
-350.0027:   (RAB A2 M1 L2 AE) [73.0000]
-1430.0030:   (AEEI A2 M1 L2 AE) [85.0000]
-392.0032:   (RAB A1 M1 L1 AE) [67.0000]
-1430.0035:   (AEEI A1 M1 L1 AE) [36.0000]
-1466.0038:   (BS A1 M1 L1 MS1 MS2 AE) [28.0000]
-1515.0040:   (BS A2 M1 L2 MS1 MS2 AE) [24.0000]
-
-
+(TRM A2 M1 L2)
+(TRM A1 M1 L1)
+(CT A2 M1 L2)

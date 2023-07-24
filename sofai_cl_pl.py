@@ -158,29 +158,43 @@ def readThreshold(thresholdFile):
 '''Function that parses the tmp file that stores the solution from any solving process
 We assume that every solver (System-1 or System-2) generates this temporary file with the solution
 '''
-def readSolutionFromFile(filename):
+def readSolutionFromFile(filename, solver):
     try:
-        with open(filename) as myfile:
-            for line in myfile:
-                if "Solution" in line:
-                    if '=' in line:
-                        discard, sol = line.partition("=")[::2]
-                        res=[]
-                        #sol = sol.replace(' ','')
-                        sol = sol.replace(';','')
-                        sol = sol.replace('\n','')
+        if solver == 0: # System-1 plansformer and FD
+            with open(filename) as myfile:
+                for line in myfile:
+                    if "Solution" in line:
+                        if '=' in line:
+                            discard, sol = line.partition("=")[::2]
+                            res=[]
+                            #sol = sol.replace(' ','')
+                            sol = sol.replace(';','')
+                            sol = sol.replace('\n','')
 
-                        acts = sol.split(',')
+                            acts = sol.split(',')
 
-                        for act in acts:
-                            if act and not act.isspace():
-                                res.append(act.strip())
+                            for act in acts:
+                                if act and not act.isspace():
+                                    res.append(act.strip())
 
-                        myfile.close()
-                        return res
+                            myfile.close()
+                            return res
+        elif solver == 1: # LPG
+            with open(filename) as myfile:
+                res=[]
+                for line in myfile:
+                    if "no solution" in line:
+                        return "noSolution"
+                    else:
+                        cleanedLine = line.replace(';','')
+                        cleanedLine = cleanedLine.strip()
+                        if '(' in cleanedLine:
+                            res.append(re.sub(r'.*\((.+)\).*',r'\1',cleanedLine).lower())
+
 
         #raise Exception('Missing solution in '+ filename)
-        return "noSolution"
+        else:
+            return "noSolution"
     except IOError:
         return "noSolution"
 
@@ -198,7 +212,8 @@ def readTimeFromFile(filename):
                     ret = ret.replace(' ','')
                     ret = ret.replace('\n','')
                     ret = ret.replace('s','')
-
+                    ret = ret.strip()
+                    
                     myfile.close()
                     return ret
 
@@ -402,7 +417,7 @@ def executeS1():
 '''Utility function that calls subroutines to sovle the problme with System-1'''
 def solveWithS1():
     confidence, resFile = executeS1()
-    solutionS1 = readSolutionFromFile(output_folderPl1 + resFile)
+    solutionS1 = readSolutionFromFile(output_folderPl1 + resFile,0)
     return solutionS1, confidence
 
 '''Procedure that, given a solution, returns the value of that solution correctness (for now is the ratio between solved goals and total goals)'''
@@ -490,9 +505,9 @@ def solveWithS2(timeLimit, planner, solutionS1, correctnessS1, timerComputation)
     if planner == plannerS2_LPG_partial or planner == plannerS2_FD_LPG:
         if correctnessS1 >= lpg_partial_corr_threshold:
             planner = plannerS2_LPG_partial
-        elif plannerS2_LPG_partial:
+        elif planner == plannerS2_LPG_partial:
             planner = plannerS2_LPG
-        elif plannerS2_FD_LPG:
+        elif planner == plannerS2_FD_LPG:
             planner = plannerS2_FD
         else:
             planner = -1
@@ -502,27 +517,40 @@ def solveWithS2(timeLimit, planner, solutionS1, correctnessS1, timerComputation)
     if planner == plannerS2_FD:
 
         result = subprocess.run(['bash','./'+ scripts_folder + 'FASTDOWNWARD_solve.sh', domainFileNoPath, domainPath, problemFileNoPath, problemPath, " " + str(int(timeLimit))+"s"])
-    
+        resFilename = os.path.splitext(domainFileNoPath)[0]+os.path.splitext(problemFileNoPath)[0]+".out"
+        solutionS2 = readSolutionFromFile("tmp/FastDownward/" + resFilename,0)
+        time = readTimeFromFile("tmp/FastDownward/" + resFilename)
+        
     ### LPG solving
     elif planner == plannerS2_LPG:
         
         #@TODO: Yet to implement -- waiting for Call with Alfonso
         #./Planners/LPG-td-1.4/lpg-td -o Input/blocksworld/domain/domain.pddl -f Input/blocksworld/instances/problem_04_300.pddl -speed -out tmp
         result = subprocess.run(['bash','./'+ scripts_folder + 'LPG_solve.sh', domainFileNoPath, domainPath, problemFileNoPath, problemPath, " " + str(int(timeLimit))+"s"])
-        #solutionS2 = readSolutionFromFileLPG("tmp/FastDownward/" + resFilename)
-        #time = readTimeFromFileLPG("tmp/FastDownward/" + resFilename)
+        resFilename = os.path.splitext(domainFileNoPath)[0]+os.path.splitext(problemFileNoPath)[0]+".SOL"
+        solutionS2 = readSolutionFromFile("tmp/LPG/" + resFilename,1)
+        time = readTimeFromFile("tmp/LPG/" + resFilename)
+
 
     ### LPG partial + LPG solving or LPG partial + FastDownward solving
     elif planner == plannerS2_LPG_partial:
         #@TODO: Yet to implement -- waiting for Call with Alfonso
-        result = subprocess.run(['bash','./'+ scripts_folder + 'LPG_solve_partial.sh', domainFileNoPath, domainPath, problemFileNoPath, problemPath, solutionS1, " " + str(int(timeLimit))+"s"])
+        #./Planners/LPG-td-1.4/lpg -o Input/blocksworld/domain/domain.pddl -f Input/blocksworld/instances/problem_04_300.pddl -speed -input_plan Input/blocksworld/instances/plan_problem_04_300.pddl_1.SOL
+        s1SolFile = 's1Sol.tmp'
+        with open(s1SolFile, 'w') as sol_f:
+            for act in solutionS1:
+                sol_f.write(f"({str(act)})\n")
+        result = subprocess.run(['bash','./'+ scripts_folder + 'LPG_partial_solve.sh', domainFileNoPath, domainPath, problemFileNoPath, problemPath, s1SolFile, " " + str(int(timeLimit))+"s"])
+        resFilename = os.path.splitext(domainFileNoPath)[0]+os.path.splitext(problemFileNoPath)[0]+".SOL"
+        solutionS2 = readSolutionFromFile("tmp/LPG/" + resFilename,1)
+        time = readTimeFromFile("tmp/LPG/" + resFilename)
+        os.remove(s1SolFile)
+
 
     else:
         raise Exception('Planner '+ str(planner) +' is not a known S2-planner')
 
-    resFilename = os.path.splitext(domainFileNoPath)[0]+os.path.splitext(problemFileNoPath)[0]+".out"
-    solutionS2 = readSolutionFromFile("tmp/FastDownward/" + resFilename)
-    time = readTimeFromFile("tmp/FastDownward/" + resFilename)
+    
 
     if(time == "TO" or solutionS2 == "noSolution"):
         #return False, timeLimit, None

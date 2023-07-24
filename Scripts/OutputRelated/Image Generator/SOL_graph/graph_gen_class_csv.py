@@ -114,7 +114,7 @@ def sol_reader(filename,rootFilename):
 if __name__ == '__main__':
 
 
-    plotting_val = "Correctness"
+    plotting_val = "Time"
 
     if plotting_val == "Time":
         merged_name = "Sys1Sol/merged_time.csv"
@@ -145,7 +145,7 @@ if __name__ == '__main__':
         df[columns] = df[columns] / 1000
 
     # Plot the lines
-    df.plot(y=columns, style=styles, figsize=(12,4),color=['tab:orange','tab:blue'])
+    df.plot(y=columns, style=styles, figsize=(12,4),color=['limegreen','tab:blue'])
     #plt.title(plotting_val + " comparsion between Fast and Slow Arch. and FD", weight='bold')
     # label the x and y axes
     plt.xlabel('Instances', weight='bold', size='large')
