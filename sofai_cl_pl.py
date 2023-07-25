@@ -186,11 +186,12 @@ def readSolutionFromFile(filename, solver):
                     if "no solution" in line:
                         return "noSolution"
                     else:
-                        cleanedLine = line.replace(';','')
+                        cleanedLine = re.sub(r'(.*);.*',r'\1',line)
                         cleanedLine = cleanedLine.strip()
+                        #print(f"Cleaned line --- {cleanedLine}")
                         if '(' in cleanedLine:
                             res.append(re.sub(r'.*\((.+)\).*',r'\1',cleanedLine).lower())
-
+                return res
 
         #raise Exception('Missing solution in '+ filename)
         else:
@@ -206,7 +207,7 @@ def readTimeFromFile(filename):
         for line in myfile:
             if "TIMED-OUT" in line:
                 return "TO"
-            elif "completed the search" or "Search time" in line:
+            elif "completed the search" in line or "Search time" in line:
                 if ':' in line:
                     discard, ret = line.partition(":")[::2]
                     ret = ret.replace(' ','')
@@ -214,7 +215,6 @@ def readTimeFromFile(filename):
                     ret = ret.replace('s','')
                     ret = ret.strip()
                     
-                    myfile.close()
                     return ret
 
     #raise Exception('Missing plan in '+ filename)
@@ -516,6 +516,7 @@ def solveWithS2(timeLimit, planner, solutionS1, correctnessS1, timerComputation)
     ### Fast Downward solving
     if planner == plannerS2_FD:
 
+        #print(f"system 2 with FD and s1 correctness {correctnessS1}")
         result = subprocess.run(['bash','./'+ scripts_folder + 'FASTDOWNWARD_solve.sh', domainFileNoPath, domainPath, problemFileNoPath, problemPath, " " + str(int(timeLimit))+"s"])
         resFilename = os.path.splitext(domainFileNoPath)[0]+os.path.splitext(problemFileNoPath)[0]+".out"
         solutionS2 = readSolutionFromFile("tmp/FastDownward/" + resFilename,0)
@@ -524,8 +525,8 @@ def solveWithS2(timeLimit, planner, solutionS1, correctnessS1, timerComputation)
     ### LPG solving
     elif planner == plannerS2_LPG:
         
-        #@TODO: Yet to implement -- waiting for Call with Alfonso
-        #./Planners/LPG-td-1.4/lpg-td -o Input/blocksworld/domain/domain.pddl -f Input/blocksworld/instances/problem_04_300.pddl -speed -out tmp
+        #print("system 2 with LPG")
+
         result = subprocess.run(['bash','./'+ scripts_folder + 'LPG_solve.sh', domainFileNoPath, domainPath, problemFileNoPath, problemPath, " " + str(int(timeLimit))+"s"])
         resFilename = os.path.splitext(domainFileNoPath)[0]+os.path.splitext(problemFileNoPath)[0]+".SOL"
         solutionS2 = readSolutionFromFile("tmp/LPG/" + resFilename,1)
@@ -534,8 +535,9 @@ def solveWithS2(timeLimit, planner, solutionS1, correctnessS1, timerComputation)
 
     ### LPG partial + LPG solving or LPG partial + FastDownward solving
     elif planner == plannerS2_LPG_partial:
-        #@TODO: Yet to implement -- waiting for Call with Alfonso
-        #./Planners/LPG-td-1.4/lpg -o Input/blocksworld/domain/domain.pddl -f Input/blocksworld/instances/problem_04_300.pddl -speed -input_plan Input/blocksworld/instances/plan_problem_04_300.pddl_1.SOL
+        
+        #print("system 2 with LPG partial")
+
         s1SolFile = 's1Sol.tmp'
         with open(s1SolFile, 'w') as sol_f:
             for act in solutionS1:
@@ -544,6 +546,7 @@ def solveWithS2(timeLimit, planner, solutionS1, correctnessS1, timerComputation)
         resFilename = os.path.splitext(domainFileNoPath)[0]+os.path.splitext(problemFileNoPath)[0]+".SOL"
         solutionS2 = readSolutionFromFile("tmp/LPG/" + resFilename,1)
         time = readTimeFromFile("tmp/LPG/" + resFilename)
+        #print(f"\n\nSolution is {solutionS2} and time is {time}, file is tmp/LPG/{resFilename}\n\n")
         os.remove(s1SolFile)
 
 
@@ -559,12 +562,6 @@ def solveWithS2(timeLimit, planner, solutionS1, correctnessS1, timerComputation)
     else:
         memorizeSolution(systemTWO, planner, 1.0, float(time), 1.0, solutionS2, timerComputation)
         #return True, float(time), solutionS2
-
-'''Function that selects the best System 2 approach for the situation'''
-def selectPlannerS2():
-    planner = plannerS2_FD #By default we use plannerS2_FD -- we use label to indicate the planners
-
-    return planner
 
 '''Function that stores (both for evaluation and in the experience) the solution when found, and also terminates the code execution'''
 def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solution, timerComputation):
@@ -744,6 +741,8 @@ def getAvgCorrS1(system,planner,slidingWindow):
 '''Function that tries to employ System 1 and, if fails, employs System 2'''
 def tryS1(plannerS1, plannerS2, solutionS1, confidenceS1, timerS1, timerComputation, timeLimit):
     correctnessS1 = validateSolution(solutionS1)
+    #print(f"Correctness of S1 is {str(correctnessS1)}")
+
     if (correctnessS1 >= correctnessCntx):
         memorizeSolution(systemONE, plannerS1, confidenceS1, timerS1, correctnessS1, solutionS1, timerComputation)
     else:
@@ -779,7 +778,7 @@ if __name__ == '__main__':
             - 1 to indicate FastDownward
             - 2 to indicate LPG
             - 3 to indicate LPG with the possibility of replanning from S1 solutions when this is "acceptable"
-            - 4 to indictae FastDownard + the LPG replanning capabilities when S1 solution is "acceptable"
+            - 4 to indicate FastDownard + the LPG replanning capabilities when S1 solution is "acceptable"
         * <type_of_S1> can be:
             - 0 to indicate that the architecture should just use System 2 (for comparison purposes)
             - 1 to indicate the case-based solver with the concept of Levenshtein Distance
@@ -838,7 +837,7 @@ if __name__ == '__main__':
    
     if (plannerS1 == plannerS1_Plansformer or plannerS1 == plannerS1_NewPlans):
         threshold1 = 0
-        threshold4 = 0
+        threshold4 = 1
 
     #Test
     #timerS1 = time.time()
@@ -860,6 +859,7 @@ if __name__ == '__main__':
     timerS1 = time.time()
     solutionS1, confidenceS1 = solveWithS1()
     timerS1 = time.time() - timerS1 - final_training_time
+    #print(f"Solution of S1 is {str(solutionS1)} with confidence {confidenceS1}")
 
     ### Time management
     ## Storing System-1 solutions (done for future evaluation pourpouses) takes time that has to be removed from the overall running time
@@ -893,7 +893,6 @@ if __name__ == '__main__':
 
     ### We select the System-2 (this is done by looking at the result of System-1 for now and not at the instance)
     # @TODO MAybe add a neural-net that select the best System-2 planner given a problem
-    plannerS2 = selectPlannerS2()
 
     ## Once the planner is selected we calculate its usage "cost" by looking at previous example of similar difficulty
     # @TODO Maybe a neural module also for the above mentione task
