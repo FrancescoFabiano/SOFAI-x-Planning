@@ -23,7 +23,7 @@ declare -i instance_count=0
 while read -r line;
 do
   echo -e "Solving the instance \"$line\"";
-  echo -n -e "\n</ist>$instance_count</>" >> tmp/SOL/"sol.out" | python3 architecture_classical.py $line 7 $MODE >> tmp/SOL/"sol.out";
+  echo -n -e "\n</ist>$instance_count</>" >> tmp/SOL/"sol.out" | python3 sofai_cl_pl.py $line 4 7 $MODE >> tmp/SOL/"sol.out";
   instance_count=$(( instance_count+1 ))
 done < $instancesfile
 

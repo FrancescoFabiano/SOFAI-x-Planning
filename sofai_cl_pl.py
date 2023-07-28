@@ -57,9 +57,10 @@ newPlans_pretrained = 1     # Constant to indicate that Plansformer (v2.0) will 
 newPlans_continual = 2      # Constant to indicate that Plansformer (v2.0) will be pretrained and WITH continual learning
 newPlans_scratch = 3        # Constant to indicate that Plansformer (v2.0) will have NO initial experience and WITH continual learning
 
-# Parametera for Plansformer v2.0 continual learning
+# Parameters for Plansformer v2.0 continual learning
 instances_count = 0         
 final_training_time = 0.0
+continual_train_size = 201
 #firstTraining = True
 
 ## Type of System-2 Planners
