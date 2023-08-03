@@ -2,7 +2,7 @@ NewPlansformer Batch testing -- Everything to be executed from the main folder
 
 Initial Preparations:
 	1) Clean the content of the "Input/FilesList" folder
-	2) Clena the content of the "Input/NewPlansformer/<domain_name>/instances" folder for each <domain_name>
+	2) Clean the content of the "Input/NewPlansformer/<domain_name>/instances" folder for each <domain_name>
 	2) Insert the 1000 instances for testing in the "Input/NewPlansformer/<domain_name>/instances" folders foe each <domain_name>
 	3) Run the script "./Scripts/newPlans_create_file_list.sh Input/NewPlansformer/blocksworld Input/NewPlansformer/driverlog Input/NewPlansformer/hanoi Input/NewPlansformer/gripper"
 	
