@@ -54,7 +54,7 @@ def sol_reader(filename,rootFilename):
 
 
     with open(modfilename, 'w') as f:
-        print("Name,TimTimeys",file=f)
+        print("Name,Time,Corr,Sys",file=f)
         with open(newfilename) as myfile:
             for line in myfile:
                 problem = getVarFromLine(line,"pro")
@@ -73,7 +73,7 @@ def sol_reader(filename,rootFilename):
             myfile.close()
 
 
-    mydata = ['Name','Time'Time'Sys']
+    mydata = ['Name','Time','Corr','Sys']
     columns = mydata
     sort_order = mydata
     # Read a CSV file
@@ -160,7 +160,7 @@ if __name__ == '__main__':
         #         print(line1+","+line2+","+line3+","+line4,file=f)
 
         with open(modfilenames[0]) as file1:
-            print("Problem,TimTimeys,",end="\n",file=f)
+            print("Problem,Time,Corr,Sys",end="\n",file=f)
             for line1 in file1:
                 line1 = line1.strip()
                 n_inst += 1

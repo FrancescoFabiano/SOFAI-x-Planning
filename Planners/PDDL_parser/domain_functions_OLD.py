@@ -228,32 +228,14 @@ def get_preconditions(data):
 
     return preconditions
 
-# def get_effect(data):
-
-#     index = data.index(':effect')    
-#     index_dict = find_parens( data[index:] )
-#     data = data[index:]
-
-#     ind_list = sorted(list(index_dict.keys()))[1:]
-    
-#     if "and" in data[ind_list[0]:ind_list[0]+4]:
-#         ind_list = ind_list[1:]
-
-#     effect = []
-#     previoud_ind = -1
-#     for ind in ind_list:
-#         if ind > previoud_ind:
-#             effect.append( data[ ind: index_dict[ind]+1] )
-#             previoud_ind = index_dict[ind]+1
-
-#     return effect
-
 def get_effect(data):
 
     index = data.index(':effect')    
     index_dict = find_parens( data[index:] )
     data = data[index:]
-    ind_list = sorted(list(index_dict.keys()))
+
+    ind_list = sorted(list(index_dict.keys()))[1:]
+    
     if "and" in data[ind_list[0]:ind_list[0]+4]:
         ind_list = ind_list[1:]
 
