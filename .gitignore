@@ -135,6 +135,7 @@ dmypy.json
 Output/
 Memory/*
 Input/TEST_domains/
+Input/Test/*
 tmp/
 *.tmp
 */tmp/

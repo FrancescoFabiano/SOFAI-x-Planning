@@ -754,7 +754,7 @@ def tryS1(plannerS1, plannerS2, solutionS1, confidenceS1, timerS1, timerComputat
 '''Utility function that ends the computation'''
 def endComputation(problem_name,timerComputation,solved):
     if not solved:
-        print("Problem </pro>" + problem_name + "</> could not be solved and timed-out in </tio>" + (time.time() - timerComputation) + "s</>")
+        print("Problem </pro>" + problem_name + "</> could not be solved and timed-out in </tio>" + str((time.time() - timerComputation)) + "s</>")
     
     print(f" -- Total time is </tot>{(time.time() - timerTotal)}s</>, SOFAI time is </sot>{(time.time() - timerSOFAI)}s</>, Parsing was done in </par>" + str(timerParsing) + "s</>.")
     sys.exit(0)
