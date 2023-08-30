@@ -527,7 +527,6 @@ def solveWithS2(timeLimit, planner, solutionS1, correctnessS1, timerComputation)
     elif planner == plannerS2_LPG:
         
         #print("system 2 with LPG")
-
         result = subprocess.run(['bash','./'+ scripts_folder + 'LPG_solve.sh', domainFileNoPath, domainPath, problemFileNoPath, problemPath, " " + str(int(timeLimit))+"s"])
         resFilename = os.path.splitext(domainFileNoPath)[0]+os.path.splitext(problemFileNoPath)[0]+".SOL"
         solutionS2 = readSolutionFromFile("tmp/LPG/" + resFilename,1)
@@ -633,7 +632,7 @@ def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solu
         if plannerS1 == plannerS1_NewPlans:
             print(" and submodality </sub>" + str(newPlans_mode) +"</> with training size of </tra>" + str(continual_train_size) +"</>", end = '')
 
-    endComputation(problem_name,timerComputation,True)
+    endComputation(problem_name,domain_name,timerComputation,True)
 
 
 '''Function that stores the solutions proposed by System 1, even if are not adopted, for evaluation porpuses'''
@@ -752,9 +751,9 @@ def tryS1(plannerS1, plannerS2, solutionS1, confidenceS1, timerS1, timerComputat
     return correctnessS1
 
 '''Utility function that ends the computation'''
-def endComputation(problem_name,timerComputation,solved):
+def endComputation(problem_name,domain_name,timerComputation,solved):
     if not solved:
-        print("Problem </pro>" + problem_name + "</> could not be solved and timed-out in </tio>" + str((time.time() - timerComputation)) + "s</>")
+        print("Problem </pro>" + problem_name + "</> of </dmn>" + domain_name + "</> could not be solved and timed-out in </tio>" + str((time.time() - timerComputation)) + "s</>", end = '')
     
     print(f" -- Total time is </tot>{(time.time() - timerTotal)}s</>, SOFAI time is </sot>{(time.time() - timerSOFAI)}s</>, Parsing was done in </par>" + str(timerParsing) + "s</>.")
     sys.exit(0)
@@ -851,7 +850,7 @@ if __name__ == '__main__':
     '''
     if (plannerS1 == onlySystem2):
         solveWithS2(timeLimitCntx,plannerS2,[],0.0,timerComputation)
-        endComputation(problem_name,timerComputation,False)
+        endComputation(problem_name,domain_name,timerComputation,False)
 
 
     ''' SYSTEM-1 METACOGNITIVE MODULE'''
@@ -941,4 +940,4 @@ if __name__ == '__main__':
     if (remainingTime >= (estimatedTimeS2 - (float(estimatedTimeS2)/100.0 * float(flexibility_perc)))):
         solveWithS2(remainingTime,plannerS2,solutionS1,correctnessS1,timerComputation)
 
-    endComputation(problem_name,timerComputation,False)
+    endComputation(problem_name,domain_name,timerComputation,False)

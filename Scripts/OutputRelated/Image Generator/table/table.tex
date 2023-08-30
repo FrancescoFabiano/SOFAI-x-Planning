@@ -1,0 +1,42 @@
+\documentclass[12pt,a4paper]{standalone}
+\usepackage{hhline}
+\usepackage{tabularx}
+
+
+\begin{document}
+	
+	%SOFAI.P-Plansformer-1.0 -- Change names to something like this
+	%SOFAI.P-Plansformer-0.5
+	
+	%SOFAI.P-CaseBased-1.0
+	%SOFAI.P-CaseBased-0.5
+	
+%\iffalse
+	\begin{tabular}{||l|c|c|c||}
+	%Candidate Plan
+	\hhline{~|t:===:t|}
+	%   \multicolumn{5}{||c||}{\textbf{CB} with $|\sAG|=3$, $|\sF|=8$, $|\sAC|=21$} \\
+	%   \hhline{|:=====:|}
+	\multicolumn{1}{c||}{} & \multicolumn{1}{c|}{FD} 	& \texttt{SOFAI-PF-FD}  &\texttt{SOFAI-PF-LPGxFD} \\
+	\hhline{|t:=:b:===:|}
+	%Percentage of solved planned
+	Plans   					& 394 (78.8\%)					&470 (94.0\%) & \textbf{472 (94.4\%)}\\
+	\hhline{|:====:|}
+	%Correct plans out of those 414 with 1.0
+	\texttt{S1} Plans   	& --     						&191 (38.2\%) & 191 (38.2\%) \\
+	\hhline{||----||}
+	\quad Complete			& --      						&191 & 191 \\
+	%\hhline{||----||}
+	\quad Partial			& --      						&0 & 0\\
+	\hhline{|:====:|}
+		\texttt{S2} Plans   	& 394 (78.8\%) 						&279 (55.8\%) & 281 (56.2\%) \\
+	\hhline{||----||}
+	\quad FD			& 394      						&279 & 26 \\
+	%\hhline{||----||}
+	\quad LPG			& --      						&-- & 255\\
+	\hhline{|:====:|}
+	Time (avg)  								& 16.619s 						&10.933s & \textbf{6.983s}\\
+	\hhline{|b:====:b|}
+\end{tabular}
+%\fi
+\end{document}

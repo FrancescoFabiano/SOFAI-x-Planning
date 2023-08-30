@@ -1,7 +1,7 @@
 #
 # This Python File generates the graphs with the solutions from the raw output files
 #
-# Run it with "python3 graph_gen.py Time 3 Input/FD.out Input/SOFAI-PF-FD.out Input/SOFAI-PF-LPGxFD.out".
+# Run it with "python3 graph_gen_fromCSV.py Time".
 #
 
 import os
@@ -24,24 +24,29 @@ def getVarFromLine(line,varname):
     return ''
 
 
-def sol_reader(filename,rootFilename,suffix):
+def sol_reader(filename,rootFilename):
     modfilename = rootFilename+'.csv'  # /home/user/somefile.jpg
-  
+
+    suffix = os.path.basename(filename)
+    suffix = os.path.splitext(suffix)[0]
+   
     found_names = {}
 
     with open(modfilename, 'w') as f:
-        print(f"Name,Time-{suffix},Corr-{suffix},Sys-{suffix},Planner-{suffix}",file=f)
+        print(f"Name,{suffix},Corr-{suffix},Sys-{suffix},Planner-{suffix}",file=f)
         with open(filename) as myfile:
             for line in myfile:
                 problem = getVarFromLine(line,"pro")
-                
+
                 if (problem != ''):
 
-                    problem = getVarFromLine(line,"dmn") +"_"+ problem
+                    if re.match(r"problem\_\d+\_\d+\_\d+\_\d+", problem):
+                        problem = "DL_" + problem
+                    elif re.match(r"problem\_\d+\_\d+", problem):
+                        problem = "zBW_" + problem
 
-                        
-                    #elif re.match(r"problem\_\d+\_\d+", problem):
-                    #   problem = getVarFromLine(line,"dmn") + problem            
+                
+                
 
                     if problem in found_names.keys():
                         found_names[problem] = found_names[problem]+1
@@ -67,7 +72,7 @@ def sol_reader(filename,rootFilename,suffix):
             myfile.close()
 
 
-    mydata = ['Name',f'Time-{suffix}',f'Corr-{suffix}',f'Sys-{suffix}',f'Planner-{suffix}']
+    mydata = ['Name',f'{suffix}',f'Corr-{suffix}',f'Sys-{suffix}',f'Planner-{suffix}']
     columns = mydata
     sort_order = mydata
     # Read a CSV file
@@ -81,35 +86,7 @@ if __name__ == '__main__':
     plotting_val = (sys.argv[1])
     print(f"Plotting value is \"{plotting_val}\"")
 
-    narg = int(sys.argv[2])
-    print("Arg is " +  str(narg))
-
-    filenames = []
-    rootFilenames = []
-    modfilenames = []
-    dataFrames=[]
-    suffixes=[]
-    padding_arg = 3
-    count = padding_arg
-    while count < narg+padding_arg:
-        temp = sys.argv[count]
-        print("Temp is " +  str(temp))
-        filenames.append(temp)
-        rootFilenames.append(os.path.splitext(temp)[0])
-        suffixes.append(os.path.basename(rootFilenames[count-padding_arg]))
-
-        sol_reader(filenames[count-padding_arg],rootFilenames[count-padding_arg],suffixes[count-padding_arg])
-
-        modfilenames.append(rootFilenames[count-padding_arg]+'.csv')
-        dataFrames.append(pd.read_csv(modfilenames[count-padding_arg]).reset_index(drop=True))
-        path, rootFilenames[count-padding_arg] = os.path.split(rootFilenames[count-padding_arg])
-        count += 1
-
-    merged_df = functools.reduce(lambda left, right: pd.merge(left,right,on='Name'), dataFrames)
-
-
-    merged_name = "Input/Merged/merged.csv"
-    merged_df.to_csv(merged_name, encoding='utf-8', index=False)
+    merged_name = "Input/Merged/merged_cleaned.csv"
 
 
 
@@ -119,13 +96,14 @@ if __name__ == '__main__':
 
    # mydata = ["Fast Downward",'SOFAIxPlansformers','SOFAIxPlanning', 'Jaccard']
 
-    mydata=[]
-    for elem in suffixes:
-        mydata.append(plotting_val+'-'+elem)
+    mydata = ['FD','SOFAI-PF-FD','SOFAI-PF-LPGxFD']#,plotting_val+'-FD']
+    #mydata = [plotting_val+'-JAC',plotting_val+'-FD']
 
     columns = mydata
 
-    styles = ['o', 'x', 'h' , '^', 'D']
+
+
+    styles = ['o', '1', 'x']
 
     df = pd.read_csv(merged_name, usecols=columns)
 
@@ -133,7 +111,7 @@ if __name__ == '__main__':
         df[columns] = df[columns] / 1000
 
     # Plot the lines
-    df.plot(y=columns, style=styles, figsize=(12,4),color=['black','limegreen','tab:blue','tab:orange','tab:red'])
+    df.plot(y=columns, style=styles, figsize=(12,4),color=['limegreen','tab:blue','orange'])
     #plt.title(plotting_val + " comparsion between Fast and Slow Arch. and FD", weight='bold')
     # label the x and y axes
     plt.xlabel('Instances', weight='bold', size='large')
@@ -148,38 +126,14 @@ if __name__ == '__main__':
     #plt.axvspan(100, 199, color='green', alpha=0.2)
     #plt.axvspan(200, 299, color='yellow', alpha=0.2)
     #plt.axvspan(300, 399, color='blue', alpha=0.2)
-    #plt.axvspan(400, 499, color='orange', alpha=0.2)
+    ##plt.axvspan(400, 499, color='orange', alpha=0.2)
 
     plt.legend(prop={'size': 18})
-    plt.legend(labels=suffixes)
+
     #plt.xlim(1, 240)
     #plt.ylim(1, 900000)
 
     #plt.yscale('log')
-    plt.savefig(plotting_val+"-Plot.png")
-
-
-
-    nInstances = len(df)+1
-    countCases = 0
-    col_numbers = 4
-    merged_name_formula = "Input/Merged/merged_formulae.csv"
-    merged_df.to_csv(merged_name_formula, encoding='utf-8', index=False)
-
-    formula_row = "\"=SUBTOTAL(3,"+chr(ord('A') + 0)+"2:"+chr(ord('A') + 0)+str(nInstances) +")\","
-    while countCases < narg:
-        increaser = countCases*4
-        formula_row += "\"=SUBTOTAL(1,"+chr(ord('B') + increaser)+"2:"+chr(ord('B') + increaser)+str(nInstances) +")\","
-        formula_row += "\"=SUBTOTAL(1,"+chr(ord('C') + increaser)+"2:"+chr(ord('C') + increaser)+str(nInstances) +")\","
-        formula_row += "\"=COUNTIF("+chr(ord('D') + increaser)+"2:"+chr(ord('D') + increaser)+str(nInstances) +",1)\","
-        if countCases < narg:
-            formula_row += ","
-        else:
-            formula_row += "\n"
-        countCases+=1
-
-    f = open(merged_name_formula, "a")
-    f.write(formula_row)
-    f.close()
+    plt.savefig(plotting_val+"Chart.png")
 
 
