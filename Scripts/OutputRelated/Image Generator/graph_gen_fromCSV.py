@@ -1,7 +1,7 @@
 #
 # This Python File generates the graphs with the solutions from the raw output files
 #
-# Run it with "python3 graph_gen_fromCSV.py Time".
+# Run it with "python3 graph_gen_fromCSV.py Time Input/Merged/merged_cleaned.csv".
 #
 
 import os
@@ -13,81 +13,17 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import functools
+import csv
 
 
-def getVarFromLine(line,varname):
-
-#    print("Cond is </"+varname+">")
-    if "</"+varname+">" in line:
-        line = re.sub(r'.*</'+varname+'>([^<]+)</>.*',r'\1', line)
-        return line.strip()
-    return ''
-
-
-def sol_reader(filename,rootFilename):
-    modfilename = rootFilename+'.csv'  # /home/user/somefile.jpg
-
-    suffix = os.path.basename(filename)
-    suffix = os.path.splitext(suffix)[0]
-   
-    found_names = {}
-
-    with open(modfilename, 'w') as f:
-        print(f"Name,{suffix},Corr-{suffix},Sys-{suffix},Planner-{suffix}",file=f)
-        with open(filename) as myfile:
-            for line in myfile:
-                problem = getVarFromLine(line,"pro")
-
-                if (problem != ''):
-
-                    if re.match(r"problem\_\d+\_\d+\_\d+\_\d+", problem):
-                        problem = "DL_" + problem
-                    elif re.match(r"problem\_\d+\_\d+", problem):
-                        problem = "zBW_" + problem
-
-                
-                
-
-                    if problem in found_names.keys():
-                        found_names[problem] = found_names[problem]+1
-                    else:
-                        found_names[problem] = 0
-
-                    problem = problem + f"__{found_names[problem]}"
-
-
-                    if "could not be solved" in line:
-                        time = float(getVarFromLine(line,"tot")[:-1])
-                        cor = "0"
-                        sys = "-1"
-                        pla = "-1"
-                    else:
-                        time = float(getVarFromLine(line,"tot")[:-1])
-                        cor = getVarFromLine(line,"cor")
-                        sys = getVarFromLine(line,"sys")
-                        pla = getVarFromLine(line,"pla")
-                    time = time * 1000.00
-                    print(problem + ", "+ str(time)+ "," + str(cor)+ "," +str(sys)+ "," +str(pla),file=f)
-                        #sys.exit()
-            myfile.close()
-
-
-    mydata = ['Name',f'{suffix}',f'Corr-{suffix}',f'Sys-{suffix}',f'Planner-{suffix}']
-    columns = mydata
-    sort_order = mydata
-    # Read a CSV file
-    df = pd.read_csv(modfilename, usecols=columns)
-    # sorting according to multiple columns
-    df.sort_values(sort_order, ascending=True,inplace=True,na_position='first')
-    df.to_csv(modfilename, index=False)
 
 if __name__ == '__main__':
 
     plotting_val = (sys.argv[1])
+    csv_file = (sys.argv[2])
+
     print(f"Plotting value is \"{plotting_val}\"")
-
-    merged_name = "Input/Merged/merged_cleaned.csv"
-
+    print(f"Plotting file is \"{csv_file}\"")
 
 
     plt.rcParams["figure.figsize"] = [14.00, 8.00]
@@ -96,22 +32,32 @@ if __name__ == '__main__':
 
    # mydata = ["Fast Downward",'SOFAIxPlansformers','SOFAIxPlanning', 'Jaccard']
 
-    mydata = ['FD','SOFAI-PF-FD','SOFAI-PF-LPGxFD']#,plotting_val+'-FD']
-    #mydata = [plotting_val+'-JAC',plotting_val+'-FD']
+
+
+    with open(csv_file) as f:
+        reader = csv.reader(f)
+        for i, row in enumerate(reader):
+            if i == 0:
+                headers = row
+                break
+
+    mydata = []
+    suffixes = []
+    for elem in headers:
+        if re.match(rf"{plotting_val}-.+", elem):
+            mydata.append(elem)
+            suffixes.append(re.sub(rf"{plotting_val}-(.+)", r"\1", elem))
 
     columns = mydata
+    styles = ['o', 'x', 'h' , '^', 'D']
 
-
-
-    styles = ['o', '1', 'x']
-
-    df = pd.read_csv(merged_name, usecols=columns)
+    df = pd.read_csv(csv_file, usecols=columns)
 
     if plotting_val == "Time":
         df[columns] = df[columns] / 1000
 
     # Plot the lines
-    df.plot(y=columns, style=styles, figsize=(12,4),color=['limegreen','tab:blue','orange'])
+    df.plot(y=columns, style=styles, figsize=(12,4),color=['black','limegreen','tab:blue','tab:orange','tab:red'])
     #plt.title(plotting_val + " comparsion between Fast and Slow Arch. and FD", weight='bold')
     # label the x and y axes
     plt.xlabel('Instances', weight='bold', size='large')
@@ -126,14 +72,15 @@ if __name__ == '__main__':
     #plt.axvspan(100, 199, color='green', alpha=0.2)
     #plt.axvspan(200, 299, color='yellow', alpha=0.2)
     #plt.axvspan(300, 399, color='blue', alpha=0.2)
-    ##plt.axvspan(400, 499, color='orange', alpha=0.2)
+    #plt.axvspan(400, 499, color='orange', alpha=0.2)
 
     plt.legend(prop={'size': 18})
-
+    plt.legend(labels=suffixes)
     #plt.xlim(1, 240)
     #plt.ylim(1, 900000)
 
     #plt.yscale('log')
-    plt.savefig(plotting_val+"Chart.png")
+    plt.savefig(plotting_val+"-Plot.png")
+
 
 

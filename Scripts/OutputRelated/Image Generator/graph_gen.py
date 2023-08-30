@@ -37,11 +37,14 @@ def sol_reader(filename,rootFilename,suffix):
                 
                 if (problem != ''):
 
-                    problem = getVarFromLine(line,"dmn") +"_"+ problem
+                    #problem = getVarFromLine(line,"dmn") +"_"+ problem
 
-                        
-                    #elif re.match(r"problem\_\d+\_\d+", problem):
-                    #   problem = getVarFromLine(line,"dmn") + problem            
+                    if re.match(r"problem\_\d+\_\d+\_\d+\_\d+", problem):
+                        problem = "gripper" + problem     
+                    elif re.match(r"problem\_\d+\_\d\d\d", problem):
+                        problem = "hanoi" + problem            
+                    elif re.match(r"problem\_\d+\_\d+", problem):
+                        problem = "zBW" + problem 
 
                     if problem in found_names.keys():
                         found_names[problem] = found_names[problem]+1
@@ -50,14 +53,12 @@ def sol_reader(filename,rootFilename,suffix):
 
                     problem = problem + f"__{found_names[problem]}"
 
-
+                    time = float(getVarFromLine(line,"sot")[:-1])
                     if "could not be solved" in line:
-                        time = float(getVarFromLine(line,"tot")[:-1])
                         cor = "0"
                         sys = "-1"
                         pla = "-1"
                     else:
-                        time = float(getVarFromLine(line,"tot")[:-1])
                         cor = getVarFromLine(line,"cor")
                         sys = getVarFromLine(line,"sys")
                         pla = getVarFromLine(line,"pla")
