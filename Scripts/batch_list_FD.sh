@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-#USAGE EXAMPLE (from the project root folder): "./Scripts/FASTDOWNWARD_batch_test_list.sh Input/FilesList/NewPlansformerInputFile_0.txt"
+#USAGE EXAMPLE (from the project root folder): "./Scripts/batch_list_FD.sh Input/FilesList/NewPlansformerInputFile_0.txt"
 #	where:
 #			"Input/FilesList/NewPlansformerInputFile_0.txt" is the name of the file containing all the problems (shuffled) to be solved
-#     "1" is the mode in which we are using plansformer (can be 1,2, or 3 for no_continual, continual, and scratch_continual)
+
 
 instancesfile="$1" # Name of the file containing all the problems
 FILEMem="Memory/fresh_classicalNP.json"
@@ -32,4 +32,6 @@ for file in $(find "Output/SOL"/ -type f); do
 done
 
 mkdir -p Output/SOL/
-mv tmp/SOL/"sol.out" Output/SOL/sol_"$c".out
+mv tmp/SOL/sol.out tmp/SOL/FD.sol
+echo "Solution of FD batch test" | mutt -s "FD solution" -a tmp/SOL/FD.sol -- fabianofrancesco.cs@gmail.com
+mv tmp/SOL/FD.sol Output/SOL/FD_"$c".sol

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#USAGE EXAMPLE (from the project root folder): "./Scripts/newPlans_create_file_list.sh Input/Test20/blocksworld Input/Test20/driverlog Input/Test20/ferry Input/Test20/hanoi Input/Test20/gripper Input/Test20/miconic"
+#USAGE EXAMPLE (from the project root folder): "./Scripts/instances_list_generator.sh Input/Test20/blocksworld Input/Test20/driverlog Input/Test20/ferry Input/Test20/hanoi Input/Test20/gripper Input/Test20/miconic"
 #	where:
 #			"blocksworld" and "hanoi" are the names of the folders containing the domains and the instances to be added in the solving list file
 

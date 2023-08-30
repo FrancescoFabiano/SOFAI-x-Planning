@@ -1,0 +1,2 @@
+Input/Test/ferry/domain//domain.pddl Input/Test/ferry/instances//problem_6_6_464.pddl Input/contexts//contextEx.epddl Input/thresholds//thresholdEx.epddl
+Input/Test/ferry/domain//domain.pddl Input/Test/ferry/instances//problem_6_6_437.pddl Input/contexts//contextEx.epddl Input/thresholds//thresholdEx.epddl
