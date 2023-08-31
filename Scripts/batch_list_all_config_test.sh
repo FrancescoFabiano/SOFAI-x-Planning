@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# USAGE EXAMPLE (from the project root folder): "./Scripts/batch_all_config_test.sh Input/FilesList/NewPlansformerInputFile_0.txt"
+# USAGE EXAMPLE (from the project root folder): "./Scripts/batch_list_all_config_test.sh Input/FilesList/NewPlansformerInputFile_0.txt"
 # Where Input/FilesList/NewPlansformerInputFile_0.txt contains the list of the instances for the tes
 
 

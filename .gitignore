@@ -134,6 +134,7 @@ dmypy.json
 # MyFolders
 Output/
 Memory/*
+S1SOl_Memory/
 Input/TEST_domains/
 Input/Test/*
 tmp/
