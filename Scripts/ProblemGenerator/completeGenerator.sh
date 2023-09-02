@@ -95,10 +95,10 @@ do
       cp $domain_file $tempDmnFolder/domain.pddl
     fi
     
-    #prompt=$(python plansformer_prompt_generator.py "$domain_file" "$problem_file")
-    #token_count=$(python count_512subset.py "$prompt")
+    prompt=$(python plansformer_prompt_generator.py "$domain_file" "$problem_file")
+    token_count=$(python count_512subset.py "$prompt")
 
-    token_count=100
+    #token_count=100
     
     filename=$(basename -- "$problem_file")
     #Checking for token limitations
