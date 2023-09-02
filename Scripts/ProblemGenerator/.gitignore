@@ -1,0 +1,69 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+
+#Blocksworld
+blocksworld/3ops/2pddl
+blocksworld/4ops/2pddl
+blocksworld/bwstates.1/bwstates
+blocksworld/matching/2pddl-typed
+blocksworld/matching/2pddl-untyped
+blocksworld/problem_files/*
+blocksworld/problem_files_temp/*
+
+#Driverlog
+driverlog/dlgen
+driverlog/driverlog_prompt.csv
+driverlog/problem_files/*
+driverlog/problem_files_temp/*
+
+#Ferry
+ferry/ferry
+ferry/problem_files/*
+ferry/problem_files_temp/*
+
+#Gripper
+grippers/grippers
+grippers/problems/*
+grippers/problem_files_temp/*
+
+#Hanoi
+hanoi/problems/*
+hanoi/problem_files_temp/*
+
+#Miconic
+miconic/miconic
+miconic/problem_files/*
+miconic/problem_files_temp/*
+
+Output/*
