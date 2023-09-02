@@ -1,23 +1,21 @@
 #!/bin/sh
-#
-# Makefile for basic miconic examples
-#
+
 
 
 ####### FLAGS
 
-TYPE	=
-ADDONS	=
+TYPE	= 
+ADDONS	= 
 
 CC      = gcc
 
-CFLAGS	= -O3 -Wall -g $(TYPE) $(ADDONS)
+CFLAGS	= -O6 -Wall -g -ansi $(TYPE) $(ADDONS) 
 # -g -pg
 
 LIBS    = -lm
 
 
-SOURCES 	= miconic.c
+SOURCES 	= 2pddl.c
 
 OBJECTS 	= $(SOURCES:.c=.o)
 
@@ -33,7 +31,7 @@ OBJECTS 	= $(SOURCES:.c=.o)
 
 
 miconic: $(OBJECTS)
-	$(CC) -o miconic $(OBJECTS) $(CFLAGS) $(LIBS)
+	$(CC) -o 2pddl $(OBJECTS) $(CFLAGS) $(LIBS)
 
 # misc
 clean:
@@ -41,7 +39,7 @@ clean:
         \#*\# $(RES_PARSER_SRC) $(PDDL_PARSER_SRC)
 
 veryclean: clean
-	rm -f miconic H* J* K* L* O* graph.* *.symbex gmon.out \
+	rm -f  2pddl H* J* K* L* O* graph.* *.symbex gmon.out \
 	$(PDDL_PARSER_SRC) \
 	lex.fct_pddl.c lex.ops_pddl.c lex.probname.c \
 	*.output

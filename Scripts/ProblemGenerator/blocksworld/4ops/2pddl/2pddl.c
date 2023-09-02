@@ -34,7 +34,7 @@ typedef unsigned char Bool;
 /* commands
  */
 char *gdata;
-int gn;  // number of blocks
+int gn; 
 
 
 
@@ -77,7 +77,6 @@ int main( int argc, char *argv[] )
   }
   while ( (c = fgetc( data )) != '\n' );
   while ( (c = fgetc( data )) != '\n' );
-  while ( (c = fgetc( data )) != '\n' );
   for ( i = 0; i < gn; i++ ) {
     fscanf( data, " %d", &(goal[i + 1]) );
   }
@@ -89,29 +88,18 @@ int main( int argc, char *argv[] )
     printf("\n\n");
   }
 
-  printf("\n\n(define (problem matching-bw-untyped-n%d)", gn);
-  printf("\n(:domain matching-bw-untyped)");
-  printf("\n(:objects h1 h2 ");
+  printf("\n\n(define (problem BW-rand-%d)", gn);
+  printf("\n(:domain blocksworld-4ops)");
+  printf("\n(:objects ");
   for ( i = 0; i < gn; i++ ) printf("b%d ", i+1);
   printf(")");
   printf("\n(:init");
-  printf("\n (hand h1)");
-  printf("\n (hand h2)");
-  printf("\n (empty h1)");
-  printf("\n (empty h2)");
-  printf("\n (hand-positive h1)");
-  printf("\n (hand-negative h2)");
+  printf("\n(arm-empty)");
   for ( i = 1; i < gn + 1; i++ ) {
-	  printf("\n (solid b%d)",i);
-	  printf("\n (block b%d)",i);
-    if (i <= gn/2)
-		printf("\n (block-positive b%d)",i);
-	else
-		printf("\n (block-negative b%d)",i);
     if ( initial[i] == 0 ) {
-      printf("\n (on-table b%d)", i);
+      printf("\n(on-table b%d)", i);
     } else {
-      printf("\n (on b%d b%d)", i, initial[i]);
+      printf("\n(on b%d b%d)", i, initial[i]);
     }
   }
   for ( i = 1; i < gn + 1; i++ ) {
@@ -120,7 +108,7 @@ int main( int argc, char *argv[] )
       if ( initial[j] == i ) break;
     }
     if ( j < gn + 1 ) continue;
-    printf("\n (clear b%d)", i);
+    printf("\n(clear b%d)", i);
   }
   printf("\n)");
   printf("\n(:goal");
@@ -128,7 +116,7 @@ int main( int argc, char *argv[] )
   for ( i = 1; i < gn + 1; i++ ) {
     if ( goal[i] == 0 ) {
     } else {
-      printf("\n (on b%d b%d)", i, goal[i]);
+      printf("\n(on b%d b%d)", i, goal[i]);
     }
   }
   printf(")\n)\n)\n\n\n");

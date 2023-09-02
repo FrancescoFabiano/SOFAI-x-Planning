@@ -33,8 +33,8 @@
 
 
 #Blocksworld
-blocksworld/3ops/2pddl
-blocksworld/4ops/2pddl
+blocksworld/3ops/2pddl/2pddl
+blocksworld/4ops/2pddl/2pddl
 blocksworld/bwstates.1/bwstates
 blocksworld/matching/2pddl-typed
 blocksworld/matching/2pddl-untyped
@@ -67,3 +67,6 @@ miconic/problem_files/*
 miconic/problem_files_temp/*
 
 Output/*
+*.SOL
+plan.tmp
+plan.tmp.SOL

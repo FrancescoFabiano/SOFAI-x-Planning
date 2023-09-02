@@ -105,7 +105,7 @@ do
     if (( $token_count <= $max_tokens )); then
 
       #Checking for solving time limitations
-      timeout "$minimumTime"s ./../../Planners/LPG-td-1.4/lpg-td -o $domain_file -f $problem_file -speed > /dev/null
+      timeout "$minimumTime"s ./../../Planners/LPG-td-1.4/lpg-td -o $domain_file -f $problem_file -speed -out plan.tmp > /dev/null
       if [ $? -eq 124 ]; then #If we take more than the minimum time to solve with LPG fast we add it
         cp $problem_file $tempInstancesDirHard/$filename
         counter=$((counter + 1))
