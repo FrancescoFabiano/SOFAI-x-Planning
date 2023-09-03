@@ -189,7 +189,7 @@ if __name__ == '__main__':
     #plt.ylim(1, 900000)
 
     #plt.yscale('log')
-    plt.savefig(plotting_val+"-Plot.png")
+    plt.savefig("Output/"+plotting_val+"-Plot.png")
 
 
 
