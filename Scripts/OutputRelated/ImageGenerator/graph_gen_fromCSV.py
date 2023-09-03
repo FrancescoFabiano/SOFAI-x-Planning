@@ -80,6 +80,7 @@ if __name__ == '__main__':
     #plt.ylim(1, 900000)
 
     #plt.yscale('log')
+    Path("Output").mkdir(parents=True,exist_ok=True)
     plt.savefig("Output/"+plotting_val+"-Plot.png")
 
 
