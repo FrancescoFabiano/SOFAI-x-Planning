@@ -1,6 +1,6 @@
 #!/bin/bash
 # Script to generate $1 problem files for the domains. These instances should require at least $2 seconds to be solved by the fastet planner we have and within $3 tries. $4 Activate (if == 1) optimality calculation
-# Usage from the "Scripts/ProblemGenerator" folder execute "./completeGenerator.sh 20 0.5 1000 1"
+# Usage from the "Scripts/ProblemGenerator" folder execute "./completeGenerator_test.sh 5 0.5 20 1"
 # Each instance will be below 512 token and should require more than 0.5 seconds to be solved by LPG. Finally, all domains will try to generate a maximum of 1000 instances and for each one the optiaml plan is calculated
 
 max_tokens=512
@@ -14,7 +14,7 @@ origOptPath="noOpt/"
 minimumTime=$2
 declare -i maxAttemptsPerDomain=$3
 optimality=$4
-optimality_time=300
+optimality_time=1
 
 #Blocksworld specific
 declare -i maxBlockNum=16
@@ -39,7 +39,8 @@ miconicFolder="miconic/"
 
 ## declare an array variable
 #declare -a dmnArr=("$bwFolder")
-declare -a dmnArr=("$hanoiFolder" "$miconicFolder" "$grFolder" "$ferryFolder" "$dlFolder" "$bwFolder" )
+#declare -a dmnArr=("$hanoiFolder" "$miconicFolder" "$grFolder" "$ferryFolder" "$dlFolder" "$bwFolder" )
+declare -a dmnArr=("$dlFolder")
 
 ## now loop through the above array
 for domain in "${dmnArr[@]}"
@@ -113,9 +114,9 @@ do
     echo -e "; Optimality lenght is (:optlen $optimal_lenght)\n" | cat - $problem_file > optFileName.tmp && mv optFileName.tmp $problem_file
 
     #Checking for token limitations
-    prompt=$(python plansformer_prompt_generator.py "$domain_file" "$problem_file")
-    token_count=$(python count_512subset.py "$prompt")
-    #token_count=100
+    #prompt=$(python plansformer_prompt_generator.py "$domain_file" "$problem_file")
+    #token_count=$(python count_512subset.py "$prompt")
+    token_count=100
     
     filename=$(basename -- "$problem_file")
     #Checking for token limitations
