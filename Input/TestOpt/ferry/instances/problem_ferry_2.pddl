@@ -1,9 +1,9 @@
-; Optimality lenght is (:optlen 18)
+; Optimality lenght is (:optlen 11)
 
-(define (problem ferry-l6-c6)
+(define (problem ferry-l6-c3)
 (:domain ferry)
 (:objects l0 l1 l2 l3 l4 l5 
-          c0 c1 c2 c3 c4 c5 
+          c0 c1 c2 
 )
 (:init
 (location l0)
@@ -15,9 +15,6 @@
 (car c0)
 (car c1)
 (car c2)
-(car c3)
-(car c4)
-(car c5)
 (not-eq l0 l1)
 (not-eq l1 l0)
 (not-eq l0 l2)
@@ -52,19 +49,13 @@
 (at c0 l0)
 (at c1 l1)
 (at c2 l2)
-(at c3 l5)
-(at c4 l3)
-(at c5 l0)
-(at-ferry l3)
+(at-ferry l0)
 )
 (:goal
 (and
-(at c0 l0)
+(at c0 l5)
 (at c1 l3)
-(at c2 l1)
-(at c3 l3)
-(at c4 l4)
-(at c5 l3)
+(at c2 l0)
 )
 )
 )

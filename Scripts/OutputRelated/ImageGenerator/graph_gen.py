@@ -1,7 +1,7 @@
 #
 # This Python File generates the graphs with the solutions from the raw output files
 #
-# Run it with "python3 graph_gen.py Time 3 Input/FD.out Inputpyth/SOFAI-PF-FD.out Input/SOFAI-PF-LPGxFD.out".
+# Run it with "python3 graph_gen.py Time 3 Input/FD.out Input/SOFAI-PF-FD.out Input/SOFAI-PF-LPGxFD.out".
 #
 
 import os
@@ -83,7 +83,7 @@ def sol_reader(filename,rootFilename,suffix):
                         optLen = getVarFromLine(line,"optlen")
                         opt = calculate_optimality(planLen,optLen)
                     time = time * 1000.00
-                    print(f"{problem}, {str(time)}, {str(cor)}, {str(opt)}, {str(sys)}, {str(pla)}",file=f)
+                    print(f"{problem},{str(time)},{str(cor)},{str(opt)},{str(sys)},{str(pla)}",file=f)
                         #sys.exit()
             myfile.close()
 
@@ -95,6 +95,8 @@ def sol_reader(filename,rootFilename,suffix):
     df = pd.read_csv(modfilename, usecols=columns)
     # sorting according to multiple columns
     df.sort_values(sort_order, ascending=True,inplace=True,na_position='first')
+    df[f'Sys-{suffix}'] = df[f'Sys-{suffix}'].astype('Int64')
+    df[f'Planner-{suffix}'] = df[f'Planner-{suffix}'].astype('Int64')
     df.to_csv(modfilename, index=False)
 
 def loopPrintLaTeX(line,narg,tableFile):
@@ -197,21 +199,55 @@ if __name__ == '__main__':
     countCases = 0
     col_numbers = 5
     merged_name_formula = merged_path+"merged_formulae.csv"
+    
+    for suffix in suffixes:
+        merged_df[f'Sys-{suffix}'] = merged_df[f'Sys-{suffix}'].astype('Int64')
+        merged_df[f'Planner-{suffix}'] = merged_df[f'Planner-{suffix}'].astype('Int64')  
+            
     merged_df.to_csv(merged_name_formula, encoding='utf-8', index=False)
-
-    formula_row = "\"=SUBTOTAL(3,"+chr(ord('A') + 0)+"2:"+chr(ord('A') + 0)+str(nRows) +")\","
+    chrOrd = ord('A')
+    extraChar = ''
+    formula_row = "\"=SUBTOTAL(3,"+chr(chrOrd)+"2:"+chr(chrOrd)+str(nRows) +")\","
+    chrOrd+=1
+    internal_counter = 0
+    extraCounter=0
     while countCases < narg:
-        increaser = countCases*col_numbers
-        formula_row += "\"=SUBTOTAL(1,"+chr(ord('B') + increaser)+"2:"+chr(ord('B') + increaser)+str(nRows) +")\","
-        formula_row += "\"=SUBTOTAL(1,"+chr(ord('C') + increaser)+"2:"+chr(ord('C') + increaser)+str(nRows) +")\","
-        formula_row += "\"=SUBTOTAL(1,"+chr(ord('D') + increaser)+"2:"+chr(ord('D') + increaser)+str(nRows) +")\","
-        formula_row += "\"=COUNTIF("+chr(ord('E') + increaser)+"2:"+chr(ord('E') + increaser)+str(nRows) +",1)\""
-        formula_row += "," #For Empty column -- Type of system 2 does not have an aggregate
-        if countCases < narg:
-            formula_row += ","
-        else:
-            formula_row += "\n"
-        countCases+=1
+        if internal_counter < 3:
+            formula_row += "\"=SUBTOTAL(1,"+extraChar+chr(chrOrd)+"2:"+extraChar+chr(chrOrd)+str(nRows) +")\","
+            internal_counter+=1
+            if chrOrd<90:
+                chrOrd+=1
+            else:
+                chrOrd = ord('A')
+                extraChar = chr(ord('A')+extraCounter)
+                extraCounter+=1
+        
+        elif internal_counter == 3:
+            formula_row += "\"=COUNTIF("+extraChar+chr(chrOrd)+"2:"+extraChar+chr(chrOrd)+str(nRows) +",1)\""
+            internal_counter+=1
+            if chrOrd<90:
+                chrOrd+=1
+            else:
+                chrOrd = ord('A')
+                extraChar = chr(ord('A')+extraCounter)
+                extraCounter+=1
+                
+        elif internal_counter == 4:
+            formula_row += "," #For Empty column -- Type of system 2 does not have an aggregate
+            internal_counter=0
+            if chrOrd<90:
+                chrOrd+=1
+            else:
+                chrOrd = ord('A')
+                extraChar = chr(ord('A')+extraCounter)
+                extraCounter+=1
+        
+            if countCases < narg:
+                formula_row += ","
+            else:
+                formula_row += "\n"
+            
+            countCases+=1
 
     f = open(merged_name_formula, "a")
     f.write(formula_row)
@@ -391,7 +427,7 @@ if __name__ == '__main__':
             df_Sys2_cleaned = merged_df
             df_Sys2_cleaned = df_Sys2_cleaned[ (df_Sys2_cleaned[f'Sys-{suff}'] == 2) ]
             dictValues = df_Sys2_cleaned[f'Planner-{suff}'].value_counts().to_dict()
-
+        
             if 1 in dictValues.keys():
                 fdPlans = dictValues[1]
             else:

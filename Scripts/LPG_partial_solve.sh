@@ -18,7 +18,8 @@ if [ -f "$OUTTMPFILE.SOL" ] ; then
     rm "$OUTTMPFILE.SOL"
 fi;
 
-timeout "$TIMEOUT" ./Planners/LPG-td-1.4/lpg -o $DOMAINFOLDER$DOMAIN -f $PROBLEMFOLDER$PROBLEM -speed -out $OUTTMPFILE -input_plan $PARTIALPLANFILE > res.tmp
+#timeout "$TIMEOUT" ./Planners/LPG-td-1.4/lpg -o $DOMAINFOLDER$DOMAIN -f $PROBLEMFOLDER$PROBLEM -speed -out $OUTTMPFILE -input_plan $PARTIALPLANFILE > res.tmp
+timeout "$TIMEOUT" ./Planners/LPG-td-1.4/lpg -o $DOMAINFOLDER$DOMAIN -f $PROBLEMFOLDER$PROBLEM -quality -out $OUTTMPFILE -input_plan $PARTIALPLANFILE > res.tmp
 
 if [ $? -eq 124 ]; then
   echo -e "LPG TIMED-OUT" >> "$OUTTMPFILE.SOL"

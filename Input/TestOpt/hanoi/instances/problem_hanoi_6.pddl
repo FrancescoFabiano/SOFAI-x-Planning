@@ -1,4 +1,4 @@
-; Optimality lenght is (:optlen 1)
+; Optimality lenght is (:optlen 3)
 
 (define (problem problem_2_6)
   (:domain hanoi)
@@ -20,10 +20,10 @@ peg1 peg2 peg3 d1 d2 )
 )
 
   (:goal (and 
-(on d1 peg1 )
+(on d1 d2)
 (clear d1)
-(on d2 peg2 )
-(clear d2)
+(on d2 peg1 )
+(clear peg2)
 (clear peg3)  
   )
   )

@@ -12,6 +12,7 @@ cmds=("./Scripts/batch_list_FD.sh $instancesfile" "./Scripts/batch_list_LPG.sh $
 
 declare -i count=0
 mkdir -p S1SOl_Memory
+mkdir -p TotSOl_Memory
 
 for cmd in "${cmds[@]}"; do
     
@@ -26,6 +27,10 @@ for cmd in "${cmds[@]}"; do
     
     if [ -e Memory/allS1_solutions.json ]
         then cp Memory/allS1_solutions.json S1SOl_Memory/allS1_solutions_$count.json
+    fi
+    
+    if [ -e Memory/cases_classical.json ]
+        then cp Memory/cases_classical.json TotSOl_Memory/cases_classical_$count.json
     fi
     
     count=$((count+1))

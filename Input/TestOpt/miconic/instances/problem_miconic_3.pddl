@@ -1,11 +1,11 @@
-; Optimality lenght is (:optlen 14)
+; Optimality lenght is (:optlen 12)
 
 
 
 
-(define (problem mixed-f6-p5-u0-v0-d0-a0-n0-A0-B0-N0-F0)
+(define (problem mixed-f6-p4-u0-v0-d0-a0-n0-A0-B0-N0-F0)
    (:domain miconic)
-   (:objects p0 p1 p2 p3 p4 - passenger
+   (:objects p0 p1 p2 p3 - passenger
              f0 f1 f2 f3 f4 f5 - floor)
 
 
@@ -44,9 +44,6 @@
 (origin p3 f4)
 (destin p3 f1)
 
-(origin p4 f4)
-(destin p4 f3)
-
 
 
 
@@ -64,6 +61,5 @@
 (served p1)
 (served p2)
 (served p3)
-(served p4)
 ))
 )

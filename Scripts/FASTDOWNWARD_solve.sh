@@ -27,7 +27,8 @@ touch $TMPPLANFILE
 
 #python3 ./fast-downward.py --plan-file plan.out ../../Input/blocksworld/domain/domain.pddl ../../Input/blocksworld/instances/4/problem_4_1.pddl --search "astar(lmcut)" | grep "Search time:" > time.tmp
 
-timeout "$TIMEOUT" python3 Planners/FastDownward/fast-downward.py --plan-file $TMPPLANFILE $DOMAINFOLDER$DOMAIN $PROBLEMFOLDER$PROBLEM  --search "astar(lmcut)" > res.tmp
+#timeout "$TIMEOUT" python3 Planners/FastDownward/fast-downward.py --plan-file $TMPPLANFILE $DOMAINFOLDER$DOMAIN $PROBLEMFOLDER$PROBLEM  --search "astar(lmcut)" > res.tmp
+timeout "$TIMEOUT" python3 Planners/FastDownward/fast-downward.py --plan-file $TMPPLANFILE $DOMAINFOLDER$DOMAIN $PROBLEMFOLDER$PROBLEM  --search "astar(blind())" > res.tmp
 
 if [ $? -eq 124 ]; then
   echo -e "FASTDOWNWARD TIMED-OUT" >> $OUTTMPFILE
