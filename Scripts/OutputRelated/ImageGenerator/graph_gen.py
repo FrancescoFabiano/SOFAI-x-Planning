@@ -536,3 +536,11 @@ if __name__ == '__main__':
 
 
         print('\t\\end{tabular}\n\\end{document}',file=tableFile)
+
+
+    with open(table_path+"table.tex", 'r') as file:
+        data = file.read()
+        data = data.replace("_", "\\_")
+
+    with open(table_path+"table.tex", 'w') as file:
+        file.write(data)
