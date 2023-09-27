@@ -1,6 +1,6 @@
 #!/bin/bash
 # Script to generate $1 problem files for the domain for the BW (for each number fo blocks). These instances should require at least $2 seconds to be solved by the fastet planner we have and within $3 tries. $4 Activate (if == 1) optimality calculation
-# Usage from the "Scripts/ProblemGenerator" folder execute "./completeGenerator_bw.sh 150 0.01 1000 1"
+# Usage from the "Scripts/ProblemGenerator" folder execute "./completeGenerator_bw.sh 20 0.01 100 1"
 # Each instance will be below 512 token and should require more than 0.5 seconds to be solved by LPG. Finally, all domains will try to generate a maximum of 1000 instances and for each one the optiaml plan is calculated
 
 max_tokens=512
@@ -11,10 +11,10 @@ instFolderPlans="plans/"
 minimumTime=$2
 declare -i maxAttemptsPerDomain=$3
 optimality=$4
-optimality_time=300
+optimality_time=600
 
 #Blocksworld specific
-declare -i maxBlockNum=10
+declare -i maxBlockNum=15
 declare -i minBlockNum=10
 blocksNum=$minBlockNum
 bwFolder="blocksworld/"
