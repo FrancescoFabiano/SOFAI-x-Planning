@@ -11,10 +11,10 @@ instFolderPlans="plans/"
 minimumTime=$2
 declare -i maxAttemptsPerDomain=$3
 optimality=$4
-optimality_time=600
+optimality_time=300
 
 #Blocksworld specific
-declare -i maxBlockNum=16
+declare -i maxBlockNum=10
 declare -i minBlockNum=10
 blocksNum=$minBlockNum
 bwFolder="blocksworld/"
@@ -89,7 +89,6 @@ do
         else
           optimal_lenght=`wc --lines < planopt.tmp`
           optimal_lenght=$((optimal_lenght - 1))
-          optPath=""
           filename=$(basename -- "$problem_file")
           cp planopt.tmp $tempInstancesDirPlan$filename
         fi
@@ -105,9 +104,10 @@ do
       #Checking for token limitations
       if (( $token_count <= $max_tokens )); then
           if (( $optimal_lenght > 0)); then
-            cp $problem_file $tempInstancesDir$optPath$filename
+            cp $problem_file $tempInstancesDir$filename
             counter=$((counter + 1))
             echo "Added problem" $filename
+            python plansformer_csv_generator.py "$prompt" "$tempInstancesDirPlan$filename" "$outFolder$domain"
           else
             rm -f $tempInstancesDirPlan$filename
           fi
