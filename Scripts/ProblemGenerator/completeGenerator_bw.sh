@@ -15,7 +15,7 @@ optimality_time=600
 
 #Blocksworld specific
 declare -i maxBlockNum=15
-declare -i minBlockNum=10
+declare -i minBlockNum=12
 blocksNum=$minBlockNum
 bwFolder="blocksworld/"
 
@@ -67,6 +67,7 @@ do
   while (( $blocksNum <= $maxBlockNum )); do
   declare -i attemptPerDomain=0
   declare -i counter=0
+  declare -i optimal_lenght=-1
     while (( $counter < $1 && $attemptPerDomain < $maxAttemptsPerDomain )); do
 
       result=$(./"$domain"/generator_single.sh "$blocksNum")
@@ -81,20 +82,7 @@ do
         cp $domain_file $tempDmnFolder/domain.pddl
       fi
 
-      #Optimality checker
-      if (( $optimality == 1)); then
-        timeout "$optimality_time"s python3 ../../Planners/FastDownward/fast-downward.py --plan-file planopt.tmp $domain_file $problem_file  --search "astar(blind())" > /dev/null
-        if [ $? -eq 124 ]; then #If we take more than the minimum time to solve with LPG fast we add it
-          optimal_lenght=-1
-        else
-          optimal_lenght=`wc --lines < planopt.tmp`
-          optimal_lenght=$((optimal_lenght - 1))
-          filename=$(basename -- "$problem_file")
-          cp planopt.tmp $tempInstancesDirPlan$filename
-        fi
-      fi
-      echo -e "; Optimality lenght is (:optlen $optimal_lenght)\n" | cat - $problem_file > optFileName.tmp && mv optFileName.tmp $problem_file
-
+      
       #Checking for token limitations
       prompt=$(python plansformer_prompt_generator.py "$domain_file" "$problem_file")
       token_count=$(python count_512subset.py "$prompt")
@@ -103,16 +91,35 @@ do
       filename=$(basename -- "$problem_file")
       #Checking for token limitations
       if (( $token_count <= $max_tokens )); then
-          if (( $optimal_lenght > 0)); then
-            cp $problem_file $tempInstancesDir$filename
-            counter=$((counter + 1))
-            echo "Added problem" $filename
-            python plansformer_csv_generator.py "$prompt" "$tempInstancesDirPlan$filename" "$outFolder$domain"
+      
+      	#Optimality checker
+        if (( $optimality == 1)); then
+          timeout "$optimality_time"s python3 ../../Planners/FastDownward/fast-downward.py --plan-file planopt.tmp $domain_file $problem_file  --search "astar(lmcut)" > /dev/null
+          if [ $? -eq 124 ]; then #If we take more than the minimum time to solve with LPG fast we add it
+            optimal_lenght=-1
           else
-            rm -f $tempInstancesDirPlan$filename
+            optimal_lenght=`wc --lines < planopt.tmp`
+            optimal_lenght=$((optimal_lenght - 1))
+            filename=$(basename -- "$problem_file")
+            cp planopt.tmp $tempInstancesDirPlan$filename
           fi
+        fi
+        echo -e "; Optimality lenght is (:optlen $optimal_lenght)\n" | cat - $problem_file > optFileName.tmp && mv optFileName.tmp $problem_file
+
+      
+        if (( $optimal_lenght > 0)); then
+          cp $problem_file $tempInstancesDir$filename
+          counter=$((counter + 1))
+          echo "Added problem $filename"
+          python plansformer_csv_generator.py "$prompt" "$tempInstancesDirPlan$filename" "$outFolder$domain"
+        else
+          echo "Discarded problem $filename because could not find the solution within $optimality_time seconds"
+          rm -f $tempInstancesDirPlan$filename
+        fi
       else
+        echo "Discarded problem $filename because of too many tokens"
         rm -f $tempInstancesDirPlan$filename
+        rm -f $problem_file
       fi 
 
       attemptPerDomain=$((attemptPerDomain + 1))

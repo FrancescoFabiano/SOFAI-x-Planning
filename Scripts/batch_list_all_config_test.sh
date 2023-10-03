@@ -8,7 +8,9 @@ instancesfile="$1"
 
 #!/usr/bin/env bash
 
-cmds=("./Scripts/batch_list_FD.sh $instancesfile" "./Scripts/batch_list_LPG.sh $instancesfile" "./Scripts/batch_list_SOFAI-PF-FD.sh $instancesfile 1" "./Scripts/batch_list_SOFAI-PF-LPG.sh $instancesfile 1" "./Scripts/batch_list_SOFAI-PF-FDxLPG.sh $instancesfile 1" "./Scripts/batch_list_SOFAI-PF-LPGxLPG.sh $instancesfile 1")
+#cmds=("./Scripts/batch_list_FD.sh $instancesfile" "./Scripts/batch_list_LPG.sh $instancesfile" "./Scripts/batch_list_SOFAI-PF-FD.sh $instancesfile 1" "./Scripts/batch_list_SOFAI-PF-LPG.sh $instancesfile 1" "./Scripts/batch_list_SOFAI-PF-FDxLPG.sh $instancesfile 1" "./Scripts/batch_list_SOFAI-PF-LPGxLPG.sh $instancesfile 1")
+
+cmds=("./Scripts/batch_list_SOFAI-PF-FD.sh $instancesfile 1" "./Scripts/batch_list_SOFAI-PF-LPG.sh $instancesfile 1" "./Scripts/batch_list_SOFAI-PF-FDxLPG.sh $instancesfile 1" "./Scripts/batch_list_SOFAI-PF-LPGxLPG.sh $instancesfile 1")
 
 declare -i count=0
 mkdir -p S1SOl_Memory
