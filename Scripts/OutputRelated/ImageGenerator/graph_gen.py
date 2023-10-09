@@ -1,7 +1,7 @@
 #
 # This Python File generates the graphs with the solutions from the raw output files
 #
-# Run it with "python3 graph_gen.py Time 3 Input/FD.out Input/SOFAI-PF-FD.out Input/SOFAI-PF-LPGxFD.out".
+# Run it with "python3 graph_gen.py Time 6 Input/FD.sol Input/LPG.sol Input/SOFAI-PF-FD.sol Input/SOFAI-PF-FDxLPG.sol Input/SOFAI-PF-LPG.sol Input/SOFAI-PF-LPGxLPG.sol".
 #
 
 import os
@@ -130,7 +130,7 @@ if __name__ == '__main__':
 
     domain_separate = False
     tot_domain_list = ['blocksworld-4ops', 'ferry', 'hanoi', 'gripper-strips', 'miconic', 'driverlog']
-    #tot_domain_list = [ 'ferry', 'hanoi', 'gripper-strips', 'miconic', 'driverlog']
+    tot_domain_list = [ 'ferry', 'hanoi', 'gripper-strips', 'miconic', 'driverlog']
 
     domain_list = []
     iter_domain = 0
