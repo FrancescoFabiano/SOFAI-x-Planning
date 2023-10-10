@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# USAGE EXAMPLE (from the project root folder): "./Scripts/batch_list_all_config_test.sh Input/FilesList/NewPlansformerInputFile_0.txt"
+# USAGE EXAMPLE (from the project root folder): "./Scripts/batch_list_all_configS2_test.sh Input/FilesList/NewPlansformerInputFile_0.txt"
 # Where Input/FilesList/NewPlansformerInputFile_0.txt contains the list of the instances for the tes
 
 
@@ -8,9 +8,9 @@ instancesfile="$1"
 
 #!/usr/bin/env bash
 
-#cmds=("./Scripts/batch_list_FD.sh $instancesfile" "./Scripts/batch_list_LPG.sh $instancesfile" "./Scripts/batch_list_SOFAI-PF-FD.sh $instancesfile 1" "./Scripts/batch_list_SOFAI-PF-LPG.sh $instancesfile 1" "./Scripts/batch_list_SOFAI-PF-FDxLPG.sh $instancesfile 1" "./Scripts/batch_list_SOFAI-PF-LPGxLPG.sh $instancesfile 1")
+#cmds=("./Scripts/batch_list_FD.sh $instancesfile" "./Scripts/batch_list_LPG.sh $instancesfile" "./Scripts/batch_list_SOFAI-PF-FD.sh $instancesfile" "./Scripts/batch_list_SOFAI-PF-LPG.sh $instancesfile" "./Scripts/batch_list_SOFAI-PF-FDxLPG.sh $instancesfile" "./Scripts/batch_list_SOFAI-PF-LPGxLPG.sh $instancesfile")
 
-cmds=("./Scripts/batch_list_SOFAI-PF-FD.sh $instancesfile 1" "./Scripts/batch_list_SOFAI-PF-LPG.sh $instancesfile 1" "./Scripts/batch_list_SOFAI-PF-FDxLPG.sh $instancesfile 1" "./Scripts/batch_list_SOFAI-PF-LPGxLPG.sh $instancesfile 1")
+cmds=("./Scripts/batch_list_SOFAI-PF-FD.sh $instancesfile" "./Scripts/batch_list_SOFAI-PF-LPG.sh $instancesfile" "./Scripts/batch_list_SOFAI-PF-FDxLPG.sh $instancesfile" "./Scripts/batch_list_SOFAI-PF-LPGxLPG.sh $instancesfile")
 
 declare -i count=0
 mkdir -p S1SOl_Memory

@@ -128,9 +128,9 @@ def loopPrintLaTeXArray(line_before,endline,endSequence,array,tableFile):
 
 if __name__ == '__main__':
 
-    domain_separate = False
+    domain_separate = True
     tot_domain_list = ['blocksworld-4ops', 'ferry', 'hanoi', 'gripper-strips', 'miconic', 'driverlog']
-    tot_domain_list = [ 'ferry', 'hanoi', 'gripper-strips', 'miconic', 'driverlog']
+    #tot_domain_list = [ 'ferry', 'hanoi', 'gripper-strips', 'miconic', 'driverlog']
 
     domain_list = []
     iter_domain = 0
@@ -299,7 +299,7 @@ if __name__ == '__main__':
         #Create LaTeX Table
         if domain_separate:
             table_path="Output/Table_"+f"{domain_list[0]}/"
-            table_filename = "table_"+f"{domain_list[0]}"+".tex"
+            table_filename = "table_"+f"{domain_list[0]}"+"4.tex"
         else:
             table_path="Output/Table/"
             table_filename = "table.tex"

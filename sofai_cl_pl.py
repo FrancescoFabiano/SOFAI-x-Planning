@@ -258,6 +258,8 @@ def executeS1():
         cases = experience["cases"]
 
         ### Secific System-1 handling
+        global instances_count
+        global final_training_time
 
         ## Levenshtein and Jaccard case-based (disjunctive)
         if (plannerS1 == plannerS1_Dist1 or plannerS1 == plannerS1_Dist2):
@@ -332,7 +334,7 @@ def executeS1():
         ## Plansformer v2.0
         elif (plannerS1 == plannerS1_NewPlans):
             
-            global instances_count
+            
 
             if (newPlans_mode != newPlans_pretrained):
                 if not os.path.exists(dbFolder + continual_train_file):
@@ -359,7 +361,6 @@ def executeS1():
                     elif (newPlans_mode == newPlans_scratch): #continual learning on pretrained model
                         scracth_training.scratch_plansformer_continual(dbFolder + continual_train_file,continual_train_size)
                     os.rename(dbFolder + continual_train_file, dbFolder + strftime("%Y-%m-%d_%H-%M-%S", gmtime()) + "_done_" + continual_train_file)
-                    global final_training_time
                     final_training_time = time.time() - start_training_time
 
 
@@ -383,9 +384,10 @@ def executeS1():
                 else:
                     sol = sol + ", " + act
 
-        ## Plansformer v1.0 and Jaccard case-based (toghether)
+        ## Plansformer v2.0 and Jaccard case-based (toghether)
         elif(plannerS1 == plannerS1_JacPlans):
             #init_States,goal = getStates.States(problemFile) #reading initial and goal states from problem file
+
 
             #returned_list has records of this form <path_to_sol, similarity_score, problem_name>
             sol = ""
@@ -404,7 +406,45 @@ def executeS1():
                     solCB = solCB + ", " + act
             confidenceCB = returned_list[0][0]
 
-            tens_confidence, plan = plansformer_s1.solve(domainFile,problemFile)
+
+            if (newPlans_mode != newPlans_pretrained):
+                if not os.path.exists(dbFolder + continual_train_file):
+                    with open(dbFolder + continual_train_file, 'w+') as f:
+                        f.write(",DomainProblem,Plan,ProblemPath\n")
+                    instances_count = 0
+                elif instances_count == 0:
+                    instances_count = sum(1 for line in open(dbFolder + continual_train_file)) -1 #-1 for title
+
+            #Training
+            training = False
+            if (newPlans_mode != newPlans_pretrained):
+                if (instances_count >= continual_train_size): #We reached the appropriate number of new instances to train
+                    training = True
+                #    print(f"\n\nDEBUG:I'm in here with instance count = {instances_count} and training_size = {continual_train_size}")
+                #elif newPlans_mode == newPlans_scratch and firstTraining:
+                #    training = True
+                #    firstTraining = False
+                
+                if training:
+                    start_training_time = time.time()
+                    if (newPlans_mode == newPlans_continual): #continual learning on pretrained model
+                        continual_training.existing_plansformer_continual(dbFolder + continual_train_file,continual_train_size)
+                    elif (newPlans_mode == newPlans_scratch): #continual learning on pretrained model
+                        scracth_training.scratch_plansformer_continual(dbFolder + continual_train_file,continual_train_size)
+                    os.rename(dbFolder + continual_train_file, dbFolder + strftime("%Y-%m-%d_%H-%M-%S", gmtime()) + "_done_" + continual_train_file)
+                    final_training_time = time.time() - start_training_time
+
+
+            #Solving
+            try:
+                tens_confidence, plan = newPlansformer_s1.solve(domainFile,problemFile,(newPlans_mode-1))
+            except Exception as e:
+                 logging.error(traceback.format_exc())
+                 raise Exception("NewPlansformer encountered some errors.")
+
+            #print(f"tens confidence is {str(str_confidence)}")
+
+
             confidencePL = float(tensor_clean(tens_confidence))
             solPL = ""
             first_act = True
@@ -898,6 +938,7 @@ if __name__ == '__main__':
     ## We first check if System-2 has generated at least an experience of n > threshold1 entries to allow System-1 to continue
     M = 1
     testedS1 = False
+    correctnessS1=0
     if (countSolvedInstances(systemALL,plannerALL) > threshold1):
         ## We then check if System-1 has generated at least m > threshold4 plans to evaluate its performance and check if it make sense to verify it
         if (countSolvedInstances(systemONE,plannerALL) > threshold4):
