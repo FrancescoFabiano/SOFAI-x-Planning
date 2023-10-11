@@ -864,7 +864,7 @@ if __name__ == '__main__':
     readThreshold(sys.argv[4])                      #<threshold_file>
     plannerS2 = int(sys.argv[5])                    #<type_of_S2>
     plannerS1 = int(sys.argv[6])                    #<type_of_S1>
-    if (plannerS1 == plannerS1_NewPlans):           
+    if (plannerS1 == plannerS1_NewPlans or plannerS1 == plannerS1_JacPlans):           
         newPlans_mode = int(sys.argv[7])            #<planformer_mode>
         if (newPlans_mode == newPlans_scratch or newPlans_mode == newPlans_continual):
             continual_train_size = int(sys.argv[8])     #<training_size>

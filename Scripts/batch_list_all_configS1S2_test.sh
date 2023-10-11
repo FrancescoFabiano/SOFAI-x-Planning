@@ -9,20 +9,28 @@ instancesfile="$1"
 #!/usr/bin/env bash
 
 
-system1_configs=("0" "1" "2" "3" "4" "5" "6" "7 1")
+system1_configs=("0" "1" "2" "3" "4" "5" "6" "7")
 system1_names=("" "LEV" "JAC" "RNG" "MIX" "PFOLD" "JACPF" "PF")
 
 system2_configs=("1" "2" "3" "4")
 system2_names=("FD" "LPG" "LPGxLPG" "FDxLPG")
 
-used_S1configs=("2" "4" "6")
-used_S2configs=("1" "2" "3" "4")
+#used_S1configs=("2" "4" "6")
+used_S1configs=("6")
+#used_S2configs=("1" "2" "3" "4")
+used_S2configs=("2" "3" "4")
+
 
 declare -i count=0
 mkdir -p S1SOl_Memory
 mkdir -p TotSOl_Memory
 
 for sys1 in "${used_S1configs[@]}"; do
+    declare -i sys1ConfigIndex=$(( sys1 ))
+    if [[ "$sys1" == "6" ]] || [[ "$sys1" == "7" ]]; then
+	sys1="$sys1 1"
+    fi
+    
     for sys2 in "${used_S2configs[@]}"; do
 
         echo -e "\nCleaning repository for new execution"
@@ -30,7 +38,7 @@ for sys1 in "${used_S1configs[@]}"; do
         rm -rf Memory/*
         rm -rf tmp/
 
-        declare -i sys1ConfigIndex=$(( sys1 ))
+
         declare -i sys2ConfigIndex=$(( sys2 - 1 ))
 
         if [[ "$sys1" == "0" ]]; then

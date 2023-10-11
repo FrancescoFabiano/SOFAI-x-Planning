@@ -15,7 +15,7 @@ system1="$4"
 PF_type=""
 training_size=""
 
-if [[ "$system1" == "7" ]]; then
+if [[ "$system1" == "6" ]] || [[ "$system1" == "7" ]]; then
   PF_type=$5
   if [[ "$PF_type" == "2" ]] || [[ "$PF_type" == "3" ]]; then
     training_size=$6
