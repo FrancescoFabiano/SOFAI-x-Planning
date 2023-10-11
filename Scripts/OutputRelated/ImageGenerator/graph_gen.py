@@ -2,7 +2,7 @@
 # This Python File generates the graphs with the solutions from the raw output files
 #
 # Run it with "python3 graph_gen.py Time 6 Input/FD.sol Input/LPG.sol Input/SOFAI-PF-FD.sol Input/SOFAI-PF-FDxLPG.sol Input/SOFAI-PF-LPG.sol Input/SOFAI-PF-LPGxLPG.sol".
-#
+# Run it with "python3 graph_gen.py Time Input".
 
 import os
 import re
@@ -13,7 +13,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import functools
-
+import glob
 
 
 def getVarFromLine(line,varname):
@@ -144,22 +144,33 @@ if __name__ == '__main__':
             iter_domain = len(tot_domain_list)
 
 
-        plotting_val = (sys.argv[1])
+        plotting_val = sys.argv[1]
         print(f"Plotting value is \"{plotting_val}\"")
 
-        narg = int(sys.argv[2])
-        print("Arg is " +  str(narg))
+        inputFolder = sys.argv[2]
+        solutionfilesExt=".sol"
+
+        narg = len(glob.glob1(inputFolder,f"*{solutionfilesExt}"))
+        # list to store files
+        solFiles = []
+        # Iterate directory
+        for file in os.listdir(inputFolder):
+            # check only text files
+            if file.endswith(f"{solutionfilesExt}"):
+                solFiles.append(f"{inputFolder}/{file}")
+
+        print("Files to analize are: " +  str(solFiles))
+
 
         filenames = []
         rootFilenames = []
         modfilenames = []
         dataFrames=[]
         suffixes=[]
-        padding_arg = 3
-        count = padding_arg
+        count = 0
         decrease_n_arg = 0
-        while count < narg+padding_arg:
-            temp = sys.argv[count]
+        while count < narg:
+            temp = solFiles[count]
             tmp_filename = temp
             tmp_rootFilename = (os.path.splitext(temp)[0])
             tmp_suffix = (os.path.basename(tmp_rootFilename))
@@ -167,10 +178,10 @@ if __name__ == '__main__':
             if(sol_reader(tmp_filename,tmp_rootFilename,tmp_suffix,domain_list)):
                 filenames.append(temp)
                 rootFilenames.append(os.path.splitext(temp)[0])
-                suffixes.append(os.path.basename(rootFilenames[count-padding_arg]))
-                modfilenames.append(rootFilenames[count-padding_arg]+'.csv')
-                dataFrames.append(pd.read_csv(modfilenames[count-padding_arg]).reset_index(drop=True))
-                path, rootFilenames[count-padding_arg] = os.path.split(rootFilenames[count-padding_arg])
+                suffixes.append(os.path.basename(rootFilenames[count]))
+                modfilenames.append(rootFilenames[count]+'.csv')
+                dataFrames.append(pd.read_csv(modfilenames[count]).reset_index(drop=True))
+                path, rootFilenames[count] = os.path.split(rootFilenames[count])
             else:
                 decrease_n_arg +=1
             count += 1
@@ -298,8 +309,9 @@ if __name__ == '__main__':
 
         #Create LaTeX Table
         if domain_separate:
+            extension="5"
             table_path="Output/Table_"+f"{domain_list[0]}/"
-            table_filename = "table_"+f"{domain_list[0]}"+"4.tex"
+            table_filename = "table_"+f"{domain_list[0]}{extension}.tex"
         else:
             table_path="Output/Table/"
             table_filename = "table.tex"
