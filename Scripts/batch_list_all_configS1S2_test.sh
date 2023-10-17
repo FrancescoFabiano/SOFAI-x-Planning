@@ -16,7 +16,7 @@ system2_configs=("1" "2" "3" "4")
 system2_names=("FD" "LPG" "LPGxLPG" "FDxLPG")
 
 #used_S1configs=("2" "4" "6")
-used_S1configs=("6")
+used_S1configs=("1" "3")
 #used_S2configs=("1" "2" "3" "4")
 used_S2configs=("2" "3" "4")
 
