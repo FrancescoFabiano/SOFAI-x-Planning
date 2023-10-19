@@ -28,6 +28,7 @@ mkdir -p tmp/SOL/
 touch tmp/SOL/"sol.out"
 echo "" > tmp/SOL/"sol.out"
 
+mkdir -p Memory/
 if test -f "$FILEMem"; then
   cp -f $FILEMem "Memory/cases_classical.json"
 else

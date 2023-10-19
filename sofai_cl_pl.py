@@ -930,7 +930,8 @@ if __name__ == '__main__':
         if (correctnessS1 >= correctnessCntx):
             memorizeSolution(systemONE, plannerS1, confidenceS1, timerOnlyS1, correctnessS1, solutionS1, timerComputation)
         else:
-            solveWithS2(timeLimitCntx - (time.time() - timerComputation), plannerS2_FD, solutionS1, correctnessS1, timerComputation, True, False)
+            if plannerS1 != plannerS1_NewPlans:
+            	solveWithS2(timeLimitCntx - (time.time() - timerComputation), plannerS2_FD, solutionS1, correctnessS1, timerComputation, True, False)
             memorizeSolution(systemONE, plannerS1, confidenceS1, timerOnlyS1, correctnessS1, solutionS1, timerComputation, False, True)
 
     ''' SYSTEM-1 METACOGNITIVE MODULE'''
