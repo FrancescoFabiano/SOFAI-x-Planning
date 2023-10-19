@@ -17,7 +17,7 @@ optimality=$4
 optimality_time=300
 
 #Blocksworld specific
-declare -i maxBlockNum=16
+declare -i maxBlockNum=11
 declare -i minBlockNum=10
 blocksNum=$minBlockNum
 bwFolder="blocksworld/"

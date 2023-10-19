@@ -22,7 +22,7 @@ if [[ "$system1" == "6" ]] || [[ "$system1" == "7" ]]; then
   fi
 fi
 
-FILEMem="Memory/fresh_classicalNP.json"
+FILEMem="Utilities/fresh_classical.json"
 
 mkdir -p tmp/SOL/
 touch tmp/SOL/"sol.out"

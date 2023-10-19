@@ -65,6 +65,7 @@ continual_train_size = 201
 
 ## Type of System-2 Planners
 
+onlySystem1 = 0            # Constant that represents NO System-2 Planner (evaluation porpuses)
 plannerS2_FD = 1            # Constant to indicate the System-2 solver "FAST DOWNWARD"
 plannerS2_LPG = 2           # Constant to indicate the System-2 solver "LPG" 
 plannerS2_LPG_partial = 3   # Constant to indicate the System-2 solver "LPG" with the replanning capabilities (from S1)
@@ -545,7 +546,7 @@ def estimateTimeCons(planner,difficulty):
         return noMatchConsumption
 
 '''Procedure that tris to solve the problem with System 2 within the time limit'''
-def solveWithS2(timeLimit, planner, solutionS1, correctnessS1, timerComputation):
+def solveWithS2(timeLimit, planner, solutionS1, correctnessS1, timerComputation, continue_solve=False, temp_solve=False):
 
     #print("Problem </pro>" + problem_name + "</> solved by System </sys>" + str(systemTWO) + "</> using planner </pla>" + str(planner) +"</>.")
     #sys.exit(0)
@@ -619,11 +620,11 @@ def solveWithS2(timeLimit, planner, solutionS1, correctnessS1, timerComputation)
         #print("Problem </pro>" + problem_name + "</> could not be solved by System </sys>" + str(systemTWO) + "</> using planner </pla>" + str(planner) +"</>.")
         return False
     else:
-        memorizeSolution(systemTWO, planner, 1.0, float(time), 1.0, solutionS2, timerComputation)
+        memorizeSolution(systemTWO, planner, 1.0, float(time), 1.0, solutionS2, timerComputation, continue_solve, temp_solve)
         #return True, float(time), solutionS2
 
 '''Function that stores (both for evaluation and in the experience) the solution when found, and also terminates the code execution'''
-def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solution, timerComputation):
+def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solution, timerComputation, continue_solve=False, temp_solve=False):
 
     memory_file = open(experience_file)
     totalTIME = time.time()-timerComputation
@@ -658,11 +659,14 @@ def memorizeSolution(system, planner, confidence, elapsedTime, correctness, solu
     data['cases'][str(index)]['goal'] = goal_States
     data['cases'][str(index)]['plan'] = solution
 
-    json_object = json.dumps(data,indent=4)
-
-    # writing dictionary data into json file
-    with open(experience_file,"w") as out:
-        out.write(json_object)
+    if not temp_solve:
+        json_object = json.dumps(data,indent=4)
+        # writing dictionary data into json file
+        with open(experience_file,"w") as out:
+            out.write(json_object)
+    
+    if continue_solve:
+        return
 
     if system != systemONE: #We only take sys2 solution
         if plannerS1 == plannerS1_NewPlans:
@@ -839,6 +843,7 @@ if __name__ == '__main__':
         python3 sofai_cl_pl.py <domain_file> <instance_file> <context_file> <threshold_file> <type_of_S2> <type_of_S1> (<planformerV2.0_mode>) (<training_size>)
     where:
         * <type_of_S2> can be:
+            - 0 to indicate that the architecture should just use System 1 (for comparison purposes)
             - 1 to indicate FastDownward
             - 2 to indicate LPG
             - 3 to indicate LPG with the possibility of replanning from S1 solutions when this is "acceptable"
@@ -915,7 +920,18 @@ if __name__ == '__main__':
     if (plannerS1 == onlySystem2):
         solveWithS2(timeLimitCntx,plannerS2,[],0.0,timerComputation)
         endComputation(problem_name,domain_name,timerComputation,False)
+    
+    elif(plannerS2 == onlySystem1):
+        timerOnlyS1 = time.time()
+        solutionS1, confidenceS1 = solveWithS1()
+        timerOnlyS1 = time.time() - timerOnlyS1 - final_training_time
+        correctnessS1 = validateSolution(solutionS1)
 
+        if (correctnessS1 >= correctnessCntx):
+            memorizeSolution(systemONE, plannerS1, confidenceS1, timerOnlyS1, correctnessS1, solutionS1, timerComputation)
+        else:
+            solveWithS2(timeLimitCntx - (time.time() - timerComputation), plannerS2_FD, solutionS1, correctnessS1, timerComputation, True, False)
+            memorizeSolution(systemONE, plannerS1, confidenceS1, timerOnlyS1, correctnessS1, solutionS1, timerComputation, False, True)
 
     ''' SYSTEM-1 METACOGNITIVE MODULE'''
    
