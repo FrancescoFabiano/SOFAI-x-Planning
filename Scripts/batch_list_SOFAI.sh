@@ -22,12 +22,13 @@ if [[ "$system1" == "6" ]] || [[ "$system1" == "7" ]]; then
   fi
 fi
 
-FILEMem="Memory/fresh_classicalNP.json"
+FILEMem="Utilities/fresh_classical.json"
 
 mkdir -p tmp/SOL/
 touch tmp/SOL/"sol.out"
 echo "" > tmp/SOL/"sol.out"
 
+mkdir -p Memory/
 if test -f "$FILEMem"; then
   cp -f $FILEMem "Memory/cases_classical.json"
 else

@@ -13,7 +13,9 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import functools
 import glob
+import math
 
+acceptable_corr = 1.0
 
 def getVarFromLine(line,varname):
 
@@ -23,14 +25,14 @@ def getVarFromLine(line,varname):
         return line.strip()
     return ''
 
-def calculate_optimality(planLen,optLen):
+def calculate_optimality(planLen,optLen,cor):
     
     #print(f"Plan len is {planLen} while optimal len is {optLen}",end="")
 
     planLen = int(planLen)
     optLen = int(optLen)
 
-    if optLen == -1 or planLen == -1:
+    if optLen == -1 or planLen == -1 or (float(cor) < acceptable_corr):
         #print(f" Optimality is {-1}")
         return -1
 
@@ -42,8 +44,6 @@ def calculate_optimality(planLen,optLen):
 
 def sol_reader(filename,rootFilename,suffix,domain_list):
     
-  
-
     guard = False
     with open(filename) as myfile:
         for line in myfile:
@@ -83,8 +83,12 @@ def sol_reader(filename,rootFilename,suffix,domain_list):
                             problem = problem + f"__{found_names[problem]}"
 
                             time = float(getVarFromLine(line,"sot")[:-1])
-                            if "could not be solved" in line:
-                                cor = "0"
+                            #time = float(getVarFromLine(line,"tim")[:-1])
+                            if "could not be solved" in line or (float(getVarFromLine(line,"cor")) < acceptable_corr):
+                                if "could not be solved" in line:
+                                    cor = "0"
+                                else:
+                                    cor = getVarFromLine(line,"cor")
                                 sys = "-1"
                                 pla = "-1"
                                 opt = "-1"
@@ -94,7 +98,7 @@ def sol_reader(filename,rootFilename,suffix,domain_list):
                                 pla = getVarFromLine(line,"pla")
                                 planLen = getVarFromLine(line,"sollenght")
                                 optLen = getVarFromLine(line,"optlen")
-                                opt = calculate_optimality(planLen,optLen)
+                                opt = calculate_optimality(planLen,optLen,cor)
                             time = time * 1000.00
                             print(f"{problem},{str(time)},{str(cor)},{str(opt)},{str(sys)},{str(pla)}",file=f)
                                 #sys.exit()
@@ -210,7 +214,7 @@ if __name__ == '__main__':
 
         columns = mydata
 
-        styles = ['o', 'x', 'h' , '^', 'D']
+        styles = ['o', 'x', '^', 'h' , 'D']
 
         df = pd.read_csv(merged_name, usecols=columns)
 
@@ -218,7 +222,7 @@ if __name__ == '__main__':
             df[columns] = df[columns] / 1000
 
         # Plot the lines
-        df.plot(y=columns, style=styles, figsize=(12,4),color=['black','limegreen','tab:blue','tab:orange','tab:red'])
+        df.plot(y=columns, style=styles, figsize=(12,4),color=['limegreen','tab:blue','tab:orange','tab:red','black',])
         #plt.title(plotting_val + " comparsion between Fast and Slow Arch. and FD", weight='bold')
         # label the x and y axes
         plt.xlabel('Instances', weight='bold', size='large')
@@ -462,7 +466,7 @@ if __name__ == '__main__':
                 if 2 in dictValues.keys():
                     sys2Plans = dictValues[2]
                 else:
-                    sys1Plans = 0
+                    sys2Plans = 0
 
                 sys1PlansArr.append(f"{sys1Plans} ({(sys1Plans / nInstances)*100.0:.2f}\%)")
                 sys1PlanClean.append(sys1Plans)
@@ -503,9 +507,9 @@ if __name__ == '__main__':
             #loopPrintLaTeXArray(""," & ","\\\\\n",sys1_partial_stats,tableFile)
 
 
-            print('\t\t\\hhline{||',file=tableFile,end="")
-            loopPrintLaTeX('-',narg+1,tableFile)
-            print('||}',file=tableFile)
+            #print('\t\t\\hhline{||',file=tableFile,end="")
+            #loopPrintLaTeX('-',narg+1,tableFile)
+            #print('||}',file=tableFile)
 
 
             sys1_optimalPlans=[]
@@ -708,8 +712,8 @@ if __name__ == '__main__':
                     minTime = timeAvg
                     index_min.clear()
                     index_min.append(count_time)
-                elif minTime == max_solved_plans:
-                    index_max.append(count_time)
+                elif minTime == timeAvg:
+                    index_min.append(count_time)
                 count_time +=1
 
                 timeArr.append(f"{timeAvg:.3f}s")
@@ -723,12 +727,44 @@ if __name__ == '__main__':
             print(':|}',file=tableFile)
 
 
+            print("\t\tCorrectness (avg) & ", file=tableFile,end="")
+            corrArr = []
+            maxCorr = -1
+            index_max = []
+            count_corr = 0
+            for suff in suffixes:
+                corrAvg = merged_df[f'Corr-{suff}'].mean()
+
+                if corrAvg > maxCorr:
+                    maxCorr = corrAvg
+                    index_max.clear()
+                    index_max.append(count_corr)
+                elif minTime == maxCorr:
+                    index_max.append(count_corr)
+                count_corr +=1
+
+                corrArr.append(f"{corrAvg:.3f}")
+
+            for c in index_max:
+                corrArr[c] = "\\textbf{"+corrArr[c]+"}"
+            loopPrintLaTeXArray(""," & ","\\\\\n",corrArr,tableFile)
+
+            print('\t\t\\hhline{|:',file=tableFile,end="")
+            loopPrintLaTeX('=',narg+1,tableFile)
+            print(':|}',file=tableFile)
+
+
+
             print("\t\tOptimality (avg) & ", file=tableFile,end="")
         
+
+
             df_cleaned = merged_df
             for suff in suffixes:
                 df_cleaned = df_cleaned[ (df_cleaned[f'Opt-{suff}'] >= 0) ]
             
+
+
             optArr = []
             minOpt = sys.maxsize
             index_min = []
@@ -736,16 +772,17 @@ if __name__ == '__main__':
             for suff in suffixes:
                 optAvg = df_cleaned[f'Opt-{suff}'].mean()
 
-
                 if optAvg < minOpt:
                     minOpt = optAvg
                     index_min.clear()
                     index_min.append(count_opt)
-                elif minOpt == max_solved_plans:
+                elif minOpt == optAvg:
                     index_max.append(count_opt)
                 count_opt +=1
-
-                optArr.append(f"+{optAvg:.2f}\%")
+                if math.isnan(optAvg):
+                    optArr.append(f"-")
+                else:
+                    optArr.append(f"+{optAvg:.2f}\%")
 
             for c in index_min:
                 optArr[c] = "\\textbf{"+optArr[c]+"}"
