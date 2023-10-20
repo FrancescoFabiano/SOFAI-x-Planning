@@ -83,7 +83,7 @@ def sol_reader(filename,rootFilename,suffix,domain_list):
                             problem = problem + f"__{found_names[problem]}"
 
                             time = float(getVarFromLine(line,"sot")[:-1])
-                            time = float(getVarFromLine(line,"tim")[:-1])
+                            #time = float(getVarFromLine(line,"tim")[:-1])
                             if "could not be solved" in line or (float(getVarFromLine(line,"cor")) < acceptable_corr):
                                 if "could not be solved" in line:
                                     cor = "0"
@@ -214,7 +214,7 @@ if __name__ == '__main__':
 
         columns = mydata
 
-        styles = ['o', 'x', 'h' , '^', 'D']
+        styles = ['o', 'x', '^', 'h' , 'D']
 
         df = pd.read_csv(merged_name, usecols=columns)
 
@@ -222,7 +222,7 @@ if __name__ == '__main__':
             df[columns] = df[columns] / 1000
 
         # Plot the lines
-        df.plot(y=columns, style=styles, figsize=(12,4),color=['black','limegreen','tab:blue','tab:orange','tab:red'])
+        df.plot(y=columns, style=styles, figsize=(12,4),color=['limegreen','tab:blue','tab:orange','tab:red','black',])
         #plt.title(plotting_val + " comparsion between Fast and Slow Arch. and FD", weight='bold')
         # label the x and y axes
         plt.xlabel('Instances', weight='bold', size='large')
@@ -507,9 +507,9 @@ if __name__ == '__main__':
             #loopPrintLaTeXArray(""," & ","\\\\\n",sys1_partial_stats,tableFile)
 
 
-            print('\t\t\\hhline{||',file=tableFile,end="")
-            loopPrintLaTeX('-',narg+1,tableFile)
-            print('||}',file=tableFile)
+            #print('\t\t\\hhline{||',file=tableFile,end="")
+            #loopPrintLaTeX('-',narg+1,tableFile)
+            #print('||}',file=tableFile)
 
 
             sys1_optimalPlans=[]
@@ -712,7 +712,7 @@ if __name__ == '__main__':
                     minTime = timeAvg
                     index_min.clear()
                     index_min.append(count_time)
-                elif minTime == minTime:
+                elif minTime == timeAvg:
                     index_min.append(count_time)
                 count_time +=1
 
@@ -776,7 +776,7 @@ if __name__ == '__main__':
                     minOpt = optAvg
                     index_min.clear()
                     index_min.append(count_opt)
-                elif minOpt == max_solved_plans:
+                elif minOpt == optAvg:
                     index_max.append(count_opt)
                 count_opt +=1
                 if math.isnan(optAvg):
