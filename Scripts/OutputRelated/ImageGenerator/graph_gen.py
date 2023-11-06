@@ -133,7 +133,7 @@ if __name__ == '__main__':
 
     domain_separate = False
     tot_domain_list = ['blocksworld-4ops', 'ferry', 'hanoi', 'gripper-strips', 'miconic', 'driverlog']
-    tot_domain_list = [ 'ferry', 'hanoi', 'gripper-strips', 'miconic', 'driverlog']
+    #tot_domain_list = [ 'ferry', 'hanoi', 'gripper-strips', 'miconic', 'driverlog']
 
     domain_list = []
     iter_domain = 0
