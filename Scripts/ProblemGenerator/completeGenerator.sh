@@ -37,13 +37,23 @@ hanoiFolder="hanoi/"
 #Hanoi specific
 miconicFolder="miconic/"
 
-#Hanoi specific
+#Logistics specific
 logisticsFolder="logistics/"
+
+#Rovers specific
+roversfolder="rovers/"
+
+#Satellite specific
+satellitefolder="satellite/"
+
+#Barman specific
+barmanfolder="barman/"
+
 
 ## declare an array variable
 #declare -a dmnArr=("$bwFolder")
-#declare -a dmnArr=("$hanoiFolder" "$miconicFolder" "$grFolder" "$ferryFolder" "$bwFolder" "$dlFolder" "$logisticsFolder")
-declare -a dmnArr=("$logisticsFolder")
+#declare -a dmnArr=("$hanoiFolder" "$miconicFolder" "$grFolder" "$ferryFolder" "$bwFolder" "$dlFolder" "$logisticsFolder" "$roversfolder" "$satellitefolder" "$barmanfolder")
+declare -a dmnArr=("$logisticsFolder" "$roversfolder" "$satellitefolder" "$barmanfolder")
 
 ## now loop through the above array
 for domain in "${dmnArr[@]}"

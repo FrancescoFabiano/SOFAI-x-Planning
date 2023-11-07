@@ -72,6 +72,23 @@ logistics/logistics.o
 logistics/problem_files/*
 logistics/problem_files_temp/*
 
+#Barman
+barman/barman
+barman/barman.o
+barman/problem_files/*
+barman/problem_files_temp/*
+
+#Rovers
+rovers/rovgen
+rovers/rovgen.o
+rovers/problem_files/*
+rovers/problem_files_temp/*
+
+#Satellite
+satellite/satgen
+satellite/satgen.o
+satellite/problem_files/*
+satellite/problem_files_temp/*
 
 Output/*
 *.SOL
