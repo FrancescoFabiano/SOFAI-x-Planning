@@ -66,6 +66,13 @@ miconic/miconic
 miconic/problem_files/*
 miconic/problem_files_temp/*
 
+#Logistics
+logistics/logistics
+logistics/logistics.o
+logistics/problem_files/*
+logistics/problem_files_temp/*
+
+
 Output/*
 *.SOL
 plan.tmp

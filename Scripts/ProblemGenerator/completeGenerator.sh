@@ -1,6 +1,6 @@
 #!/bin/bash
 # Script to generate $1 problem files for the domains. These instances should require at least $2 seconds to be solved by the fastet planner we have and within $3 tries. $4 Activate (if == 1) optimality calculation
-# Usage from the "Scripts/ProblemGenerator" folder execute "./completeGenerator.sh 150 0.01 1000 1"
+# Usage from the "Scripts/ProblemGenerator" folder execute "./completeGenerator.sh 150 0.5 1000 1"
 # Each instance will be below 512 token and should require more than 0.5 seconds to be solved by LPG. Finally, all domains will try to generate a maximum of 1000 instances and for each one the optiaml plan is calculated
 
 max_tokens=512
@@ -37,10 +37,13 @@ hanoiFolder="hanoi/"
 #Hanoi specific
 miconicFolder="miconic/"
 
+#Hanoi specific
+logisticsFolder="logistics/"
+
 ## declare an array variable
 #declare -a dmnArr=("$bwFolder")
-#declare -a dmnArr=("$hanoiFolder" "$miconicFolder" "$grFolder" "$ferryFolder" "$bwFolder" "$dlFolder")
-declare -a dmnArr=("$hanoiFolder" "$miconicFolder" "$grFolder" "$ferryFolder" "$bwFolder")
+#declare -a dmnArr=("$hanoiFolder" "$miconicFolder" "$grFolder" "$ferryFolder" "$bwFolder" "$dlFolder" "$logisticsFolder")
+declare -a dmnArr=("$logisticsFolder")
 
 ## now loop through the above array
 for domain in "${dmnArr[@]}"
