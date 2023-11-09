@@ -90,6 +90,10 @@ satellite/satgen.o
 satellite/problem_files/*
 satellite/problem_files_temp/*
 
+#Rocket
+rocket/problem_files/*
+rocket/problem_files_temp/*
+
 Output/*
 *.SOL
 plan.tmp

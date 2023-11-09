@@ -1,0 +1,33 @@
+
+; Version LPG-td-1.4
+; Seed 98390630
+; Command line: ./Planners/LPG-td-1.4/lpg-td -o Input/rockets-s.pddl -f Input/rockets-3s.pddl -quality -inst_with_contraddicting_objects 
+; Problem Input
+; Actions having STRIPS duration
+; Time 0.01
+; Plan generation time 0.00
+; Search time 0.00
+; Parsing time 0.00
+; Mutex time 0.00
+; NrActions 20
+
+0:   (FUELUP R1 L1) [1]
+1:   (FLY R1 L1 L2) [1]
+2:   (FUELUP R1 L2) [1]
+3:   (FLY R1 L2 L3) [1]
+4:   (FUELUP R1 L3) [1]
+5:   (LOAD C3 R1 L3) [1]
+6:   (FLY R1 L3 L2) [1]
+7:   (UNLOAD C3 R1 L2) [1]
+8:   (FUELUP R1 L2) [1]
+9:   (LOAD C2 R1 L2) [1]
+10:   (FLY R1 L2 L1) [1]
+11:   (UNLOAD C2 R1 L1) [1]
+12:   (FUELUP R1 L1) [1]
+13:   (LOAD C1 R1 L1) [1]
+14:   (FLY R1 L1 L3) [1]
+15:   (UNLOAD C1 R1 L3) [1]
+16:   (FUELUP R1 L3) [1]
+17:   (LOAD C4 R1 L3) [1]
+18:   (FLY R1 L3 L2) [1]
+19:   (UNLOAD C4 R1 L2) [1]
