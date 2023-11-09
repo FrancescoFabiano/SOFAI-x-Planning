@@ -1,14 +1,11 @@
 (define (problem )
-  (:domain hanoi)
-  (:objects )
-  (:init 
-   
-   
-)
-
+  (:domain rocket)
+  (:requirements :strips)
+  (:objects
+  )
+  (:init
+  )
   (:goal (and 
-  
-  
   )
   )
-  )
+)

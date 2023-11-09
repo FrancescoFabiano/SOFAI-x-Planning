@@ -3,7 +3,7 @@
 ;; In problems rrt4 and rrt5 some passengers have to transit
 ;; several times to get to their destination.
 
-(define (domain rockets-s)
+(define (domain rocket)
   (:requirements :strips)
   (:predicates (cargo ?x) (rocket ?x) (location ?x)
 	       (at ?t ?l) (in ?c ?r) (fuel ?r) (loaded ?r) (visited ?r ?l)
