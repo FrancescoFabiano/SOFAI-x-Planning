@@ -8,7 +8,7 @@ import copy
 verbose = False
 veryVerbose = False
 
-def print_instance(filename, goal_length):
+def print_instance(filename):
     with open(filename) as f:
         for line in f:
            print(line, end='')
@@ -115,14 +115,14 @@ def generate_instance(rockets, cargos, locations, init_state, goal_state):
             count_obj +=1
             lines[goal_line] += ' '
 
-    if os.path.exists('problems/') == False:
-        os.mkdir('problems/')
+    if os.path.exists('rocket/problems/') == False:
+        os.mkdir('rocket/problems/')
 
-    with open('problems/'+problem_name+'.pddl', 'w') as write_file:
+    with open('rocket/problems/'+problem_name+'.pddl', 'w') as write_file:
         lines = "".join(lines)
         write_file.write(lines)
 
-    return 'problems/'+problem_name+'.pddl'
+    return 'rocket/problems/'+problem_name+'.pddl'
 
 def plan_generation(rockets, cargos, locations, init_state, goal_state, filename):
 
@@ -192,31 +192,35 @@ def plan_generation(rockets, cargos, locations, init_state, goal_state, filename
         if veryVerbose: print(f'Rocket-Cargo {rocket_move_cargo}')
         if veryVerbose: print(f'Rocket-Location {rocket_visited_location}')
 
-        goal_str = ''
-        goal_length = 0
+        solution_str = ''
+        solution_length = 0
         for r in rocket_visited_location:
             loc = init_location
             moved_cargo_list = copy.deepcopy(rocket_move_cargo[r])
             index = 0
             for l in rocket_visited_location[r]:
                 moved_cargo = moved_cargo_list[index]
-                goal_str += f'fuelup r{r} l{loc},'
-                goal_str += f'load c{moved_cargo} r{r} l{loc},'
-                goal_str += f'fly r{r} l{l},'
-                goal_str += f'unload c{moved_cargo} r{r} l{l},'
+                solution_str += f'fuelup r{r} l{loc},'
+                solution_str += f'load c{moved_cargo} r{r} l{loc},'
+                solution_str += f'fly r{r} l{l},'
+                solution_str += f'unload c{moved_cargo} r{r} l{l},'
                 loc = l
                 index += 1
-                goal_length += 4
+                solution_length += 4
+                
+        #Remove last comma from solution
+        solution_str = solution_str[:-1]
 
-        opt_line = f'; Optimality lenght is (:optlen {goal_length})'
+        sol_extra_line = f'; Optimality lenght is (:optlen {solution_length})\n'
+        sol_extra_line += f'; Solution is (:solution {solution_str})'
         with open(filename, 'r+') as f:
             content = f.read()
             f.seek(0, 0)
-            f.write(opt_line.rstrip('\r\n') + '\n' + content)
+            f.write(sol_extra_line.rstrip('\r\n') + '\n' + content)
 
-        #print_instance(filename,goal_length)
+        #print_instance(filename)
 
-        if veryVerbose: print(f'The goal is: {goal_str}')
+        if veryVerbose: print(f'The goal is: {solution_str}')
 
     return found_plan
 
@@ -266,7 +270,7 @@ if __name__ == "__main__":
     found_plan = False
 
     attempt_count = 0
-    max_attempt = 10
+    max_attempt = 1000
     while not found_plan:
         attempt_count += 1
         if veryVerbose: print(f'Attempt #{attempt_count} at generating a solvable instance with {rockets} rockets, {locations} locations, and {cargos} cargos.')      

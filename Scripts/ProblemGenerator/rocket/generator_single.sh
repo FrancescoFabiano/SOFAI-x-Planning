@@ -43,14 +43,23 @@ while [ $problem_found -eq 0 ]; do
 
   outputContent=$(cat $output)
   if [[ $outputContent == *"GENERATION FAILURE"* ]]; then
-    echo "Not Found with "$rocketsVal" rockets and "$locationsVal" locations"
+    #echo "Not Found with "$rocketsVal" rockets and "$locationsVal" locations"
     problem_found=0
   else
-    mv "$output" "$problem_file"
-    echo "$domain_file" "$problem_file"
     problem_found=1
-  fi
+    for file in $(find $tmpFolder -type f); do
+      if cmp --silent -- "$output" "$file"; then
+        problem_found=0
+        break
+      fi
+    done
 
+    if [ $problem_found -eq 1 ]; then
+      mv "$output" "$problem_file"
+      echo "$domain_file" "$problem_file"
+    fi
+
+  fi
 done
 
 
