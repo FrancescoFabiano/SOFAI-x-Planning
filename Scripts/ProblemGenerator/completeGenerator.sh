@@ -161,14 +161,11 @@ do
       fi      
     fi 
 
-
-
     attemptPerDomain=$((attemptPerDomain + 1))
     #sleep 1s
   done
 
   rm -rf $domain"problem_files_temp/"
-
 
 done
 

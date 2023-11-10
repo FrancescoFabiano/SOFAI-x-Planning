@@ -6,11 +6,17 @@ import re
 import copy
 
 verbose = False
+veryVerbose = False
+
+def print_instance(filename, goal_length):
+    with open(filename) as f:
+        for line in f:
+           print(line, end='')
 
 def generate_instance(rockets, cargos, locations, init_state, goal_state):
     problem_name = f'rocket_{rockets}_{cargos}_{locations}'
-    if verbose: print(problem_name)
-    with open('problem_template.pddl', 'r') as f:
+    if veryVerbose: print(problem_name)
+    with open('rocket/problem_template.pddl', 'r') as f:
         lines = f.readlines()
         for l in range(len(lines)):
             if '(problem' in lines[l]:
@@ -115,7 +121,6 @@ def generate_instance(rockets, cargos, locations, init_state, goal_state):
     with open('problems/'+problem_name+'.pddl', 'w') as write_file:
         lines = "".join(lines)
         write_file.write(lines)
-    write_file.close()
 
     return 'problems/'+problem_name+'.pddl'
 
@@ -148,11 +153,13 @@ def plan_generation(rockets, cargos, locations, init_state, goal_state, filename
             if c in goal_locations_cargo[int(l)]:
                 cargo_list_to_move.remove(int(c))
                 #Each rocket has to move carge across each planet
-                return False
+                if not cargo_list_to_move: #Remove 0-actions plans
+                    return False
                 
-    #All the rockets start at 0    
+    #All the rockets start at 0 
+    init_location = 0  
     for r in rocket_list:
-        loc = 0
+        loc = init_location
         move_count = 0
         no_move = False
 
@@ -180,12 +187,36 @@ def plan_generation(rockets, cargos, locations, init_state, goal_state, filename
     found_plan = not cargo_list_to_move
 
     if found_plan:
-        if verbose: print(f'Init dictionary {init_locations_cargo}')
-        if verbose: print(f'Goal dictionary {goal_locations_cargo}')
-        if verbose: print(f'Rocket-Cargo {rocket_move_cargo}')
-        if verbose: print(f'Rocket-Location {rocket_visited_location}')
+        if veryVerbose: print(f'Init {init_locations_cargo}')
+        if veryVerbose: print(f'Goal {goal_locations_cargo}')
+        if veryVerbose: print(f'Rocket-Cargo {rocket_move_cargo}')
+        if veryVerbose: print(f'Rocket-Location {rocket_visited_location}')
 
-        #Here print the plan on top of the file
+        goal_str = ''
+        goal_length = 0
+        for r in rocket_visited_location:
+            loc = init_location
+            moved_cargo_list = copy.deepcopy(rocket_move_cargo[r])
+            index = 0
+            for l in rocket_visited_location[r]:
+                moved_cargo = moved_cargo_list[index]
+                goal_str += f'fuelup r{r} l{loc},'
+                goal_str += f'load c{moved_cargo} r{r} l{loc},'
+                goal_str += f'fly r{r} l{l},'
+                goal_str += f'unload c{moved_cargo} r{r} l{l},'
+                loc = l
+                index += 1
+                goal_length += 4
+
+        opt_line = f'; Optimality lenght is (:optlen {goal_length})'
+        with open(filename, 'r+') as f:
+            content = f.read()
+            f.seek(0, 0)
+            f.write(opt_line.rstrip('\r\n') + '\n' + content)
+
+        #print_instance(filename,goal_length)
+
+        if veryVerbose: print(f'The goal is: {goal_str}')
 
     return found_plan
 
@@ -235,10 +266,10 @@ if __name__ == "__main__":
     found_plan = False
 
     attempt_count = 0
-    max_attempt = 10000
+    max_attempt = 10
     while not found_plan:
         attempt_count += 1
-        if verbose: print(f'Attempt #{attempt_count} at generating a solvable instance with {rockets} rockets, {locations} locations, and {cargos} cargos.')      
+        if veryVerbose: print(f'Attempt #{attempt_count} at generating a solvable instance with {rockets} rockets, {locations} locations, and {cargos} cargos.')      
         init_state = generate_partial_state(rockets, cargos, locations)
         goal_state = generate_partial_state(rockets, cargos, locations)
         
@@ -246,6 +277,12 @@ if __name__ == "__main__":
 
         found_plan = plan_generation(rockets, cargos, locations, init_state, goal_state,filename)
 
-        if attempt_count > max_attempt:
-            if verbose: print(f'No instance with {rockets} rockets, {locations} locations, and {cargos} cargos found.')      
+        if not found_plan and attempt_count > max_attempt:
+            with open(filename, 'w') as write_file:
+                write_file.write('GENERATION FAILURE')
+            if verbose: print(f'No instance with {rockets} rockets, {locations} locations, and {cargos} cargos found.')
+            print(filename)
             sys.exit()
+    
+    if verbose: print(f'Instance with {rockets} rockets, {locations} locations, and {cargos} cargos found (after {attempt_count} attempts).')
+    print(filename)
