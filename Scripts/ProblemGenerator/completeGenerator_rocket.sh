@@ -42,7 +42,8 @@ while (($counter < $1 && $attemptPerDomain < $maxAttemptsPerDomain)); do
   newExtension=".clean"
   problem_file_cleaned="$baseName$newExtension"
   #Checking for token limitations
-  tail -n +3 "$problem_file" >"$problem_file_cleaned"
+  tail -n +3 "$problem_file" > "$problem_file_cleaned"
+  python rocket/remove_extra_init.py "$problem_file_cleaned"
   prompt=$(python plansformer_prompt_generator.py "$domain_file" "$problem_file_cleaned")
   rm $problem_file_cleaned
   token_count=$(python count_512subset.py "$prompt")
