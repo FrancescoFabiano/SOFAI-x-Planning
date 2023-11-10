@@ -14,7 +14,7 @@ origOptPath="noOpt/"
 minimumTime=$2
 declare -i maxAttemptsPerDomain=$3
 optimality=$4
-optimality_time=300
+optimality_time=30
 
 #Blocksworld specific
 declare -i maxBlockNum=11
@@ -112,10 +112,11 @@ do
       cp $domain_file $tempDmnFolder/domain.pddl
     fi
     optimal_lenght=-1
+    optPath=$origOptPath
     #Optimality checker
     if (( $optimality == 1)); then
       timeout "$optimality_time"s python3 ../../Planners/FastDownward/fast-downward.py --plan-file planopt.tmp $domain_file $problem_file  --search "astar(blind())" > /dev/null
-      if [ $? -eq 124 ]; then #If we take more than the minimum time to solve with LPG fast we add it
+      if [ $? -eq 124 ]; then 
         optimal_lenght=-1
         optPath=$origOptPath
       else
@@ -128,10 +129,10 @@ do
 
     #Checking for token limitations
     prompt=$(python plansformer_prompt_generator.py "$domain_file" "$problem_file")
-    #token_count=$(python count_512subset.py "$prompt")
+    token_count=$(python count_512subset.py "$prompt")
 
     #echo "token is $token_count"
-    token_count=100
+    #token_count=100
     
     filename=$(basename -- "$problem_file")
     #Checking for token limitations

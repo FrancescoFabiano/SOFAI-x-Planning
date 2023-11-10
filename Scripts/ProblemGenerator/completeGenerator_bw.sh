@@ -11,7 +11,7 @@ instFolderPlans="plans/"
 minimumTime=$2
 declare -i maxAttemptsPerDomain=$3
 optimality=$4
-optimality_time=600
+optimality_time=60
 
 #Blocksworld specific
 declare -i maxBlockNum=15

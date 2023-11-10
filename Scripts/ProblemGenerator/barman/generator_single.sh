@@ -14,8 +14,8 @@ fi
 domain_file=$mainPath"domain.pddl"
 
 # Define the different configurations
-declare -a cocktails=(1 2 3 4 5)
-declare -a ingredients=(2 3) #(1 2 3 4 5)
+declare -a cocktails=(2 3 4 5 6)
+declare -a ingredients=(2 3 4) #(1 2 3 4 5)
 declare -a shots=(1 2 3) #(1 2 3 4)
 
 #Select a random configuration
