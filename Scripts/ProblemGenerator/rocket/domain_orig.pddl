@@ -24,7 +24,12 @@
   (:action fly
    :parameters (?r ?dep ?dst)
    :precondition (and (rocket ?r) (location ?dep) (location ?dst)
-		      (at ?r ?dep) (not (visited ?r ?dst)))
+		      (at ?r ?dep) (fuel ?r) (not (visited ?r ?dst)))
    :effect (and (not (at ?r ?dep)) (at ?r ?dst) (not (fuel ?r)) (visited ?r ?dst)))
-
+   
+  (:action fuelUp
+   :parameters (?r ?dep)
+   :precondition (and (rocket ?r) (location ?dep)
+		      (at ?r ?dep) (not (fuel ?r)) (not (loaded ?r)))
+   :effect (and (fuel ?r)))
 )
