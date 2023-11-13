@@ -1,8 +1,3 @@
-;; Rockets domain: A logistic-like domain.
-;; However, rockets can only fly once (they run out of fuel).
-;; In problems rrt4 and rrt5 some passengers have to transit
-;; several times to get to their destination.
-
 (define (domain rocket)
   (:requirements :strips)
   (:predicates (cargo ?x) (rocket ?x) (location ?x)

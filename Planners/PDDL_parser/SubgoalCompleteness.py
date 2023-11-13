@@ -139,7 +139,7 @@ def read_goal(path):
     for i in range(len(lines)):
         # if lines[i].startswith('(:goal'):
         if re.match(r"\s*\(:goal", lines[i]):
-            # print("I am here, read goal ")
+            #print(f"\nDEBUG HERE with Lines: {lines[i]}\n")
             flag_end = False
             for j in range(i+1, len(lines)):
                 if lines[j].startswith('(') and lines[j].count("and")==0:
@@ -188,6 +188,10 @@ def check_not(final_state, temp):
 def subgoal_completeness(goal, plan, domain, init_cond):
     final_state = init_cond.copy()
     # print(init_cond)
+    #print(f"\nDEBUG HERE with plan: {plan}\n")
+    #print(f"\nDEBUG HERE with init: {init_cond}\n")
+    #print(f"\nDEBUG HERE with goal: {goal}\n")
+
     for i in plan:
         if i[0] not in list(domain.keys()):
             return 0
@@ -231,5 +235,6 @@ def get_correctness(domain_path, plan_text, instance_path):
     domain  = read_domain(domain_path)
     plan = read_plan(plan_text)
     goal = read_goal(instance_path)
+    print(f"\nDEBUG HERE with goal: {goal}\n")
     init_cond = read_init(instance_path)
     return subgoal_completeness(goal, plan, domain, init_cond)
