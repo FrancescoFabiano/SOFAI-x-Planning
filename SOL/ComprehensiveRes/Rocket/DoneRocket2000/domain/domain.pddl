@@ -27,7 +27,7 @@
 		      (at ?r ?dep) (fuel ?r) (not (visited ?r ?dst)))
    :effect (and (not (at ?r ?dep)) (at ?r ?dst) (not (fuel ?r)) (visited ?r ?dst)))
    
-  (:action fuelUp
+  (:action fuelup
    :parameters (?r ?dep)
    :precondition (and (rocket ?r) (location ?dep)
 		      (at ?r ?dep) (not (fuel ?r)) (not (loaded ?r)))
