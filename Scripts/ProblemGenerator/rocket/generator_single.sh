@@ -1,4 +1,5 @@
 #!/bin/bash
+#!/usr/bin/env python3
 
 # Script to generate a problem file.
 # Usage from the "Scripts/ProblemGenerator" folder execute "./rocket/generator_single.sh" to generate an instance
@@ -39,7 +40,7 @@ while [ $problem_found -eq 0 ]; do
   problem_file="$tmpFolder"/problem_rocket_"$rocketsVal"_"$locationsVal"_"$c".pddl
               
   #python "$mainPath"single_generation_script.py "$rocketsVal" "$locationsVal" > "$problem_file"
-  output=$(python "$mainPath"single_generation_script.py "$rocketsVal" "$locationsVal")
+  output=$(python3 "$mainPath"single_generation_script.py "$rocketsVal" "$locationsVal")
 
   outputContent=$(cat $output)
   if [[ $outputContent == *"GENERATION FAILURE"* ]]; then
