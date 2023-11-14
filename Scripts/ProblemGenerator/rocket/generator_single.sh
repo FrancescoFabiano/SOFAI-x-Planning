@@ -25,8 +25,8 @@ problem_found=0
 
 while [ $problem_found -eq 0 ]; do
 
-  declare -a rockets=(1 2 3 4 5 6 7 8 9 10)
-  declare -a locations=(2 3 4 5 6 7 8 9 10) #(1 2 3 4 5)
+  declare -a rockets=(1 2 3 4 5 6 7 8)
+  declare -a locations=(2 3 4 5 6 7 8) #(1 2 3 4 5)
 
   #Select a random configuration
   rocketsSize=${#rockets[@]}

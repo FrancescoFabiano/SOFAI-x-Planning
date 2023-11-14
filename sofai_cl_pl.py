@@ -497,8 +497,7 @@ def validateSolution(solution):
             stringSolution += ", "
             count +=1
 
-    
-    print(f"String solution: {stringSolution}")
+    #print(f"String solution: {stringSolution}")
 
     #print("Execution Line is:  sh ./Planners/EFP/scripts/validate_solution.sh " + instanceNameEFP + " " + stringSolution)
     #Classical

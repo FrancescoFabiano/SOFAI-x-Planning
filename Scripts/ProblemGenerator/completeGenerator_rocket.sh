@@ -51,7 +51,7 @@ while (($counter < $1 && $attemptPerDomain < $maxAttemptsPerDomain)); do
 
   plan=$(python3 rocket/extract_plan.py "$problem_file")
   token_count_solution=$(python3 count_512subset.py "$plan")
-  #rm $plan_file
+
 
   if [[ $token_count_problem -gt $token_count_solution ]]; then
       token_count=$token_count_problem
@@ -59,7 +59,9 @@ while (($counter < $1 && $attemptPerDomain < $maxAttemptsPerDomain)); do
       token_count=$token_count_solution
   fi
 
-  echo "Token total: $token_count, Token problem: $token_count_problem, Token solution: $token_count_solution"
+  #echo "Token total: $token_count, Token problem: $token_count_problem, Token solution: $token_count_solution"
+  #echo "Plan is $plan"
+  #rm $plan_file
 
   #token_count=100
 
