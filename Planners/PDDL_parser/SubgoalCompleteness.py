@@ -82,7 +82,12 @@ def read_domain(path):
     return new_dict
 
 def read_plan(plan_text):
-    plan = plan_text.split(", ")
+    plan = plan_text.split(",")
+    # print(f"\nDEBUG HERE with plan: {plan}\n")
+    # stripping extra whitespace in the start and the end
+    plan = [i.strip() for i in plan]
+    # print(f"\nDEBUG HERE with plan: {plan}\n")
+    # raise KeyboardInterrupt
     plans = list()
     for j in range(len(plan)):
         if plan[j].count("not")==0:
@@ -112,7 +117,7 @@ def read_init(path):
                 # if lines[j].startswith('(:goal'):
                 if re.match(r"\s*\(:goal", lines[j]):
                     break
-                if lines[j].startswith('(') and lines[j].count("and")==0:
+                if re.match(r"\s*\(", lines[j]) and lines[j].count("and")==0:
                     temp = lines[j].replace("(","").replace(")","").replace("\n", "")
                     if temp.count("not")==0:
                         temp = temp.split(" ")
@@ -130,7 +135,7 @@ def read_init(path):
         else:
             new_init.append((str(i[0])," ".join(i[1:2])," ".join(i[1:])))
 
-    return [i[2] for i in new_init]
+    return [i[2].replace("\t","") for i in new_init]
 
 def read_goal(path):
     file1 = open(path, 'r')
@@ -139,11 +144,14 @@ def read_goal(path):
     for i in range(len(lines)):
         # if lines[i].startswith('(:goal'):
         if re.match(r"\s*\(:goal", lines[i]):
-            #print(f"\nDEBUG HERE with Lines: {lines[i]}\n")
+            # print(f"\nDEBUG HERE with Lines: {lines[i]}\n")
             flag_end = False
             for j in range(i+1, len(lines)):
-                if lines[j].startswith('(') and lines[j].count("and")==0:
+                # print(f"\nDEBUG HERE with Lines: {lines[j]}\n")
+                if re.match(r"\s*\(", lines[j]) and lines[j].count("and")==0:
+                    # print(f"\nDEBUG HERE with Lines: {lines[j]}\n")
                     temp = lines[j].replace("(","").replace(")","").replace("\n", "")
+                    # print(f"\nDEBUG HERE with Lines processed: {temp}\n")
                     if temp.count("not")==0:
                         temp = temp.strip().split(" ")
                         # print(temp, len(temp))
@@ -193,9 +201,13 @@ def subgoal_completeness(goal, plan, domain, init_cond):
     #print(f"\nDEBUG HERE with goal: {goal}\n")
 
     for i in plan:
+        # print(i)
         if i[0] not in list(domain.keys()):
+            # print("No changes required others")
             return 0
         elif i[1] not in list(domain[i[0]].keys()):
+            # print("No changes required domain")
+            # print(i[0], i[1], list(domain[i[0]].keys()))
             return 0
         else:
             temp = domain[i[0]][i[1]]
@@ -233,8 +245,16 @@ def subgoal_completeness(goal, plan, domain, init_cond):
 
 def get_correctness(domain_path, plan_text, instance_path):
     domain  = read_domain(domain_path)
+    # print(f"\nDEBUG HERE with domain: {domain}\n")
     plan = read_plan(plan_text)
+    # print(f"\nDEBUG HERE with plan: {plan}\n")
     goal = read_goal(instance_path)
-    print(f"\nDEBUG HERE with goal: {goal}\n")
+    # print(f"\nDEBUG HERE with goal: {goal}\n")
     init_cond = read_init(instance_path)
+    # print(f"\nDEBUG HERE with init: {init_cond}\n")
     return subgoal_completeness(goal, plan, domain, init_cond)
+
+# plan_text = "fuelup r0 l0,load c2 r0 l0,fly r0 l1,unload c2 r0 l1,fuelup r0 l1,load c0 r0 l1,fly r0 l2,unload c0 r0 l2,fuelup r0 l2,load c1 r0 l2,fly r0 l0,unload c1 r0 l0"
+# plan_text_hn = "move d2 d3 d4, move d1 peg2 d2, move d3 peg1 peg2, move d1 d2 peg1, move d2 d4 d3, move d1 peg1 d2, move d4 d5 peg1, move d1 d2 d4, move d2 d3 d5, move d1 d4 d2, move d3 peg2 d4, move d1 d2 peg2, move d2 d5 d3, move d1 peg2 d2, move d5 peg3 peg2, move d1 d2 peg3, move d2 d3 d5, move d1 peg3 d2, move d3 d4 peg3, move d1 d2 d4, move d2 d5 d3, move d1 d4 d2, move d4 peg1 d5, move d1 d2 d4, move d2 d3 peg1, move d1 d4 d2"
+# print(get_correctness("domain_test.pddl", plan_text, "problem.pddl"))
+# print(get_correctness("domain_hn.pddl", plan_text_hn, "problem_hn.pddl"))

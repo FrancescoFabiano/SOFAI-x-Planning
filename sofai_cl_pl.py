@@ -490,11 +490,28 @@ def validateSolution(solution):
 
     stringSolution = ""
     count = 1
+    previous_loc = '0'
+
     for elem in solution:
+
+        ##########@TODO: ROCKET FIX
+        if "load" in elem:
+            #print(f"Elem is {elem}")
+            previous_loc = re.sub(rf'load c\d+ r\d+ l(\d+)',  r'\1', elem)
+
+        if "fly" in elem:
+            elem = re.sub(rf'(fly r\d+) (l\d+)',  rf'\1 l{previous_loc} \2', elem)
+            #print(f"Res is {elem}")
+
+        #####################
+
         stringSolution += elem
         if count < len(solution):
             stringSolution += ", "
             count +=1
+
+    
+    print(f"String solution: {stringSolution}")
 
     #print("Execution Line is:  sh ./Planners/EFP/scripts/validate_solution.sh " + instanceNameEFP + " " + stringSolution)
     #Classical

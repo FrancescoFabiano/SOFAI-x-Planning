@@ -1,5 +1,8 @@
 ; Optimality lenght is (:optlen 24)
-; Solution is (:solution fuelup r0 l0,load c2 r0 l0,fly r0 l2,unload c2 r0 l2,fuelup r0 l2,load c0 r0 l2,fly r0 l1,unload c0 r0 l1,fuelup r0 l1,load c4 r0 l1,fly r0 l0,unload c4 r0 l0,fuelup r1 l0,load c3 r1 l0,fly r1 l1,unload c3 r1 l1,fuelup r1 l1,load c8 r1 l1,fly r1 l2,unload c8 r1 l2,fuelup r1 l2,load c1 r1 l2,fly r1 l0,unload c1 r1 l0)
+; Solution is (:solution
+fuelup r0 l0,load c2 r0 l0,fly r0 l2,unload c2 r0 l2,fuelup r0 l2,load c0 r0 l2,fly r0 l1,unload c0 r0 l1,fuelup r0 l1,load c4 r0 l1,fly r0 l0,unload c4 r0 l0,fuelup r1 l0,load c3 r1 l0,fly r1 l1,unload c3 r1 l1,fuelup r1 l1,load c8 r1 l1,fly r1 l2,unload c8 r1 l2,fuelup r1 l2,load c1 r1 l2,fly r1 l0,unload c1 r1 l0)
+fuelup r0 l0', 'load c2 r0 l0', 'fly r0 l2', 'unload c2 r0 l2', 'fuelup r0 l2', 'load c0 r0 l2', 'fly r0 l1', 'unload c0 r0 l1', 'fuelup r0 l1', 'load c8 r0 l1', 'fly r0 l2', 'unload c8 r0 l2', 'fuelup r0 l2', 'load c1 r0 l2', 'fly r0 l0', 'unload c1 r0 l0', 'fuelup r1 l0', 'load c3 r1 l0', 'fly r1 l1', 'unload c3 r1 l1', 'fuelup r1 l1', 'load c4 r1 l1', 'fly r1 l0', 'unload c4 r1 l0
+
 (define (problem rocket_3_9_3)
   (:domain rocket)
   (:requirements :strips)

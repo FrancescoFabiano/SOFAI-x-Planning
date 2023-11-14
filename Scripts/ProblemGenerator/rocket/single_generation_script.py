@@ -202,7 +202,7 @@ def plan_generation(rockets, cargos, locations, init_state, goal_state, filename
                 moved_cargo = moved_cargo_list[index]
                 solution_str += f'fuelup r{r} l{loc},'
                 solution_str += f'load c{moved_cargo} r{r} l{loc},'
-                solution_str += f'fly r{r} l{l},'
+                solution_str += f'fly r{r} l{loc} l{l},'
                 solution_str += f'unload c{moved_cargo} r{r} l{l},'
                 loc = l
                 index += 1
