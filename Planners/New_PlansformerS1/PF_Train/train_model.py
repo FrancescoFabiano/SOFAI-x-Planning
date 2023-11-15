@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 
-# Example of execution: python3 train_model.py training_file_name.csv 1000
+# Example of execution: python3 train_model.py datasets/trainingDataset.csv 1000 0
 # Where:
-# - training_file_name.csv is the name of the file that contains the training data
+# - datasets/training_file_name.csv is the name of the file that contains the training data
 # - 1000 is the size of the training
+# - 1/0 to abiliate (or not) continual training
 
 
 import sys
 
-import mode1 as continual_training
+import continual_train as continual_training
 
 #-----------------------------------------------
 # MAIN
