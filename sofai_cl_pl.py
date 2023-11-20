@@ -189,7 +189,11 @@ def readSolutionFromFile(filename, solver):
 
                             for act in acts:
                                 if act and not act.isspace():
-                                    res.append(act.strip())
+
+                                    ######################@TODO: DEBUG ROCKET SPECIFIC
+                                    if 'down' not in act:
+                                    ######################@TODO: DEBUG ROCKET SPECIFIC
+                                        res.append(act.strip())
 
                             myfile.close()
                             return res
@@ -367,7 +371,21 @@ def executeS1():
 
             #Solving
             try:
-                tens_confidence, plan = newPlansformer_s1.solve(domainFile,problemFile,(newPlans_mode-1))
+
+                ######################@TODO: DEBUG ROCKET SPECIFIC
+                pre, ext = os.path.splitext(problemFile)
+                pf_problem_file =(f'{pre}.clean')
+
+                with open(problemFile, 'r') as file:
+                    data = file.read()
+
+                data = re.sub(r"\(\b(rocket|cargo|location)\b\s[rcl]\d+\)", r"", data)
+                
+                with open(pf_problem_file, 'w') as file:
+                    file.write(data)
+                ######################@TODO: DEBUG ROCKET SPECIFIC
+
+                tens_confidence, plan = newPlansformer_s1.solve(domainFile,pf_problem_file,(newPlans_mode-1))
             except Exception as e:
                  logging.error(traceback.format_exc())
                  raise Exception("NewPlansformer encountered some errors.")
@@ -438,7 +456,19 @@ def executeS1():
 
             #Solving
             try:
-                tens_confidence, plan = newPlansformer_s1.solve(domainFile,problemFile,(newPlans_mode-1))
+                ######################@TODO: DEBUG ROCKET SPECIFIC
+                pre, ext = os.path.splitext(problemFile)
+                pf_problem_file =(f'{pre}.clean')
+
+                with open(problemFile, 'r') as file:
+                    data = file.read()
+
+                data = re.sub(r"\(\b(rocket|cargo|location)\b\s[rcl]\d+\)", r"", data)
+                
+                with open(pf_problem_file, 'w') as file:
+                    file.write(data)
+                ######################@TODO: DEBUG ROCKET SPECIFIC
+                tens_confidence, plan = newPlansformer_s1.solve(domainFile,pf_problem_file,(newPlans_mode-1))
             except Exception as e:
                  logging.error(traceback.format_exc())
                  raise Exception("NewPlansformer encountered some errors.")
@@ -502,6 +532,8 @@ def validateSolution(solution):
     #print("Execution Line is:  sh ./Planners/EFP/scripts/validate_solution.sh " + instanceNameEFP + " " + stringSolution)
     #Classical
     #print(f"Domain file is {domainFile}")
+    
+    ######################@TODO: DEBUG ROCKET SPECIFIC INSIDE THE FUNCTION
     return SubgoalCompleteness.get_correctness(domainFile,stringSolution,problemFile)
 
 '''Procedure that calculates the difficulty of a problem by looking at its pddl encoding'''
@@ -920,8 +952,11 @@ if __name__ == '__main__':
     This is just to allow to generate the only System-2 Baseline
     '''
     if (plannerS1 == onlySystem2):
-        solveWithS2(timeLimitCntx,plannerS2,[],0.0,timerComputation)
-        endComputation(problem_name,domain_name,timerComputation,False)
+        if (plannerS2 == plannerS2_FD or plannerS2 == plannerS2_LPG):
+            solveWithS2(timeLimitCntx,plannerS2,[],0.0,timerComputation)
+            endComputation(problem_name,domain_name,timerComputation,False)
+        else:
+            sys.exit(0)
     
     elif(plannerS2 == onlySystem1):
         timerOnlyS1 = time.time()

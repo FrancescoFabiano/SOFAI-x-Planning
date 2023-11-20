@@ -1,3 +1,5 @@
+import os
+
 def convert_string_to_list(input_string):
     conditions = input_string.split("(and")[-1]
     conditions = conditions.split(') (')
@@ -246,12 +248,25 @@ def subgoal_completeness(goal, plan, domain, init_cond):
 def get_correctness(domain_path, plan_text, instance_path):
     domain  = read_domain(domain_path)
     # print(f"\nDEBUG HERE with domain: {domain}\n")
+
+    ######################@TODO: DEBUG ROCKET SPECIFIC
+    pre, ext = os.path.splitext(instance_path)
+    pf_problem_file =(f'{pre}.formatted')
+    with open(instance_path, 'r') as file:
+        data = file.read()
+    data = re.sub(r"(\(.+\)) (\(.+\))", r"\1\n\2", data)
+    
+    with open(pf_problem_file, 'w') as file:
+        file.write(data)
+    ######################@TODO: DEBUG ROCKET SPECIFIC
+
+
     plan = read_plan(plan_text)
-    # print(f"\nDEBUG HERE with plan: {plan}\n")
-    goal = read_goal(instance_path)
-    # print(f"\nDEBUG HERE with goal: {goal}\n")
-    init_cond = read_init(instance_path)
-    # print(f"\nDEBUG HERE with init: {init_cond}\n")
+    #print(f"\nDEBUG HERE with plan: {plan}\n")
+    goal = read_goal(pf_problem_file)
+    #print(f"\nDEBUG HERE with goal: {goal}\n")
+    init_cond = read_init(pf_problem_file)
+    #print(f"\nDEBUG HERE with init: {init_cond}\n")
     return subgoal_completeness(goal, plan, domain, init_cond)
 
 # plan_text = "fuelup r0 l0,load c2 r0 l0,fly r0 l1,unload c2 r0 l1,fuelup r0 l1,load c0 r0 l1,fly r0 l2,unload c0 r0 l2,fuelup r0 l2,load c1 r0 l2,fly r0 l0,unload c1 r0 l0"

@@ -26,6 +26,8 @@ def solve(domain, problem, mode):
     #input problem/task
     instance_prompt = pg.get_prompt(domain,problem)
 
+    #print(f"Instance prompt: {instance_prompt}")
+
     #tokenizing the input and passing it to the model
     input_ids = tokenizer.encode(instance_prompt, return_tensors='pt').to(device, dtype = torch.long)
     generated_ids = model.generate(
