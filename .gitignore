@@ -140,6 +140,8 @@ Input/Test/*
 tmp/
 *.tmp
 */tmp/
+*.clean
+*.formatted
 .problem-cache/
 
 Planners/PlansformerS1/model_files/.*bin
