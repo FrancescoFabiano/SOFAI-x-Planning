@@ -162,6 +162,7 @@ if __name__ == '__main__':
             if file.endswith(f"{solutionfilesExt}"):
                 solFiles.append(f"{inputFolder}/{file}")
 
+            solFiles.sort()
         print("Files to analize are: " +  str(solFiles))
 
 

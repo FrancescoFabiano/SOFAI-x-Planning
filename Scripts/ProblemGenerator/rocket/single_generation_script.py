@@ -7,6 +7,7 @@ import copy
 
 verbose = False
 veryVerbose = False
+intial_locations_rocket = {}
 
 def print_instance(filename):
     with open(filename) as f:
@@ -60,14 +61,22 @@ def generate_instance(rockets, cargos, locations, init_state, goal_state):
     lines[initial_line] += '\t'
     count_obj = 0
 
+    
+    intial_locations_rocket.clear()
     for elem in rocket_list:
-        lines[initial_line] += f'(at r{elem} l0)'
+        random_loc = random.randint(0, (int(locations)-1))
+        #print(f"The random location is {random_loc}")
+        intial_locations_rocket[elem] = random_loc
+
+        lines[initial_line] += f'(at r{elem} l{random_loc})'
         if count_obj == newline_counter:
             count_obj = 0
             lines[initial_line] += '\n\t'
         else:
             count_obj +=1
             lines[initial_line] += ' '
+
+    #print(f"The random dictionary is {intial_locations_rocket}")
 
     lines[initial_line] += '\n\t'
     for obj in objects_list:
@@ -156,10 +165,9 @@ def plan_generation(rockets, cargos, locations, init_state, goal_state, filename
                 if not cargo_list_to_move: #Remove 0-actions plans
                     return False
                 
-    #All the rockets start at 0 
-    init_location = 0  
+    #All the rockets start at 0
     for r in rocket_list:
-        loc = init_location
+        loc = intial_locations_rocket[r]
         move_count = 0
         no_move = False
 
@@ -195,7 +203,7 @@ def plan_generation(rockets, cargos, locations, init_state, goal_state, filename
         solution_str = ''
         solution_length = 0
         for r in rocket_visited_location:
-            loc = init_location
+            loc = intial_locations_rocket[r]
             moved_cargo_list = copy.deepcopy(rocket_move_cargo[r])
             index = 0
             for l in rocket_visited_location[r]:

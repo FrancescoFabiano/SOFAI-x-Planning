@@ -10,15 +10,13 @@ import os
 import re
 import csv
 
-import mode1 as continual_training
-
 #-----------------------------------------------
 # MAIN
 #-----------------------------------------------
 if __name__ == '__main__':
 
     training_file = sys.argv[1]
-    pathRocket="../../../SOL/ComprehensiveRes/Rocket/DoneRocket2000/"
+    pathRocket="Output/"
     domain_file=f"{pathRocket}domain/domain.pddl"
     instacePath=f"{pathRocket}instances"
 
@@ -38,7 +36,8 @@ if __name__ == '__main__':
             fileNumber=int(re.sub(rf'.*problem_rocket_\d+_\d+_(\d+).pddl', r'\1', fileName))
             if (fileNumber <= 1900):
                 checked_plans += 1
-                plan=rows[fileNumber][1]
+                print(f"Here with file number {fileNumber}")
+                plan=rows[fileNumber-1][1]
                 
                 solution=plan.split(',')
 
