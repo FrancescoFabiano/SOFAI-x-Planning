@@ -34,9 +34,9 @@ if __name__ == '__main__':
     for fileName in os.listdir(instacePath):
         if fileName.endswith('.pddl'):
             fileNumber=int(re.sub(rf'.*problem_rocket_\d+_\d+_(\d+).pddl', r'\1', fileName))
-            if (fileNumber <= 1900):
+            if (fileNumber <= 20000):
                 checked_plans += 1
-                print(f"Here with file number {fileNumber}")
+                #print(f"Here with file number {fileNumber}")
                 plan=rows[fileNumber-1][1]
                 
                 solution=plan.split(',')
