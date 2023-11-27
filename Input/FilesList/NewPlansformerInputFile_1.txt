@@ -1,6 +1,0 @@
-Input/TestOpt/ferry/domain/domain.pddl Input/TestOpt/ferry/instances/problem_ferry_34.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl
-Input/TestOpt/ferry/domain/domain.pddl Input/TestOpt/ferry/instances/problem_ferry_53.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl
-Input/TestOpt/gripper/domain/domain.pddl Input/TestOpt/gripper/instances/problem_gr_2_3_3_125.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl
-Input/TestOpt/gripper/domain/domain.pddl Input/TestOpt/gripper/instances/problem_gr_2_3_4_62.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl
-Input/TestOpt/miconic/domain/domain.pddl Input/TestOpt/miconic/instances/problem_miconic_92.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl
-Input/TestOpt/miconic/domain/domain.pddl Input/TestOpt/miconic/instances/problem_miconic_43.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl
