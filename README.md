@@ -1,29 +1,29 @@
-# SOFAxPlanning
+# Plan-SOFAI
 
 ## Description
 
 ### Summary
-The main objective is to implement an architecture, called SOFAIxPlanning, that is able to decide which type of planning process is more appropriate given a certain problem. SOFAIxPlanning will be selecting between these strategies:
+The main objective is to implement an architecture, called Plan-SOFAI, that is able to decide which type of planning process is more appropriate given a certain problem. Plan-SOFAI will be selecting between these strategies:
 * System-1: A strategy that relies on experience to quickly find solutions to new problems. This approach usually gets solutions very quickly but is prone to errors and imprecisions. 
 * System-2: This strategy envisioned the use of state-of-the-art planners that solve problems by using search techniques. This approach is slower and its performance depends on the problem complexity but is way less prone to error w.r.t. System-1 
-Let us note that System-1 and System-2 represent two different classes of planners rather than two specific approaches. This means that SOFAIxPlanning can be equipped with different S1 and S2 and can be configured to use any combination of the two.
+Let us note that System-1 and System-2 represent two different classes of planners rather than two specific approaches. This means that Plan-SOFAI can be equipped with different S1 and S2 and can be configured to use any combination of the two.
 
-While we envisioned SOFAIxPlanning to be able to reason within various planning settings (e.g., classical, epistemic, and so on) and to automatically select the best strategy to solve the incoming problem, in the current status the architecture is not able to automatically discern between different planning settings.
-This means that, for example, SOFAIxPlanning must be configured to adopt classical solving techniques when a classical planning problem is given as input.
+While we envisioned Plan-SOFAI to be able to reason within various planning settings (e.g., classical, epistemic, and so on) and to automatically select the best strategy to solve the incoming problem, in the current status the architecture is not able to automatically discern between different planning settings.
+This means that, for example, Plan-SOFAI must be configured to adopt classical solving techniques when a classical planning problem is given as input.
 The selection of solving techniques (that is System-1 and System-2) can be easily done with execution parameters. 
 
 ### Experimental Results
-Experimental results of the newest versions of the various configurations of SOFAIxPlanning can be found in the ''SOL'' folder. These configurations have been tested on 500 instances of various classical domains (instances are randomly generated with scripts that are available in the repo and omitted to avoid clutter).
+Experimental results of the newest versions of the various configurations of Plan-SOFAI can be found in the ''SOL'' folder. These configurations have been tested on 500 instances of various classical domains (instances are randomly generated with scripts that are available in the repo and omitted to avoid clutter).
 
 
 ### Planning Domains
-SOFAIxPlanning aims to become an approach general enough to tackle all the planning problems by adopting already existing techniques in the literature and exploiting them in their field of competence.
+Plan-SOFAI aims to become an approach general enough to tackle all the planning problems by adopting already existing techniques in the literature and exploiting them in their field of competence.
 While at the moment the architecture is not able to automatically discern which type of planning setting we are reasoning one, we still allow for two different settings to be solved thanks to SOFAI.
-* As the first type of setting we decided to embed in SOFAIxPlanning the capabilities to solve classical planning problems. All the domain descriptions (in pddl) used for various experimentations can be found in the ''input'' folder.
-* Secondly we include in SOFAIxPlanning the capabilities to tackle Multi-Agent Epistemic Planning problems (for now this capability is suspended)
+* As the first type of setting we decided to embed in Plan-SOFAI the capabilities to solve classical planning problems. All the domain descriptions (in pddl) used for various experimentations can be found in the ''input'' folder.
+* Secondly we include in Plan-SOFAI the capabilities to tackle Multi-Agent Epistemic Planning problems (for now this capability is suspended)
 
 Let us note that while System-2 planners are ad-hoc solutions for their specific settings, usually System-1 solvers can be adopted in different settings as they only rely on experience.
-We hope that any interested planning researcher would embed in SOFAIxPlanning their tool to increase its capability:)
+We hope that any interested planning researcher would embed in Plan-SOFAI their tool to increase its capability:)
 
 ### The Pipeline
 While the description of the Architecture has been formalized in scientific works (yet to be published) we can give a high-level description of this process.
@@ -96,7 +96,7 @@ Where:
 ## Repository Management
 
 ### On the Epistemic Planning Capabilities
-SOFAIxPlanning is envisioned as being able to tackle multiple planning scenarios. While We developed a version to solve MEP problems, for the moment this capability is hidden as we need to refine some parts of the solving process. We are currently working in developing a more general version of SOFAIxPlanning that will allow us to select amongst multiple planning scenarios at running time.
+Plan-SOFAI is envisioned as being able to tackle multiple planning scenarios. While We developed a version to solve MEP problems, for the moment this capability is hidden as we need to refine some parts of the solving process. We are currently working in developing a more general version of Plan-SOFAI that will allow us to select amongst multiple planning scenarios at running time.
 
 #### Input Definition and Parsing for Epistemic Planning
 This part of the process is tackled by the E-PDDL parser found in <https://github.com/FrancescoFabiano/E-PDDL>. For further information on this topic, we then address the reader to the README that can be found in <https://github.com/FrancescoFabiano/E-PDDL>.
