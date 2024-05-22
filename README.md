@@ -1,45 +1,41 @@
-# Metacognitive Epistemic Planning
+# SOFAxPlanning
 
 ## Description
 
 ### Summary
-The main objective is to implement an architecture, called SOFAI x Planning, that is able to decide which type of planning process is more appropriate given a certain problem. SOFAI will be selecting between these strategies:
-* System-1: A strategy that relies on experience to quickly find solution to new problems. This approach usually gets solutions very quickly but is prone to errors and imprecisions. 
-* System-2: This strategy envisioned the use of state-of-the-art planners that solve problems by using search techniques. This approach is slower and its performances depends on the problem complexity but is way less prone to error w.r.t. System-1 
-Let us note that System-1 and System-2 represent two different class of planners rather than two specific approaches. This means that SOFAI can be equipped with different S1 and S2 and can be configured to use any combination of the two.
+The main objective is to implement an architecture, called SOFAIxPlanning, that is able to decide which type of planning process is more appropriate given a certain problem. SOFAIxPlanning will be selecting between these strategies:
+* System-1: A strategy that relies on experience to quickly find solutions to new problems. This approach usually gets solutions very quickly but is prone to errors and imprecisions. 
+* System-2: This strategy envisioned the use of state-of-the-art planners that solve problems by using search techniques. This approach is slower and its performance depends on the problem complexity but is way less prone to error w.r.t. System-1 
+Let us note that System-1 and System-2 represent two different classes of planners rather than two specific approaches. This means that SOFAIxPlanning can be equipped with different S1 and S2 and can be configured to use any combination of the two.
 
-While we envisioned SOFAI to be able to reason within various planning settings (e.g., classical, epistemic and so on) and to automatically select the best strategy to solve the incoming problem, in the current status the architecture is not able to automatically discern between different planning settings.
-This means that, for example, SOFAI must be configured to adopt classical solving techniques when a classical planning problem is given as input.
-The selection of solving techniques (that is the System-1 ans System-2) can be easily done with execution parameters. 
+While we envisioned SOFAIxPlanning to be able to reason within various planning settings (e.g., classical, epistemic, and so on) and to automatically select the best strategy to solve the incoming problem, in the current status the architecture is not able to automatically discern between different planning settings.
+This means that, for example, SOFAIxPlanning must be configured to adopt classical solving techniques when a classical planning problem is given as input.
+The selection of solving techniques (that is System-1 and System-2) can be easily done with execution parameters. 
 
 ### Planning Domains
-SOFAI x Planning aims to become an approach general enough to tackle all the planning problems by adopting already exiting techniques in the literature and exploiting them in their filed of comptence.
-While at the moment the architecture is not able to automatically discern which type of planning setting we are reasoning one, we still allow for two differet setting to be solved thanks to SOFAI.
-* As first type of setting we decided to embed in SOFAI the capabilities to solve classical planning problems
-* Secondly we include in SOFAI the capabilities to tackle Multi-Agent Epistemic Planning problems
+SOFAIxPlanning aims to become an approach general enough to tackle all the planning problems by adopting already existing techniques in the literature and exploiting them in their field of competence.
+While at the moment the architecture is not able to automatically discern which type of planning setting we are reasoning one, we still allow for two different settings to be solved thanks to SOFAI.
+* As the first type of setting we decided to embed in SOFAIxPlanning the capabilities to solve classical planning problems
+* Secondly we include in SOFAIxPlanning the capabilities to tackle Multi-Agent Epistemic Planning problems (For now this capability is sospended)
 
-Let us note that while System-2 planners are ad-hoc solution for their specific setting, usually System-1 solvers can be adopted in different settings as they only rely on experience.
-We hope that any interested planning researcher would embed in SOFAI their tool to increase its capability:)
+Let us note that while System-2 planners are ad-hoc solutions for their specific settings, usually System-1 solvers can be adopted in different settings as they only rely on experience.
+We hope that any interested planning researcher would embed in SOFAIxPlanning their tool to increase its capability:)
 
 ### The Pipeline
-While the description of the Architecture has been formalized in a scientific works (yet to be published) we can give an high level description of this process.
+While the description of the Architecture has been formalized in scientific works (yet to be published) we can give a high level description of this process.
 * Input: a problem instance and meta-data, e.g. resources availability, accuracy required, to emulate the limits represented by various situations (file called context).
 * Procedure:
 	* System-1 Metacognitive-Agent:
-		* Checks whether there is enough experience to retrieve a plan from past instances, using System-1, that solves respecting the given constraints (input) and returns it if exist.
-		* If there is not than System-2 Metacognitive-Agent is adopted
+		* Checks whether there is enough experience to retrieve a plan from past instances, using System-1, that solves respecting the given constraints (input) and returns it if exists.
+		* If there is not then System-2 Metacognitive-Agent is adopted
 	* System-2 Metacognitive-Agent:
 		* Analyze problem and select the best System-2 planner based on some factors
 		* Evaluate problem difficulty and derive expected resource consumption from that (w.r.t. to the selected planner)
-		* Checks if the solving process is within the constraints (if not adopt S1 solution)
-		* If within constraints check if the extra resources are worth the extra accuracy (w.r.t. System-1 Planner solution) using precise formula introduce by the metacognitive workstream
-		* If it is worth then solve the problem and then validate and save the solution; otherwise use S1-solution
+		* Checks if the solving process is within the constraints (if not adopt the S1 solution)
+		* If within constraints check if the extra resources are worth the extra accuracy (w.r.t. System-1 Planner solution) using a precise formula introduced by the metacognitive workstream
+		* If it is worth then solve the problem and then validate and save the solution; otherwise use the S1 solution
 
 ### Adopted Techniques
-
-#### Input Definition and Parsing for Epistemic Planning
-This part of the process is tackled by the E-PDDL parser found in <https://github.com/FrancescoFabiano/E-PDDL>. For further information on this topic we then address the reader to the README that can be found in <https://github.com/FrancescoFabiano/E-PDDL>.
-The only file with different structure is the one that symbolizes context. An example can be found in "Input/context/contextEx.epddl".
 
 #### System-1 Planners
 This part of the process is completely addressed by Planners/CaseBasedS1 and  <https://github.com/VishalPallagani/plansformer>.
@@ -52,9 +48,6 @@ This part of the process is completely addressed by <https://lpg.unibs.it/lpg/>.
 
 #### PDKB -- System 2 for Epistemic Planning
 This part of the process is completely addressed by <https://github.com/QuMuLab/pdkb-planning>.
-
-#### EFP -- System 2 for Epistemic Planning
-This part of the process is completely addressed by <https://github.com/FrancescoFabiano/EFP>.
 
 ### Execution
 Let us member that before executing the overall architecture each part must be prepared. Please follow the instructions to prepare the environment (found in the respective repos)
@@ -97,6 +90,16 @@ Where:
 - *201* represents the training size
 
 ## Repository Management
+
+### On the Epistemic Planning Capabilities
+SOFAIxPlanning is envisioned as being able to tackle multiple planning scenarios. While We developed a version to solve MEP problems, for the moment this capability is hidden as we need to refine some parts of the solving process. We are currently working in developing a more general version of SOFAIxPlanning that will allow us to select amongst multiple planning scenarios at running time.
+
+#### Input Definition and Parsing for Epistemic Planning
+This part of the process is tackled by the E-PDDL parser found in <https://github.com/FrancescoFabiano/E-PDDL>. For further information on this topic, we then address the reader to the README that can be found in <https://github.com/FrancescoFabiano/E-PDDL>.
+The only file with a different structure is the one that symbolizes context. An example can be found in "Input/context/contextEx.epddl".
+
+#### EFP -- System 2 for Epistemic Planning
+This part of the process is completely addressed by <https://github.com/FrancescoFabiano/EFP>.
 
 ### Adjustments of the External Repositories
 * EFP
