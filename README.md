@@ -12,17 +12,21 @@ While we envisioned SOFAIxPlanning to be able to reason within various planning 
 This means that, for example, SOFAIxPlanning must be configured to adopt classical solving techniques when a classical planning problem is given as input.
 The selection of solving techniques (that is System-1 and System-2) can be easily done with execution parameters. 
 
+### Experimental Results
+Experimental results of the newest versions of the various configurations of SOFAIxPlanning can be found in the ''SOL'' folder. These configurations have been tested on 500 instances of various classical domains (instances are randomly generated with scripts that are available in the repo and omitted to avoid clutter).
+
+
 ### Planning Domains
 SOFAIxPlanning aims to become an approach general enough to tackle all the planning problems by adopting already existing techniques in the literature and exploiting them in their field of competence.
 While at the moment the architecture is not able to automatically discern which type of planning setting we are reasoning one, we still allow for two different settings to be solved thanks to SOFAI.
-* As the first type of setting we decided to embed in SOFAIxPlanning the capabilities to solve classical planning problems
-* Secondly we include in SOFAIxPlanning the capabilities to tackle Multi-Agent Epistemic Planning problems (For now this capability is sospended)
+* As the first type of setting we decided to embed in SOFAIxPlanning the capabilities to solve classical planning problems. All the domain descriptions (in pddl) used for various experimentations can be found in the ''input'' folder.
+* Secondly we include in SOFAIxPlanning the capabilities to tackle Multi-Agent Epistemic Planning problems (for now this capability is suspended)
 
 Let us note that while System-2 planners are ad-hoc solutions for their specific settings, usually System-1 solvers can be adopted in different settings as they only rely on experience.
 We hope that any interested planning researcher would embed in SOFAIxPlanning their tool to increase its capability:)
 
 ### The Pipeline
-While the description of the Architecture has been formalized in scientific works (yet to be published) we can give a high level description of this process.
+While the description of the Architecture has been formalized in scientific works (yet to be published) we can give a high-level description of this process.
 * Input: a problem instance and meta-data, e.g. resources availability, accuracy required, to emulate the limits represented by various situations (file called context).
 * Procedure:
 	* System-1 Metacognitive-Agent:
