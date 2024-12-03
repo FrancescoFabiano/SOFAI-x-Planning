@@ -23,3 +23,9 @@ Input/FreshClassical/gripper/domain/domain.pddl Input/FreshClassical/gripper/ins
 Input/FreshClassical/gripper/domain/domain.pddl Input/FreshClassical/gripper/instances/problem_gr_3_3_4_5.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl
 Input/FreshClassical/ferry/domain/domain.pddl Input/FreshClassical/ferry/instances/problem_ferry_5.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl
 Input/FreshClassical/hanoi/domain/domain.pddl Input/FreshClassical/hanoi/instances/problem_hanoi_2.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl
+Input/FreshClassical/briefcaseworld/domain/briefcaseworld.pddl Input/FreshClassical/briefcaseworld/instances/problem_5_8.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl
+Input/FreshClassical/briefcaseworld/domain/briefcaseworld.pddl Input/FreshClassical/briefcaseworld/instances/problem_5_4.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl
+Input/FreshClassical/briefcaseworld/domain/briefcaseworld.pddl Input/FreshClassical/briefcaseworld/instances/problem_5_1.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl
+Input/FreshClassical/briefcaseworld/domain/briefcaseworld.pddl Input/FreshClassical/briefcaseworld/instances/problem_5_17.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl
+Input/FreshClassical/briefcaseworld/domain/briefcaseworld.pddl Input/FreshClassical/briefcaseworld/instances/problem_5_12.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl
+
