@@ -1,2 +1,1 @@
-Input/briefcaseworld//domain/briefcaseworld.pddl Input/briefcaseworld//instances/problem_16_641.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl
-Input/briefcaseworld//domain/briefcaseworld.pddl Input/briefcaseworld//instances/problem_8_618.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl
+Input/briefcaseworld//domain/briefcaseworld.pddl Input/briefcaseworld//instances/problem_5_1010.pddl Input/contexts/contextEx.epddl Input/thresholds/thresholdEx.epddl

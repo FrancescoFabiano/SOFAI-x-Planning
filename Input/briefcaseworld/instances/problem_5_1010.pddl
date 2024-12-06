@@ -1,4 +1,4 @@
-
+;(:optlen 16)
 
 
 (define (problem briefcase-o5)
