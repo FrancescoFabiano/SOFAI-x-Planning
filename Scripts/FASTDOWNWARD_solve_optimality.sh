@@ -33,7 +33,7 @@ for file in "$PROBLEMFOLDER"*.pddl; do
         # Execute the planner
         timeout "$TIMEOUT" python3 Planners/FastDownward/fast-downward.py \
             --plan-file "$TMPPLANFILE" "$DOMAINFOLDER$DOMAIN" "$PROBLEMFOLDER$PROBLEM" \
-            --search "astar(blind())" > res.tmp
+            --search "astar(lmcut)" > res.tmp
 
         # Check if the planner timed out
         if [ $? -eq 124 ]; then
