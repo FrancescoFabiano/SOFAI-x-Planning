@@ -1665,52 +1665,6 @@
                 "take-out o2 l3",
                 "take-out o0 l3"
             ]
-        },
-        "31": {
-            "domain_name": "briefcase",
-            "problem_name": "briefcase-o5",
-            "difficulty": 144,
-            "system": 1,
-            "planner": 7,
-            "confidence": 0.9996,
-            "correctness": 1.0,
-            "solving_time": 44.65709924697876,
-            "training_time": 0.0,
-            "total_time": 44.68330121040344,
-            "init": [
-                "at o0 l3",
-                "at o1 l4",
-                "at o2 l4",
-                "at o3 l2",
-                "at o4 l5",
-                "is-at l1"
-            ],
-            "goal": [
-                "at o0 l2",
-                "at o1 l1",
-                "at o2 l3",
-                "at o3 l1",
-                "at o4 l2",
-                "is-at l5"
-            ],
-            "plan": [
-                "move l1 l4",
-                "put-in o2 l4",
-                "put-in o1 l4",
-                "move l4 l3",
-                "take-out o2 l3",
-                "put-in o0 l3",
-                "move l3 l5",
-                "put-in o4 l5",
-                "move l5 l2",
-                "take-out o4 l2",
-                "put-in o3 l2",
-                "take-out o0 l2",
-                "move l2 l1",
-                "take-out o3 l1",
-                "take-out o1 l1",
-                "move l1 l5"
-            ]
         }
     }
 }

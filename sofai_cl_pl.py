@@ -31,6 +31,7 @@ from Planners.New_PlansformerS1 import mode2 as scracth_training
 from Planners.PDDL_parser import classical_parser
 from Planners.PDDL_parser import SubgoalCompleteness
 
+sys.path.append('/home/faculty8/ffabiano/.local/lib/python3.11')
 
 ''' Constants -- Variables Enumeration '''
 ### Type of Systems
