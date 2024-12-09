@@ -41,7 +41,7 @@ while read -r line;
 do
   echo -e "Solving the instance \"$line\"";
   #ADDED "PYTHONNOUSERSITE=1" to ensure local packages over system
-  echo -n -e "\n</ist>$instance_count</>" >> tmp/SOL/"sol.out" | PYTHONNOUSERSITE=1 python3 sofai_cl_pl.py $line $system2 $system1 $PF_type $training_size >> tmp/SOL/"sol.out";
+  echo -n -e "\n</ist>$instance_count</>" >> tmp/SOL/"sol.out" | python3 sofai_cl_pl.py $line $system2 $system1 $PF_type $training_size >> tmp/SOL/"sol.out";
   instance_count=$(( instance_count+1 ))
 done < $instancesfile
 
